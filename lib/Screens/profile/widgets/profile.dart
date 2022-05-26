@@ -1,8 +1,11 @@
+import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/Screens/profile/widgets/common/profile_field.dart';
 import 'package:cvault/Screens/profile/widgets/profile_header.dart';
+import 'package:cvault/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum ProfilePageMode { registration, edit }
 
@@ -17,9 +20,7 @@ class ProfilePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          leading: mode == ProfilePageMode.registration
-              ? null
-              : const Icon(Icons.arrow_back_ios_new),
+          leading: Container(),
           centerTitle: true,
           title: Title(
             child: Text(mode == ProfilePageMode.registration
@@ -230,8 +231,19 @@ class ProfilePage extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.7,
                 child: ElevatedButton(
-                  onPressed: () {
-                    /// TODO: profile edit api
+                  onPressed: () async {
+                    if (mode == ProfilePageMode.registration) {
+                      await BlocProvider.of<ProfileCubit>(context)
+                          .createNewProfile();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(),
+                        ),
+                      );
+                    } else {
+                      /// TODO: profile edit api
+                    }
                   },
                   child: Text(
                     mode == ProfilePageMode.registration ? "Submit" : "Edit",

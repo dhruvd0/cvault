@@ -51,7 +51,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(ProfileInitial());
   }
 
-  void fetchProfile() async {
+  Future<void> fetchProfile() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
     /// TODO: implement fetch profile here
@@ -59,7 +59,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     ///
     ///
 
-    bool isRegistered = false;
+    bool isRegistered = true;
     if (isRegistered) {
       var map = <String, dynamic>{};
       emit(ProfileState.fromMap(map));
@@ -67,4 +67,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(NewProfile(userType: state.userType, uid: uid));
     }
   }
+
+  createNewProfile() {}
 }

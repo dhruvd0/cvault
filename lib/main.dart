@@ -1,5 +1,8 @@
 import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
+import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
+import 'package:cvault/Screens/profile/widgets/profile.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
+import 'package:cvault/constants/theme.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,38 +21,64 @@ Future<void> main() async {
     builder: (context) {
       return MaterialApp(
         useInheritedMediaQuery: true,
-        home: CVaultApp(),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              lazy: false,
+              create: (context) => HomeCubit(),
+            ),
+            BlocProvider(
+              lazy: false,
+              create: (context) => ProfileCubit(),
+            ),
+          ],
+          child: MaterialApp(home: CVaultApp()),
+        ),
       );
     },
   ));
 }
 
-class CVaultApp extends StatelessWidget {
+class CVaultApp extends StatefulWidget {
   const CVaultApp({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<CVaultApp> createState() => _CVaultAppState();
+}
+
+class _CVaultAppState extends State<CVaultApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      Widget widget = UserTypeSelectPage();
+      if (FirebaseAuth.instance.currentUser != null) {
+        var bloc = BlocProvider.of<ProfileCubit>(context);
+        await bloc.fetchProfile();
+        widget = bloc.state is NewProfile
+            ? ProfilePage(mode: ProfilePageMode.registration)
+            : HomePage();
+      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => widget,
+        ),
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          lazy: false,
-          create: (context) => HomeCubit(),
+    return Container(
+      child: Container(
+        color: ThemeColors.backgroundColor,
+        child: Center(
+          child: CircularProgressIndicator(),
         ),
-        BlocProvider(
-          lazy: false,
-          create: (context) => ProfileCubit(),
-        ),
-      ],
-      child: MaterialApp(
-        useInheritedMediaQuery: true,
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
-        debugShowCheckedModeBanner: false,
-        home: FirebaseAuth.instance.currentUser != null
-            ? const HomePage()
-            : const UserTypeSelectPage(),
       ),
     );
   }
