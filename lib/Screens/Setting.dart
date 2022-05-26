@@ -1,14 +1,14 @@
 import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
 import 'package:cvault/Screens/home/bloc/cubit/home_state.dart';
 import 'package:cvault/Screens/login/login_screen.dart';
+import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
+import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/Screens/profile/widgets/profile.dart';
 import 'package:cvault/constants/user_types.dart';
-import 'package:cvault/util/sharedPreferences/keys.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -29,21 +29,11 @@ class _SettingsState extends State<Settings> {
   String? value;
   String? crypto = "Select currency";
   bool toggle = false;
-  String userType = UserTypes.admin;
-  void getUserType() async {
-    final user = ((await SharedPreferences.getInstance())
-            .getString(SharedPreferencesKeys.userTypeKey) ??
-        UserTypes.dealer);
-    setState(() {
-      userType = user;
-    });
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUserType();
   }
 
   DropdownMenuItem<String> buildCurrencyList(String item) {
@@ -70,11 +60,14 @@ class _SettingsState extends State<Settings> {
         leading: Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: IconButton(
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (builder) => const HomePage()));
-              },
-              icon: const Icon(Icons.arrow_back_ios)),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (builder) => const HomePage()),
+              );
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
         ),
         centerTitle: true,
         title: const Text("Settings"),
@@ -83,135 +76,170 @@ class _SettingsState extends State<Settings> {
         child: SafeArea(
           bottom: true,
           top: true,
-          child: Container(
-            margin: const EdgeInsets.only(left: 20, right: 20, top: 25),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              userType == UserTypes.admin ? TickerSelectors() : Container(),
-              const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  BlocBuilder<HomeCubit, HomeState>(
-                    builder: (context, state) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "Cryptocurrrency",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          state is HomeInitial
-                              ? const Center(child: CircularProgressIndicator())
-                              : Flexible(
-                                  child: SizedBox(
-                                    width: 100,
-                                    child: DropdownButton<String>(
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                        underline: const SizedBox(),
-                                        isExpanded: true,
-                                        dropdownColor: Colors.transparent,
-                                        items: HomeCubit.cryptoKeys
-                                            .map(buildCurrencyList)
-                                            .toList(),
-                                        value: state.selectedCurrencyKey,
-                                        onChanged: (value) {
-                                          if (value != null) {
-                                            BlocProvider.of<HomeCubit>(context,
-                                                    listen: false)
-                                                .changeCrptoKey(value);
-                                          }
-                                        }),
+          child: BlocBuilder<ProfileCubit, ProfileState>(
+            builder: (context, state) {
+              final userType = state.userType;
+
+              return Container(
+                margin: const EdgeInsets.only(left: 20, right: 20, top: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    userType == UserTypes.admin
+                        ? TickerSelectors()
+                        : Container(),
+                    const SizedBox(height: 25),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BlocBuilder<HomeCubit, HomeState>(
+                          builder: (context, state) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  "Crypto Currency",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
                                   ),
                                 ),
-                        ],
-                      );
-                    },
-                  ),
-                  Column(
-                    children: [
-                      const Text(
-                        "Default Margin",
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                state is HomeInitial
+                                    ? const Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : Flexible(
+                                        child: SizedBox(
+                                          width: 100,
+                                          child: DropdownButton<String>(
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            underline: const SizedBox(),
+                                            isExpanded: true,
+                                            dropdownColor: Colors.transparent,
+                                            items: HomeCubit.cryptoKeys
+                                                .map(buildCurrencyList)
+                                                .toList(),
+                                            value: state.selectedCurrencyKey,
+                                            onChanged: (value) {
+                                              if (value != null) {
+                                                BlocProvider.of<HomeCubit>(
+                                                  context,
+                                                  listen: false,
+                                                ).changeRcptey(value);
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                              ],
+                            );
+                          },
+                        ),
+                        Column(
+                          children: [
+                            const Text(
+                              "Default Margin",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: 120,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border.all(
+                                    width: 1.5,
+                                    color: Colors.white,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    '20.0',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    userType == UserTypes.admin
+                        ? ApplyMarginToggle()
+                        : Container(),
+                    const SizedBox(
+                      height: 200,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (builder) => ProfilePage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Manage Profile",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 15,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      SizedBox(
-                        height: 50,
-                        width: 120,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(width: 1.5, color: Colors.white),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              '20.0',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              userType == UserTypes.admin ? ApplyMarginToggle() : Container(),
-              const SizedBox(
-                height: 200,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (builder) => ProfilePage()));
-                },
-                child: const Text("Manage Profile",
-                    style: TextStyle(
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      "Change password",
+                      style: TextStyle(
                         color: Colors.white,
+                        fontWeight: FontWeight.w600,
                         fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text("Change password",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                  )),
-              const SizedBox(height: 40),
-              InkWell(
-                onTap: () async {
-                  await BlocProvider.of<HomeCubit>(context).logout(context);
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    InkWell(
+                      onTap: () async {
+                        await BlocProvider.of<HomeCubit>(context)
+                            .logout(context);
 
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (builder) => const LogInScreen()));
-                },
-                child: const Text("Logout",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600)),
-              ),
-            ]),
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (builder) => const LogInScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Logout",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -240,16 +268,17 @@ class _SettingsState extends State<Settings> {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               Switch(
-                  activeColor: Colors.green,
-                  activeTrackColor: Colors.lightGreen,
-                  value: toggle,
-                  onChanged: (value) {
-                    setState(() {
-                      toggle = value;
-                    });
-                  })
+                activeColor: Colors.green,
+                activeTrackColor: Colors.lightGreen,
+                value: toggle,
+                onChanged: (value) {
+                  setState(() {
+                    toggle = value;
+                  });
+                },
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -262,7 +291,10 @@ class _SettingsState extends State<Settings> {
         const Text(
           "Ticker",
           style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         const SizedBox(
           height: 25,
@@ -322,10 +354,11 @@ class _SettingsState extends State<Settings> {
 
   DropdownMenuItem<String> buildMenuTickerItems(String item) =>
       DropdownMenuItem(
-          value: item,
-          alignment: Alignment.center,
-          child: Text(
-            item,
-            style: const TextStyle(color: Colors.white),
-          ));
+        value: item,
+        alignment: Alignment.center,
+        child: Text(
+          item,
+          style: const TextStyle(color: Colors.white),
+        ),
+      );
 }

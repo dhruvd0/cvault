@@ -35,19 +35,17 @@ class _LogInScreenState extends State<LogInScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: 
-            IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (builder) => (const UserTypeSelectPage()),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.arrow_back_ios),
-              )
-            ,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (builder) => (const UserTypeSelectPage()),
+              ),
+            );
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,

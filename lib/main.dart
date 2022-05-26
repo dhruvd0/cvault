@@ -1,4 +1,3 @@
-import 'package:cvault/Screens/login/login_screen.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/home_page.dart';
@@ -19,28 +18,39 @@ Future<void> main() async {
     builder: (context) {
       return MaterialApp(
         useInheritedMediaQuery: true,
-        home: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              lazy: false,
-              create: (context) => HomeCubit(),
-            ),
-            BlocProvider(
-              lazy: false,
-              create: (context) => ProfileCubit(),
-            ),
-          ],
-          child: MaterialApp(
-            useInheritedMediaQuery: true,
-            locale: DevicePreview.locale(context),
-            builder: DevicePreview.appBuilder,
-            debugShowCheckedModeBanner: false,
-            home: FirebaseAuth.instance.currentUser != null
-                ? const HomePage()
-                : const UserTypeSelectPage(),
-          ),
-        ),
+        home: CVaultApp(),
       );
     },
   ));
+}
+
+class CVaultApp extends StatelessWidget {
+  const CVaultApp({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          lazy: false,
+          create: (context) => HomeCubit(),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => ProfileCubit(),
+        ),
+      ],
+      child: MaterialApp(
+        useInheritedMediaQuery: true,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
+        debugShowCheckedModeBanner: false,
+        home: FirebaseAuth.instance.currentUser != null
+            ? const HomePage()
+            : const UserTypeSelectPage(),
+      ),
+    );
+  }
 }

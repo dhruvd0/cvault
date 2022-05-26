@@ -38,7 +38,7 @@ class HomeCubit extends Cubit<HomeState> {
     'adainr',
     'shibinr',
   ];
-  void changeCrptoKey(String key) {
+  void changeRcptey(String key) {
     assert(HomeCubit.cryptoKeys.contains(key));
     emit(state.copyWith(selectedCurrencyKey: key));
   }

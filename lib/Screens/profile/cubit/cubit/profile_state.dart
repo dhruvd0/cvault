@@ -8,6 +8,7 @@ class ProfileState extends Equatable {
   final String lastName;
   final String email;
   final String code;
+  final String uid;
   final String userType;
   final String referralCode;
   const ProfileState({
@@ -16,6 +17,7 @@ class ProfileState extends Equatable {
     required this.lastName,
     required this.email,
     required this.code,
+    required this.uid,
     required this.userType,
     required this.referralCode,
   });
@@ -27,6 +29,7 @@ class ProfileState extends Equatable {
       lastName,
       email,
       code,
+      uid,
       userType,
       referralCode,
     ];
@@ -34,7 +37,7 @@ class ProfileState extends Equatable {
 
   @override
   String toString() {
-    return 'ProfileState(fullName: $fullName, middleName: $middleName, lastName: $lastName, email: $email, code: $code, userType: $userType, referralCode: $referralCode)';
+    return 'ProfileState(fullName: $fullName, middleName: $middleName, lastName: $lastName, email: $email, code: $code, uid: $uid, userType: $userType, referralCode: $referralCode)';
   }
 
   ProfileState copyWith({
@@ -43,6 +46,7 @@ class ProfileState extends Equatable {
     String? lastName,
     String? email,
     String? code,
+    String? uid,
     String? userType,
     String? referralCode,
   }) {
@@ -52,6 +56,7 @@ class ProfileState extends Equatable {
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       code: code ?? this.code,
+      uid: uid ?? this.uid,
       userType: userType ?? this.userType,
       referralCode: referralCode ?? this.referralCode,
     );
@@ -64,6 +69,7 @@ class ProfileState extends Equatable {
       'lastName': lastName,
       'email': email,
       'code': code,
+      'uid': uid,
       'userType': userType,
       'referralCode': referralCode,
     };
@@ -76,6 +82,7 @@ class ProfileState extends Equatable {
       lastName: map['lastName'] ?? '',
       email: map['email'] ?? '',
       code: map['code'] ?? '',
+      uid: map['uid'] ?? '',
       userType: map['userType'] ?? '',
       referralCode: map['referralCode'] ?? '',
     );
@@ -103,25 +110,20 @@ class ProfileInitial extends ProfileState {
           lastName: '',
           referralCode: '',
           userType: 'admin',
+          uid: '',
         );
 }
 
-class Profile extends ProfileState {
-  Profile({
-    required String fullName,
-    required String middleName,
-    required String lastName,
-    required String email,
-    required String code,
-    required String userType,
-    required String referralCode,
-  }) : super(
-          fullName: fullName,
-          middleName: middleName,
-          lastName: lastName,
-          email: email,
-          code: code,
+class NewProfile extends ProfileState {
+  const NewProfile({required String userType, required String uid})
+      : super(
+          fullName: '',
+          email: '',
+          middleName: '',
+          code: '',
+          lastName: '',
+          referralCode: '',
           userType: userType,
-          referralCode: referralCode,
+          uid: uid,
         );
 }
