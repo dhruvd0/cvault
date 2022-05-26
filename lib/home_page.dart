@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> scaffoldfkey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   int index = 0;
   var screens = [
     const DashboardPage(),
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       drawerEnableOpenDragGesture: false,
-      key: scaffoldfkey,
+      key: scaffoldKey,
       endDrawer: const MyDrawer(),
       backgroundColor: const Color(0xff1E2224),
       body: screens[index],
@@ -81,84 +81,88 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 this.index = index;
               });
             },
-            destinations: userType==UserTypes.customer?[  NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.home_filled,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.home,
-                  color: Colors.white,
-                ),
-                label: "home",
-              ),
-              NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.paid_outlined,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.paid,
-                  color: Colors.white,
-                ),
-                label: "Quote",
-              ),
-                           NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.person,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                label: "profile",
-              ),] :[
-              NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.home_filled,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.home,
-                  color: Colors.white,
-                ),
-                label: "home",
-              ),
-              NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.paid_outlined,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.paid,
-                  color: Colors.white,
-                ),
-                label: "Quote",
-              ),
-              NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.admin_panel_settings_outlined,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.admin_panel_settings,
-                  color: Colors.white,
-                ),
-                label: "Admin Panel",
-              ),
-              NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.person,
-                  color: Colors.black,
-                ),
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                label: "profile",
-              ),
-            ],
+            destinations: userType == UserTypes.customer
+                ? [
+                    NavigationDestination(
+                      selectedIcon: Icon(
+                        Icons.home_filled,
+                        color: Colors.black,
+                      ),
+                      icon: Icon(
+                        Icons.home,
+                        color: Colors.white,
+                      ),
+                      label: "home",
+                    ),
+                    NavigationDestination(
+                      selectedIcon: Icon(
+                        Icons.paid_outlined,
+                        color: Colors.black,
+                      ),
+                      icon: Icon(
+                        Icons.paid,
+                        color: Colors.white,
+                      ),
+                      label: "Quote",
+                    ),
+                    NavigationDestination(
+                      selectedIcon: Icon(
+                        Icons.person,
+                        color: Colors.black,
+                      ),
+                      icon: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      label: "profile",
+                    ),
+                  ]
+                : [
+                    NavigationDestination(
+                      selectedIcon: Icon(
+                        Icons.home_filled,
+                        color: Colors.black,
+                      ),
+                      icon: Icon(
+                        Icons.home,
+                        color: Colors.white,
+                      ),
+                      label: "home",
+                    ),
+                    NavigationDestination(
+                      selectedIcon: Icon(
+                        Icons.paid_outlined,
+                        color: Colors.black,
+                      ),
+                      icon: Icon(
+                        Icons.paid,
+                        color: Colors.white,
+                      ),
+                      label: "Quote",
+                    ),
+                    NavigationDestination(
+                      selectedIcon: Icon(
+                        Icons.admin_panel_settings_outlined,
+                        color: Colors.black,
+                      ),
+                      icon: Icon(
+                        Icons.admin_panel_settings,
+                        color: Colors.white,
+                      ),
+                      label: "Admin Panel",
+                    ),
+                    NavigationDestination(
+                      selectedIcon: Icon(
+                        Icons.person,
+                        color: Colors.black,
+                      ),
+                      icon: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      label: "profile",
+                    ),
+                  ],
           ),
         ),
       ),

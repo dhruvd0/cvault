@@ -1,9 +1,13 @@
+import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
+import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
+import 'package:cvault/Screens/profile/widgets/profile.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
@@ -35,19 +39,17 @@ class _LogInScreenState extends State<LogInScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: 
-            IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (builder) => (const UserTypeSelectPage()),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.arrow_back_ios),
-              )
-            ,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (builder) => (const UserTypeSelectPage()),
+              ),
+            );
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -282,8 +284,29 @@ class _LogInScreenState extends State<LogInScreen> {
 
     if (phone == "+911111111111") {
       await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (builder) => const HomePage()),
+      );
+
+      return;
     }
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (builder) => const HomePage()));
+    var bloc = BlocProvider.of<ProfileCubit>(context);
+    await bloc.fetchProfile();
+    if (bloc.state is NewProfile) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (builder) => ProfilePage(
+            mode: ProfilePageMode.registration,
+          ),
+        ),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (builder) => const HomePage()),
+      );
+    }
   }
 }

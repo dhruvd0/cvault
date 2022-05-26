@@ -41,14 +41,17 @@ class UserTypeSelectPage extends StatelessWidget {
               ),
               Container(
                 margin: EdgeInsets.only(left: 5),
-                child: Text("Get started with selecting your user type",
-                    style: GoogleFonts.lato(
-                      textStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
-                          fontSize: 14,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w600,),
-                    ),),
+                child: Text(
+                  "Get started with selecting your user type",
+                  style: GoogleFonts.lato(
+                    textStyle: TextStyle(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 14,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 40,
@@ -58,12 +61,14 @@ class UserTypeSelectPage extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: UserTypeButton(userType: UserTypes.dealer,),
+                      child: UserTypeButton(
+                        userType: UserTypes.dealer,
+                      ),
                     ),
                     SizedBox(
                       width: 20,
                     ),
-                   Expanded(
+                    Expanded(
                       child: UserTypeButton(
                         userType: UserTypes.customer,
                       ),
