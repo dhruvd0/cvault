@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "377759081959",
+    "project_id": "cvault-2f761",
+    "storage_bucket": "cvault-2f761.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377759081959:android:0deee39f1332859eab0942",
+        "android_client_info": {
+          "package_name": "com.application.cvault"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377759081959-rmpka454t09jmm1vqq19pv8dbbv8kj1n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.cvault",
+            "certificate_hash": "f24632fbc8f79083c318c4db9425cf1af9736e08"
+          }
+        },
+        {
+          "client_id": "377759081959-p9mgf70dfaf6ltn62vvp2f5rogdjccne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpuwRGBnUdQj8iY1G0l9h3OhCEueSzPNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377759081959-p9mgf70dfaf6ltn62vvp2f5rogdjccne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
