@@ -40,7 +40,7 @@ class DealerManagementPage extends StatelessWidget {
                      'Invite Dealer',
                       style: TextStyle(
                         fontSize: 18,
-                      ))),
+                      ),),),
 
             ),
              SizedBox(
@@ -73,7 +73,7 @@ class DealerManagementPage extends StatelessWidget {
                   label: Text('Toggle All',
                       style: TextStyle(
                         fontSize: 18,
-                      ))),
+                      ),),),
             ),
             SizedBox(
               height: 10,

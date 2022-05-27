@@ -22,23 +22,22 @@ class HomeCubit extends Cubit<HomeState> {
           .listen((event) {
         if (event != null) {
           fetchCurrencyDataFromWazirX();
-          startCryptoTicker();
+          startWazirXCryptoTicker();
         }
       });
     }
   }
-  final channel = IOWebSocketChannel.connect(
+  final wazirxChannel = IOWebSocketChannel.connect(
     Uri.parse('wss://stream.wazirx.com/stream'),
   );
-  void startCryptoTicker() {
-    channel.stream.listen((event) {
+  void startWazirXCryptoTicker() {
+    wazirxChannel.stream.listen((event) {
       if (event != null && event.contains('connected')) {
-        channel.sink.add(jsonEncode({
+        wazirxChannel.sink.add(jsonEncode({
           "event": "subscribe",
           "streams": ["!ticker@arr"],
         }));
-      }
-      else{
+      } else {
         Map<String, dynamic> baseData = jsonDecode(event);
         if (baseData.containsKey('data') && baseData['data'] is List) {
           var cryptoData = baseData['data'];
@@ -58,7 +57,6 @@ class HomeCubit extends Cubit<HomeState> {
           }
         }
       }
-     
     });
   }
 
@@ -105,7 +103,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   List<CryptoCurrency> _parseCurrenciesFromCryptoData(
-      Map<String, dynamic> mapResponse) {
+    Map<String, dynamic> mapResponse,
+  ) {
     List<CryptoCurrency> currencies = state.cryptoCurrencies;
     for (var key in cryptoKeys) {
       if (mapResponse.containsKey(key)) {
@@ -127,6 +126,7 @@ class HomeCubit extends Cubit<HomeState> {
         }
       }
     }
+    
     return currencies;
   }
 

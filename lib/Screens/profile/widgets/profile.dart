@@ -13,6 +13,7 @@ enum ProfilePageMode { registration, edit }
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key, this.mode}) : super(key: key);
   ProfilePageMode? mode;
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     mode = mode ?? ProfilePageMode.edit;
@@ -32,153 +33,188 @@ class ProfilePage extends StatelessWidget {
         ),
         backgroundColor: const Color(0xff202427),
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 5,
-              ),
-              mode == ProfilePageMode.registration
-                  ? Container()
-                  : const ProfileHeader(),
-              const SizedBox(
-                height: 20,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                    child: Text(
-                      "First Name",
-                      style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Roboto',
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  ProfileTextField(
-                    hintText: 'Full Name',
-                    fieldName: ProfileFields.firstName,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                    child: Text(
-                      "Middle Name",
-                      style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Roboto',
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  ProfileTextField(
-                    hintText: 'Middle Name',
-                    fieldName: ProfileFields.middleName,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                    child: Text(
-                      "Last Name",
-                      style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Roboto',
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  ProfileTextField(
-                    hintText: 'Last Name',
-                    fieldName: ProfileFields.lastName,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                    child: Text(
-                      "Email",
-                      style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Roboto',
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  ProfileTextField(
-                    showVerified:
-                        mode == ProfilePageMode.registration ? false : true,
-                    hintText: 'Email',
-                    fieldName: ProfileFields.email,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 30.0,
-                  right: 30.0,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 5,
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                mode == ProfilePageMode.registration
+                    ? Container()
+                    : const ProfileHeader(),
+                const SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 35.0, bottom: 8),
+                      child: Text(
+                        "First Name",
+                        style: TextStyle(
+                          fontStyle: FontStyle.normal,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Roboto',
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    ProfileTextField(
+                      hintText: 'First Name',
+                      fieldName: ProfileFields.firstName,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 35.0, bottom: 8),
+                      child: Text(
+                        "Middle Name",
+                        style: TextStyle(
+                          fontStyle: FontStyle.normal,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Roboto',
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    ProfileTextField(
+                      hintText: 'Middle Name',
+                      fieldName: ProfileFields.middleName,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.only(left: 35.0, bottom: 8),
+                      child: Text(
+                        "Last Name",
+                        style: TextStyle(
+                          fontStyle: FontStyle.normal,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Roboto',
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    ProfileTextField(
+                      hintText: 'Last Name',
+                      fieldName: ProfileFields.lastName,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      children: const [
-                        SizedBox(
-                          height: 35,
+                    const Padding(
+                      padding: EdgeInsets.only(left: 35.0, bottom: 8),
+                      child: Text(
+                        "Email",
+                        style: TextStyle(
+                          fontStyle: FontStyle.normal,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Roboto',
+                          fontSize: 12,
                         ),
-                        Text(
-                          '+91\n\n',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                    Flexible(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
+                    ProfileTextField(
+                      showVerified:
+                          mode == ProfilePageMode.registration ? false : true,
+                      hintText: 'Email',
+                      fieldName: ProfileFields.email,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(
+                    left: 30.0,
+                    right: 30.0,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: const [
+                          SizedBox(
+                            height: 35,
+                          ),
+                          Text(
+                            '+91\n\n',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Flexible(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(left: 35.0, bottom: 8),
+                              child: Text(
+                                "Phone",
+                                style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Roboto',
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              child: ProfileTextField(
+                                showVerified: true,
+                                hintText: 'Phone',
+                                fieldName: ProfileFields.code,
+                                fixedValue: FirebaseAuth
+                                        .instance.currentUser?.phoneNumber ??
+                                    '',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                mode == ProfilePageMode.registration
+                    ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
+                        children: const [
+                          Padding(
                             padding: EdgeInsets.only(left: 35.0, bottom: 8),
                             child: Text(
-                              "Phone",
+                              "Referral",
                               style: TextStyle(
                                 fontStyle: FontStyle.normal,
                                 color: Colors.white,
@@ -188,86 +224,56 @@ class ProfilePage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Flexible(
-                            child: ProfileTextField(
-                              showVerified: true,
-                              hintText: 'Phone',
-                              fieldName: ProfileFields.code,
-                              fixedValue: FirebaseAuth
-                                      .instance.currentUser?.phoneNumber ??
-                                  '',
-                            ),
+                          ProfileTextField(
+                            hintText: 'Referral Code',
+                            fieldName: ProfileFields.referralCode,
                           ),
                         ],
-                      ),
-                    ),
-                  ],
+                      )
+                    : Container(),
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              mode == ProfilePageMode.registration
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                          child: Text(
-                            "Referral",
-                            style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Roboto',
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        ProfileTextField(
-                          hintText: 'Referral Code',
-                          fieldName: ProfileFields.referralCode,
-                        ),
-                      ],
-                    )
-                  : Container(),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.65,
-                    child: FloatingActionButton.extended(
-                        backgroundColor: const Color(0xff03dac6),
-                        foregroundColor: Colors.black,
-                        onPressed: () async {
-                          if (mode == ProfilePageMode.registration) {
-                            await BlocProvider.of<ProfileCubit>(context)
-                                .createNewProfile();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                            );
-                          } else {
-                            /// TODO: profile edit api
-                          }
-                        },
-                        label: Text(
-                            mode == ProfilePageMode.registration
-                                ? "Submit"
-                                : "Edit",
-                            style: TextStyle(
-                              fontSize: 18,
-                            ))),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.65,
+                      child: FloatingActionButton.extended(
+                          backgroundColor: const Color(0xff03dac6),
+                          foregroundColor: Colors.black,
+                          onPressed: () async {
+                            if (mode == ProfilePageMode.registration) {
+                              if (_formKey.currentState!.validate()) {
+                                await BlocProvider.of<ProfileCubit>(context)
+                                    .createNewProfile();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );                              }
+                             
+                            } else {
+                              /// TODO: profile edit api
+                            }
+                          },
+                          label: Text(
+                              mode == ProfilePageMode.registration
+                                  ? "Submit"
+                                  : "Edit",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ))),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-            ],
+                const SizedBox(
+                  height: 5,
+                ),
+              ],
+            ),
           ),
         ),
       ),

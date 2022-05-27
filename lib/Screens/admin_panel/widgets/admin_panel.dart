@@ -147,7 +147,7 @@ class _AdminPanelState extends State<AdminPanel> {
                               ),
                             ],
                           ),
-                  ]),
+                  ],),
             );
           },
         ),

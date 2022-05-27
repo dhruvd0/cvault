@@ -75,14 +75,17 @@ class _LogInScreenState extends State<LogInScreen> {
                   const SizedBox(
                     height: 15,
                   ),
-                  Text("we sent it to the number $phone",
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
-                            fontSize: 14,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w600),
-                      )),
+                  Text(
+                    "we sent it to the number $phone",
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                        color: Colors.white.withOpacity(0.7),
+                        fontSize: 14,
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                   const SizedBox(
                     height: 30,
                   ),
@@ -126,7 +129,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             backgroundColor: Colors.black,
                             color: Colors.white,
                           ),
-                  )
+                  ),
                 ],
               )
             : Column(

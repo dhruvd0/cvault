@@ -2,6 +2,7 @@ import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:regexed_validator/regexed_validator.dart';
 
 class ProfileTextField extends StatelessWidget {
   const ProfileTextField({
@@ -50,6 +51,19 @@ class ProfileTextField extends StatelessWidget {
               onChanged: (string) {
                 BlocProvider.of<ProfileCubit>(context)
                     .changeProfileField(string, fieldName);
+              },
+              validator: (string) {
+                if (string == null) {
+                  return 'This should not be empty.';
+                }
+                if (string.isEmpty) {
+                  return 'This should not be empty.';
+                }
+                if (fieldName == ProfileFields.email) {
+                  return validator.email(string) ? null : 'Invalid email';
+                }
+
+                return null;
               },
               autocorrect: false,
               readOnly: fixedValue != null,

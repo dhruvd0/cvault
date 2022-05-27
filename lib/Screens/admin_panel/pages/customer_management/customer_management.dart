@@ -1,5 +1,4 @@
 import 'package:cvault/Screens/admin_panel/pages/customer_management/customer_tile.dart';
-import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_tile.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +55,10 @@ class CustomerManagementPage extends StatelessWidget {
               child: FloatingActionButton.extended(
                 backgroundColor: const Color(0xff03dac6),
                 foregroundColor: Colors.black,
-                onPressed: () async {},
+                onPressed: () async {
+
+                  /// TODO: toggle all api
+                },
                 label: Text(
                   'Toggle All',
                   style: TextStyle(
@@ -78,7 +80,7 @@ class CustomerManagementPage extends StatelessWidget {
                   label: Text('Revert All To Admin',
                       style: TextStyle(
                         fontSize: 18,
-                      ))),
+                      ),),),
             ),
             SizedBox(
               height: 10,

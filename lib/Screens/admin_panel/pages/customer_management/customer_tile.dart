@@ -95,7 +95,7 @@ class _CustomerTileState extends State<CustomerTile> {
                   borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                   color: ThemeColors.lightGreenAccentColor,
-                )),
+                ),),
                 child: Text('Change Dealer',style: TextStyle(color: Colors.white),),
               ),
               const SizedBox(

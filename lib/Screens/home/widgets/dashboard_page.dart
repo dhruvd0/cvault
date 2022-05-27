@@ -100,6 +100,7 @@ class _DashboardPageState extends State<DashboardPage> {
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
           var userType = state.userType;
+          
           return BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
               return Container(
@@ -315,7 +316,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 children: [
                                   const Text('AD'),
                                   Center(
-                                      child: Image.asset("assets/test_ad.gif")),
+                                      child: Image.asset("assets/test_ad.gif"),),
                                   const Text('AD'),
                                 ],
                               ),
