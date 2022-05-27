@@ -1,71 +1,76 @@
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
+import 'package:cvault/constants/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class DealerTile extends StatelessWidget {
+class DealerTile extends StatefulWidget {
   const DealerTile({Key? key, required this.profile}) : super(key: key);
   final ProfileState profile;
+
+  @override
+  State<DealerTile> createState() => _DealerTileState();
+}
+
+class _DealerTileState extends State<DealerTile> {
+  bool toggle = false;
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-      height: 170,
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
       decoration: BoxDecoration(
         color: Colors.grey[850],
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Column(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    profile.firstName,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "₹" ,
+                    "Name: " + widget.profile.firstName,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Text(
-                    "Quote " ,
+                    "Email: " + widget.profile.email,
                     style: const TextStyle(
-                      color: Colors.green,
-                      fontSize: 12,
+                      color: Colors.white,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 10,
                   ),
                   Text(
-                    DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY)
-                        .format(DateTime.now()),
+                    "Mobile: " + widget.profile.phone,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "ID: " + widget.profile.code,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -73,32 +78,35 @@ class DealerTile extends StatelessWidget {
               ),
             ],
           ),
-          Row(
+          Column(
             children: [
-              Expanded(child: Container()),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                ),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: const Text('Accept'),
+              Icon(
+                Icons.person,
+                color: ThemeColors.lightGreenAccentColor,
+                size: 30,
               ),
               const SizedBox(
-                width: 10,
+                height: 10,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.red,
-                ),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: const Text(
-                  'Reject',
-                  style: TextStyle(color: Colors.white),
-                ),
+              Icon(
+                Icons.document_scanner,
+                color: ThemeColors.lightGreenAccentColor,
+                size: 30,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Switch(
+                activeColor: Colors.white,
+                activeTrackColor: Colors.green,
+                inactiveThumbColor: Colors.white,
+                inactiveTrackColor: Colors.black,
+                value: toggle,
+                onChanged: (value) {
+                  setState(() {
+                    toggle = value;
+                  });
+                },
               ),
             ],
           ),

@@ -21,16 +21,65 @@ class DealerManagementPage extends StatelessWidget {
         elevation: 0,
       ),
       backgroundColor: const Color(0xff1E2224),
-      body: ListView.builder(
-        itemCount: 2,
-        itemBuilder: (BuildContext context, int index) {
-          ProfileState profile =
-              ProfileInitial().copyWith(firstName: 'Test Name');
+      body: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 10,),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.65,
+              child: FloatingActionButton.extended(
+                  backgroundColor: const Color(0xff03dac6),
+                  foregroundColor: Colors.black,
+                  onPressed: () async {
+                   
+                  },
+                  label: Text(
+                     'Invite Dealer',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ))),
 
-          return DealerTile(profile: profile);
-        },
+            ),
+             SizedBox(
+              height: 20,
+            ),
+            Flexible(
+              child: ListView.builder(
+                itemCount: 2,
+                itemBuilder: (BuildContext context, int index) {
+                  ProfileState profile = ProfileInitial().copyWith(
+                    firstName: 'Test Name',
+                    email: 'test@gmail.com',
+                    phone: '+9191111111111',
+                    code: 'TP001',
+                  );
+            
+                  return DealerTile(profile: profile);
+                },
+              ),
+            ),
+              SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.65,
+              child: FloatingActionButton.extended(
+                  backgroundColor: const Color(0xff03dac6),
+                  foregroundColor: Colors.black,
+                  onPressed: () async {},
+                  label: Text('Toggle All',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ))),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
       ),
     );
-    
   }
 }

@@ -64,7 +64,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       var map = <String, dynamic>{};
       emit(ProfileState.fromMap(map));
     } else {
-      emit(NewProfile(userType: state.userType, uid: uid));
+      emit(NewProfile(userType: state.userType, uid: uid,phone: '+919000000001'));
     }
   }
 

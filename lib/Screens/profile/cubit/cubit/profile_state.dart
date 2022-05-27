@@ -11,6 +11,7 @@ class ProfileState extends Equatable {
   final String uid;
   final String userType;
   final String referralCode;
+  final String phone;
   const ProfileState({
     required this.firstName,
     required this.middleName,
@@ -20,6 +21,7 @@ class ProfileState extends Equatable {
     required this.uid,
     required this.userType,
     required this.referralCode,
+    required this.phone,
   });
   @override
   List<Object> get props {
@@ -32,12 +34,13 @@ class ProfileState extends Equatable {
       uid,
       userType,
       referralCode,
+      phone,
     ];
   }
 
   @override
   String toString() {
-    return 'ProfileState(firstName: $firstName, middleName: $middleName, lastName: $lastName, email: $email, code: $code, uid: $uid, userType: $userType, referralCode: $referralCode)';
+    return 'ProfileState(firstName: $firstName, middleName: $middleName, lastName: $lastName, email: $email, code: $code, uid: $uid, userType: $userType, referralCode: $referralCode, phone: $phone)';
   }
 
   ProfileState copyWith({
@@ -49,6 +52,7 @@ class ProfileState extends Equatable {
     String? uid,
     String? userType,
     String? referralCode,
+    String? phone,
   }) {
     return ProfileState(
       firstName: firstName ?? this.firstName,
@@ -59,6 +63,7 @@ class ProfileState extends Equatable {
       uid: uid ?? this.uid,
       userType: userType ?? this.userType,
       referralCode: referralCode ?? this.referralCode,
+      phone: phone ?? this.phone,
     );
   }
 
@@ -72,6 +77,7 @@ class ProfileState extends Equatable {
       'uid': uid,
       'userType': userType,
       'referralCode': referralCode,
+      'phone': phone,
     };
   }
 
@@ -85,6 +91,7 @@ class ProfileState extends Equatable {
       uid: map['uid'] ?? '',
       userType: map['userType'] ?? '',
       referralCode: map['referralCode'] ?? '',
+      phone: map['phone'] ?? '',
     );
   }
 
@@ -111,11 +118,12 @@ class ProfileInitial extends ProfileState {
           referralCode: '',
           userType: 'admin',
           uid: '',
+          phone: '',
         );
 }
 
 class NewProfile extends ProfileState {
-  const NewProfile({required String userType, required String uid})
+  const NewProfile({required String userType, required String uid,required String phone})
       : super(
           firstName: '',
           email: '',
@@ -125,5 +133,6 @@ class NewProfile extends ProfileState {
           referralCode: '',
           userType: userType,
           uid: uid,
+          phone: phone
         );
 }
