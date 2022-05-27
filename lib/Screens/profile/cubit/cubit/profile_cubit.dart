@@ -59,7 +59,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     ///
     ///
 
-    bool isRegistered = true;
+    bool isRegistered = false;
     if (isRegistered) {
       var map = <String, dynamic>{};
       emit(ProfileState.fromMap(map));

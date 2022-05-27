@@ -281,9 +281,10 @@ class _LogInScreenState extends State<LogInScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('login', true);
-
+    var bloc = BlocProvider.of<ProfileCubit>(context);
     if (phone == "+911111111111") {
       await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
+      bloc.changeUserType(UserTypes.admin);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (builder) => const HomePage()),
@@ -291,7 +292,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
       return;
     }
-    var bloc = BlocProvider.of<ProfileCubit>(context);
+
     await bloc.fetchProfile();
     if (bloc.state is NewProfile) {
       Navigator.pushReplacement(
