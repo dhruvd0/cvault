@@ -1,7 +1,6 @@
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class DealerTile extends StatefulWidget {
   const DealerTile({Key? key, required this.profile}) : super(key: key);

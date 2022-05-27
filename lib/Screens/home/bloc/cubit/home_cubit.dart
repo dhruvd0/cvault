@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:cvault/Screens/home/bloc/cubit/home_state.dart';
 import 'package:cvault/Screens/home/models/crypto_currency.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial()) {
@@ -27,13 +25,13 @@ class HomeCubit extends Cubit<HomeState> {
       });
     }
   }
-  final wazirxChannel = IOWebSocketChannel.connect(
+  final wazirXChannel = IOWebSocketChannel.connect(
     Uri.parse('wss://stream.wazirx.com/stream'),
   );
   void startWazirXCryptoTicker() {
-    wazirxChannel.stream.listen((event) {
+    wazirXChannel.stream.listen((event) {
       if (event != null && event.contains('connected')) {
-        wazirxChannel.sink.add(jsonEncode({
+        wazirXChannel.sink.add(jsonEncode({
           "event": "subscribe",
           "streams": ["!ticker@arr"],
         }));
@@ -109,7 +107,8 @@ class HomeCubit extends Cubit<HomeState> {
     for (var key in cryptoKeys) {
       if (mapResponse.containsKey(key)) {
         var cryptoData = mapResponse[key];
-        var indexWhere = currencies.indexWhere((curr) => curr.key == key);
+        var indexWhere =
+            currencies.indexWhere((currency) => currency.key == key);
         if (indexWhere != -1) {
           currencies[indexWhere] = currencies[indexWhere].copyWith(
             key: key,
@@ -126,7 +125,7 @@ class HomeCubit extends Cubit<HomeState> {
         }
       }
     }
-    
+
     return currencies;
   }
 

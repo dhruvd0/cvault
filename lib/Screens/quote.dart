@@ -346,7 +346,8 @@ class _QuoteState extends State<Quote> {
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(color: Colors.grey, width: 1)),
                       child: TextFormField(
-                        style: const TextStyle(color: Colors.white, fontSize: 18),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 18),
                         autovalidateMode: AutovalidateMode.always,
                         decoration: const InputDecoration(
                             hintText: 'Mobile Number',

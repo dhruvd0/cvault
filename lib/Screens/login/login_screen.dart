@@ -30,11 +30,11 @@ class _LogInScreenState extends State<LogInScreen> {
   bool codeSent = false;
   bool isLoading = false;
   bool otpLoading = false;
-  final GlobalKey<ScaffoldState> _scaffoldfkey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldfkey,
+      key: _scaffoldKey,
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -66,10 +66,11 @@ class _LogInScreenState extends State<LogInScreen> {
                     "Enter code sent \nto your number",
                     style: GoogleFonts.lato(
                       textStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w600),
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -92,23 +93,27 @@ class _LogInScreenState extends State<LogInScreen> {
                   Container(
                     height: 55,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white)),
-                    child: otpLoading == false
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.white),
+                    ),
+                    child: !otpLoading
                         ? OTPTextField(
                             outlineBorderRadius: 25,
                             keyboardType: TextInputType.number,
                             otpFieldStyle: OtpFieldStyle(
-                                errorBorderColor: Colors.black,
-                                borderColor: Colors.black,
-                                enabledBorderColor: Colors.black,
-                                disabledBorderColor: Colors.black,
-                                focusBorderColor: Colors.black),
+                              errorBorderColor: Colors.black,
+                              borderColor: Colors.black,
+                              enabledBorderColor: Colors.black,
+                              disabledBorderColor: Colors.black,
+                              focusBorderColor: Colors.black,
+                            ),
                             length: 6,
                             width: MediaQuery.of(context).size.width,
                             fieldWidth: 20,
                             style: const TextStyle(
-                                fontSize: 17, color: Colors.white),
+                              fontSize: 17,
+                              color: Colors.white,
+                            ),
                             textFieldAlignment: MainAxisAlignment.spaceAround,
                             fieldStyle: FieldStyle.underline,
                             onCompleted: (pin) {
@@ -120,8 +125,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                 //             color: Colors.white,
                                 //           ),
                                 //         ));
-                                otpLoading == true;
-                                verifyPin(pin);
+                                if (otpLoading) {
+                                  verifyPin(pin);
+                                }
                               });
                             },
                           )
@@ -139,32 +145,39 @@ class _LogInScreenState extends State<LogInScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Text("Enter your \nmobile number",
-                      style: GoogleFonts.lato(
-                        textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w600),
-                      )),
+                  Text(
+                    "Enter your \nmobile number",
+                    style: GoogleFonts.lato(
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                   const SizedBox(
                     height: 15,
                   ),
-                  Text("we will send you a confirmation code",
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
-                            fontSize: 14,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w600),
-                      )),
+                  Text(
+                    "we will send you a confirmation code",
+                    style: GoogleFonts.lato(
+                      textStyle: TextStyle(
+                        color: Colors.white.withOpacity(0.7),
+                        fontSize: 14,
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                   const SizedBox(
                     height: 30,
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(50)),
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
                     child: IntlPhoneField(
                       countryCodeTextColor: Colors.white,
                       dropDownIcon: const Icon(
@@ -182,7 +195,9 @@ class _LogInScreenState extends State<LogInScreen> {
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         hintText: '00000-00000',
                         hintStyle: TextStyle(
-                            color: Colors.white.withOpacity(0.4), fontSize: 16),
+                          color: Colors.white.withOpacity(0.4),
+                          fontSize: 16,
+                        ),
                       ),
                       initialCountryCode: 'IN',
                       style: const TextStyle(
@@ -215,11 +230,13 @@ class _LogInScreenState extends State<LogInScreen> {
                       });
                       verifyPhone();
                     },
-                    label: isLoading == false
-                        ? const Text('Get otp',
+                    label: !isLoading
+                        ? const Text(
+                            'Get otp',
                             style: TextStyle(
                               fontSize: 18,
-                            ))
+                            ),
+                          )
                         : const CircularProgressIndicator(
                             color: Colors.white,
                           ),
@@ -232,30 +249,31 @@ class _LogInScreenState extends State<LogInScreen> {
 
   Future<void> verifyPhone() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: phone,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          _postLoginSubRoutine();
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          final snackBar = SnackBar(content: Text("${e.message}"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        },
-        codeSent: (String verficationId, int? resendToken) {
+      phoneNumber: phone,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        _postLoginSubRoutine();
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        final snackBar = SnackBar(content: Text("${e.message}"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        setState(() {
+          codeSent = true;
+          verId = verificationId;
+        });
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        if (mounted) {
           setState(() {
-            codeSent = true;
-            verId = verficationId;
+            verId = verificationId;
           });
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          if (mounted) {
-            setState(() {
-              verId = verificationId;
-            });
-          }
-        },
-        timeout: const Duration(seconds: 60));
+        }
+      },
+      timeout: const Duration(seconds: 60),
+    );
   }
-//loading naviagtion
+//loading navigation
 
   Future<void> doTask() async {
     // Any future process here
@@ -273,7 +291,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
       await _postLoginSubRoutine();
     } on FirebaseAuthException catch (e) {
-      otpLoading == false;
+      otpLoading = false;
       final snackBar = SnackBar(content: Text("${e.message}"));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }

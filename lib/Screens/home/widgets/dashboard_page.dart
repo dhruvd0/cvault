@@ -31,14 +31,14 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     int LocalPrice = 2533118;
     double globalPrice = 2415313.58;
-    double dyf = 100 * ((LocalPrice - globalPrice) / globalPrice);
-    double dyf1 = double.parse(dyf.toStringAsFixed(2));
+    double difference = 100 * ((LocalPrice - globalPrice) / globalPrice);
+    double fixedDifference = double.parse(difference.toStringAsFixed(2));
 
-    final GlobalKey<ScaffoldState> scaffoldfkey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
       drawerEnableOpenDragGesture: false,
-      key: scaffoldfkey,
+      key: scaffoldKey,
       endDrawer: const MyDrawer(),
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
@@ -100,7 +100,7 @@ class _DashboardPageState extends State<DashboardPage> {
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
           var userType = state.userType;
-          
+
           return BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
               return Container(
@@ -316,7 +316,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                 children: [
                                   const Text('AD'),
                                   Center(
-                                      child: Image.asset("assets/test_ad.gif"),),
+                                    child: Image.asset("assets/test_ad.gif"),
+                                  ),
                                   const Text('AD'),
                                 ],
                               ),

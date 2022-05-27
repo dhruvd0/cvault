@@ -56,7 +56,6 @@ class CustomerManagementPage extends StatelessWidget {
                 backgroundColor: const Color(0xff03dac6),
                 foregroundColor: Colors.black,
                 onPressed: () async {
-
                   /// TODO: toggle all api
                 },
                 label: Text(
@@ -73,14 +72,19 @@ class CustomerManagementPage extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.65,
               child: FloatingActionButton.extended(
-                  heroTag: 'revert',
-                  backgroundColor: const Color(0xff03dac6),
-                  foregroundColor: Colors.black,
-                  onPressed: () async {},
-                  label: Text('Revert All To Admin',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),),),
+                heroTag: 'revert',
+                backgroundColor: const Color(0xff03dac6),
+                foregroundColor: Colors.black,
+                onPressed: () async {
+                  /// TODO: implement revert all to admin
+                },
+                label: Text(
+                  'Revert All To Admin',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
             ),
             SizedBox(
               height: 10,

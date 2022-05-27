@@ -241,31 +241,33 @@ class ProfilePage extends StatelessWidget {
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.65,
                       child: FloatingActionButton.extended(
-                          backgroundColor: const Color(0xff03dac6),
-                          foregroundColor: Colors.black,
-                          onPressed: () async {
-                            if (mode == ProfilePageMode.registration) {
-                              if (_formKey.currentState!.validate()) {
-                                await BlocProvider.of<ProfileCubit>(context)
-                                    .createNewProfile();
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomePage(),
-                                  ),
-                                );                              }
-                             
-                            } else {
-                              /// TODO: profile edit api
+                        backgroundColor: const Color(0xff03dac6),
+                        foregroundColor: Colors.black,
+                        onPressed: () async {
+                          if (mode == ProfilePageMode.registration) {
+                            if (_formKey.currentState!.validate()) {
+                              await BlocProvider.of<ProfileCubit>(context)
+                                  .createNewProfile();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ),
+                              );
                             }
-                          },
-                          label: Text(
-                              mode == ProfilePageMode.registration
-                                  ? "Submit"
-                                  : "Edit",
-                              style: TextStyle(
-                                fontSize: 18,
-                              ))),
+                          } else {
+                            /// TODO: profile edit api
+                          }
+                        },
+                        label: Text(
+                          mode == ProfilePageMode.registration
+                              ? "Submit"
+                              : "Edit",
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

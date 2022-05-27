@@ -26,24 +26,27 @@ class DealerManagementPage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.65,
               child: FloatingActionButton.extended(
                 heroTag: 'inv_dealer',
-                  backgroundColor: const Color(0xff03dac6),
-                  foregroundColor: Colors.black,
-                  onPressed: () async {
-                   
-                  },
-                  label: Text(
-                     'Invite Dealer',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),),),
-
+                backgroundColor: const Color(0xff03dac6),
+                foregroundColor: Colors.black,
+                onPressed: () async {
+                  /// TODO: Invite Dealer
+                },
+                label: Text(
+                  'Invite Dealer',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
             ),
-             SizedBox(
+            SizedBox(
               height: 20,
             ),
             Flexible(
@@ -56,24 +59,29 @@ class DealerManagementPage extends StatelessWidget {
                     phone: '+9191111111111',
                     code: 'TP001',
                   );
-            
+
                   return DealerTile(profile: profile);
                 },
               ),
             ),
-              SizedBox(
+            SizedBox(
               height: 10,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.65,
               child: FloatingActionButton.extended(
-                  backgroundColor: const Color(0xff03dac6),
-                  foregroundColor: Colors.black,
-                  onPressed: () async {},
-                  label: Text('Toggle All',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),),),
+                backgroundColor: const Color(0xff03dac6),
+                foregroundColor: Colors.black,
+                onPressed: () async {
+                  /// TODO: Toggle all
+                },
+                label: Text(
+                  'Toggle All',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
             ),
             SizedBox(
               height: 10,

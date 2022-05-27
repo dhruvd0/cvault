@@ -123,8 +123,11 @@ class ProfileInitial extends ProfileState {
 }
 
 class NewProfile extends ProfileState {
-  const NewProfile({required String userType, required String uid,required String phone})
-      : super(
+  const NewProfile({
+    required String userType,
+    required String uid,
+    required String phone,
+  }) : super(
           firstName: '',
           email: '',
           middleName: '',
@@ -133,6 +136,6 @@ class NewProfile extends ProfileState {
           referralCode: '',
           userType: userType,
           uid: uid,
-          phone: phone
+          phone: phone,
         );
 }

@@ -39,6 +39,7 @@ class _SettingsState extends State<Settings> {
   DropdownMenuItem<String> buildCurrencyList(String item) {
     final state = BlocProvider.of<HomeCubit>(context).state;
     String name = state.cryptoCurrencies.firstWhere((e) => e.key == item).name;
+
     return DropdownMenuItem(
       value: item,
       alignment: Alignment.center,
@@ -267,20 +268,24 @@ class _SettingsState extends State<Settings> {
                 "Global - Local",
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
-              Switch(
-                activeColor: Colors.green,
-                activeTrackColor: Colors.lightGreen,
-                value: toggle,
-                onChanged: (value) {
-                  setState(() {
-                    toggle = value;
-                  });
-                },
-              ),
+              _globalToLocalSwitch(),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Switch _globalToLocalSwitch() {
+    return Switch(
+      activeColor: Colors.green,
+      activeTrackColor: Colors.lightGreen,
+      value: toggle,
+      onChanged: (value) {
+        setState(() {
+          toggle = value;
+        });
+      },
     );
   }
 
@@ -299,28 +304,21 @@ class _SettingsState extends State<Settings> {
         const SizedBox(
           height: 25,
         ),
+        _dropdownSelectors(),
+      ],
+    );
+  }
+
+  Column _dropdownSelectors() {
+    return Column(
+      children: [
         Container(
           padding: const EdgeInsets.only(left: 20, right: 20),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(width: 1.5, color: Colors.white)),
-          child: DropdownButton<String>(
-            style: const TextStyle(color: Colors.black),
-            underline: const SizedBox(),
-            hint: const Center(
-              child: Text(
-                "Select Global Ticker",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            isExpanded: true,
-            dropdownColor: Colors.transparent,
-            items: items.map(buildMenuTickerItems).toList(),
-            value: value,
-            onChanged: (value) => setState(() {
-              this.value = value;
-            }),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(width: 1.5, color: Colors.white),
           ),
+          child: _globalTickerDropdown(),
         ),
         const SizedBox(
           height: 25,
@@ -328,27 +326,52 @@ class _SettingsState extends State<Settings> {
         Container(
           padding: const EdgeInsets.only(left: 20, right: 20),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(width: 1.5, color: Colors.white)),
-          child: DropdownButton<String>(
-            style: const TextStyle(color: Colors.black),
-            underline: const SizedBox(),
-            hint: const Center(
-              child: Text(
-                "Select Local Ticker",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            isExpanded: true,
-            dropdownColor: Colors.transparent,
-            items: items.map(buildMenuTickerItems).toList(),
-            value: value,
-            onChanged: (value) => setState(() {
-              this.value = value;
-            }),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(width: 1.5, color: Colors.white),
           ),
+          child: _localTickerDropdown(),
         ),
       ],
+    );
+  }
+
+  DropdownButton<String> _localTickerDropdown() {
+    return DropdownButton<String>(
+      style: const TextStyle(color: Colors.black),
+      underline: const SizedBox(),
+      hint: const Center(
+        child: Text(
+          "Select Local Ticker",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      isExpanded: true,
+      dropdownColor: Colors.transparent,
+      items: items.map(buildMenuTickerItems).toList(),
+      value: value,
+      onChanged: (value) => setState(() {
+        this.value = value;
+      }),
+    );
+  }
+
+  DropdownButton<String> _globalTickerDropdown() {
+    return DropdownButton<String>(
+      style: const TextStyle(color: Colors.black),
+      underline: const SizedBox(),
+      hint: const Center(
+        child: Text(
+          "Select Global Ticker",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      isExpanded: true,
+      dropdownColor: Colors.transparent,
+      items: items.map(buildMenuTickerItems).toList(),
+      value: value,
+      onChanged: (value) => setState(() {
+        this.value = value;
+      }),
     );
   }
 

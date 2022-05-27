@@ -1,7 +1,6 @@
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class CustomerTile extends StatefulWidget {
   const CustomerTile({Key? key, required this.profile}) : super(key: key);
@@ -93,10 +92,14 @@ class _CustomerTileState extends State<CustomerTile> {
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                  color: ThemeColors.lightGreenAccentColor,
-                ),),
-                child: Text('Change Dealer',style: TextStyle(color: Colors.white),),
+                  border: Border.all(
+                    color: ThemeColors.lightGreenAccentColor,
+                  ),
+                ),
+                child: Text(
+                  'Change Dealer',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               const SizedBox(
                 height: 10,
