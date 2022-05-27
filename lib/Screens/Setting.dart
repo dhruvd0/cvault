@@ -130,7 +130,7 @@ class _SettingsState extends State<Settings> {
                                                 BlocProvider.of<HomeCubit>(
                                                   context,
                                                   listen: false,
-                                                ).changeRcptey(value);
+                                                ).changeCryptoKey(value);
                                               }
                                             },
                                           ),

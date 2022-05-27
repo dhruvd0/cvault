@@ -20,7 +20,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  bool toggle = false;
+  bool toggle = true;
 
   @override
   void initState() {

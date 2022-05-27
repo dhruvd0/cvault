@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cvault/Screens/home/bloc/cubit/home_state.dart';
 import 'package:cvault/Screens/home/models/crypto_currency.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial()) {
@@ -19,10 +22,46 @@ class HomeCubit extends Cubit<HomeState> {
           .listen((event) {
         if (event != null) {
           fetchCurrencyDataFromWazirX();
+          startCryptoTicker();
         }
       });
     }
   }
+  final channel = IOWebSocketChannel.connect(
+    Uri.parse('wss://stream.wazirx.com/stream'),
+  );
+  void startCryptoTicker() {
+    channel.stream.listen((event) {
+      if (event != null && event.contains('connected')) {
+        channel.sink.add(jsonEncode({
+          "event": "subscribe",
+          "streams": ["!ticker@arr"],
+        }));
+      }
+      else{
+        Map<String, dynamic> baseData = jsonDecode(event);
+        if (baseData.containsKey('data') && baseData['data'] is List) {
+          var cryptoData = baseData['data'];
+          for (var crypto in cryptoData.toList()) {
+            var key = crypto['s'];
+            if (cryptoKeys.contains(key)) {
+              var price = crypto['b'];
+              final cryptoCurrencies = state.cryptoCurrencies.toList();
+              int index =
+                  cryptoCurrencies.indexWhere((element) => element.key == key);
+              if (index != -1) {
+                cryptoCurrencies[index] = cryptoCurrencies[index]
+                    .copyWith(wazirxPrice: double.parse(price));
+                emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
+              }
+            }
+          }
+        }
+      }
+     
+    });
+  }
+
   Future<void> logout(BuildContext context) async {
     emit(HomeInitial());
     BlocProvider.of<ProfileCubit>(context).reset();
@@ -38,7 +77,7 @@ class HomeCubit extends Cubit<HomeState> {
     'adainr',
     'shibinr',
   ];
-  void changeRcptey(String key) {
+  void changeCryptoKey(String key) {
     assert(HomeCubit.cryptoKeys.contains(key));
     emit(state.copyWith(selectedCurrencyKey: key));
   }

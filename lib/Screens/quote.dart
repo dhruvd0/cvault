@@ -340,20 +340,22 @@ class _QuoteState extends State<Quote> {
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: Colors.grey, width: 1)),
-                    child: TextFormField(
-                      style: const TextStyle(color: Colors.white, fontSize: 18),
-                      autovalidateMode: AutovalidateMode.always,
-                      decoration: const InputDecoration(
-                          hintText: '    UserID',
-                          hintStyle: TextStyle(
-                              color: Colors.white54,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600)),
-                    )),
+                Center(
+                  child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.grey, width: 1)),
+                      child: TextFormField(
+                        style: const TextStyle(color: Colors.white, fontSize: 18),
+                        autovalidateMode: AutovalidateMode.always,
+                        decoration: const InputDecoration(
+                            hintText: 'Mobile Number',
+                            hintStyle: TextStyle(
+                                color: Colors.white54,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600)),
+                      )),
+                ),
                 const SizedBox(
                   height: 20,
                 )
