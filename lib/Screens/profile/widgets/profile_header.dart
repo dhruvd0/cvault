@@ -34,11 +34,11 @@ class ProfileHeader extends StatelessWidget {
           ),
           child: CircleAvatar(child: BlocBuilder<ProfileCubit, ProfileState>(
             builder: (context, state) {
-              if (state.fullName.isEmpty) {
+              if (state.firstName.isEmpty) {
                 return const Text('AB');
               }
 
-              return Text(state.fullName[0]);
+              return Text(state.firstName[0]);
             },
           )),
         ),
@@ -48,9 +48,9 @@ class ProfileHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  state.fullName.isEmpty
+                  state.firstName.isEmpty
                       ? 'Name'
-                      : state.fullName +
+                      : state.firstName +
                           ' ' +
                           state.middleName +
                           ' ' +

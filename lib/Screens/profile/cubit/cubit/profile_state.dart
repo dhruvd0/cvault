@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class ProfileState extends Equatable {
-  final String fullName;
+  final String firstName;
   final String middleName;
   final String lastName;
   final String email;
@@ -12,7 +12,7 @@ class ProfileState extends Equatable {
   final String userType;
   final String referralCode;
   const ProfileState({
-    required this.fullName,
+    required this.firstName,
     required this.middleName,
     required this.lastName,
     required this.email,
@@ -24,7 +24,7 @@ class ProfileState extends Equatable {
   @override
   List<Object> get props {
     return [
-      fullName,
+      firstName,
       middleName,
       lastName,
       email,
@@ -37,11 +37,11 @@ class ProfileState extends Equatable {
 
   @override
   String toString() {
-    return 'ProfileState(fullName: $fullName, middleName: $middleName, lastName: $lastName, email: $email, code: $code, uid: $uid, userType: $userType, referralCode: $referralCode)';
+    return 'ProfileState(firstName: $firstName, middleName: $middleName, lastName: $lastName, email: $email, code: $code, uid: $uid, userType: $userType, referralCode: $referralCode)';
   }
 
   ProfileState copyWith({
-    String? fullName,
+    String? firstName,
     String? middleName,
     String? lastName,
     String? email,
@@ -51,7 +51,7 @@ class ProfileState extends Equatable {
     String? referralCode,
   }) {
     return ProfileState(
-      fullName: fullName ?? this.fullName,
+      firstName: firstName ?? this.firstName,
       middleName: middleName ?? this.middleName,
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
@@ -64,7 +64,7 @@ class ProfileState extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
-      'fullName': fullName,
+      'firstName': firstName,
       'middleName': middleName,
       'lastName': lastName,
       'email': email,
@@ -77,7 +77,7 @@ class ProfileState extends Equatable {
 
   factory ProfileState.fromMap(Map<String, dynamic> map) {
     return ProfileState(
-      fullName: map['fullName'] ?? '',
+      firstName: map['firstName'] ?? '',
       middleName: map['middleName'] ?? '',
       lastName: map['lastName'] ?? '',
       email: map['email'] ?? '',
@@ -92,7 +92,7 @@ class ProfileState extends Equatable {
 }
 
 enum ProfileFields {
-  fullName,
+  firstName,
   middleName,
   lastName,
   email,
@@ -103,7 +103,7 @@ enum ProfileFields {
 class ProfileInitial extends ProfileState {
   const ProfileInitial()
       : super(
-          fullName: '',
+          firstName: '',
           email: '',
           middleName: '',
           code: '',
@@ -117,7 +117,7 @@ class ProfileInitial extends ProfileState {
 class NewProfile extends ProfileState {
   const NewProfile({required String userType, required String uid})
       : super(
-          fullName: '',
+          firstName: '',
           email: '',
           middleName: '',
           code: '',

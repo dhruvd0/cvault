@@ -1,4 +1,4 @@
-import 'package:cvault/Screens/admin_panel/admin_panel.dart';
+import 'package:cvault/Screens/admin_panel/widgets/admin_panel.dart';
 import 'package:cvault/Screens/home/widgets/dashboard_page.dart';
 
 import 'package:cvault/Screens/profile/widgets/profile.dart';

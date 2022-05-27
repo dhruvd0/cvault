@@ -18,8 +18,8 @@ class ProfileTextField extends StatelessWidget {
   final ProfileFields fieldName;
   String getInitialValueFromFieldName(ProfileState state) {
     switch (fieldName) {
-      case ProfileFields.fullName:
-        return state.fullName;
+      case ProfileFields.firstName:
+        return state.firstName;
       case ProfileFields.middleName:
         return state.middleName;
       case ProfileFields.lastName:

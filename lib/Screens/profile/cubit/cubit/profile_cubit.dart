@@ -26,8 +26,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   void changeProfileField(dynamic data, ProfileFields field) {
     var profileState = state;
     switch (field) {
-      case ProfileFields.fullName:
-        profileState = profileState.copyWith(fullName: data);
+      case ProfileFields.firstName:
+        profileState = profileState.copyWith(firstName: data);
         break;
       case ProfileFields.middleName:
         profileState = profileState.copyWith(middleName: data);
