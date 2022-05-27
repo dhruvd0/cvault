@@ -51,7 +51,7 @@ class _DashboardPageState extends State<DashboardPage> {
             var userType = state.userType;
 
             return Text(
-              "Hello, ${state.fullName.isEmpty ? 'User' : state.fullName}.\n Welcome to ${userType[0].toUpperCase() + userType.substring(1)} Dashboard",
+              "Hello, ${state.firstName.isEmpty ? 'User' : state.firstName}.\n Welcome to ${userType[0].toUpperCase() + userType.substring(1)} Dashboard",
               textAlign: TextAlign.center,
               maxLines: 3,
               style: const TextStyle(

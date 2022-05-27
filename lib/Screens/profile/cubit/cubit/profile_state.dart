@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class ProfileState extends Equatable {
-  final String fullName;
+  final String firstName;
   final String middleName;
   final String lastName;
   final String email;
@@ -11,8 +11,9 @@ class ProfileState extends Equatable {
   final String uid;
   final String userType;
   final String referralCode;
+  final String phone;
   const ProfileState({
-    required this.fullName,
+    required this.firstName,
     required this.middleName,
     required this.lastName,
     required this.email,
@@ -20,11 +21,12 @@ class ProfileState extends Equatable {
     required this.uid,
     required this.userType,
     required this.referralCode,
+    required this.phone,
   });
   @override
   List<Object> get props {
     return [
-      fullName,
+      firstName,
       middleName,
       lastName,
       email,
@@ -32,16 +34,17 @@ class ProfileState extends Equatable {
       uid,
       userType,
       referralCode,
+      phone,
     ];
   }
 
   @override
   String toString() {
-    return 'ProfileState(fullName: $fullName, middleName: $middleName, lastName: $lastName, email: $email, code: $code, uid: $uid, userType: $userType, referralCode: $referralCode)';
+    return 'ProfileState(firstName: $firstName, middleName: $middleName, lastName: $lastName, email: $email, code: $code, uid: $uid, userType: $userType, referralCode: $referralCode, phone: $phone)';
   }
 
   ProfileState copyWith({
-    String? fullName,
+    String? firstName,
     String? middleName,
     String? lastName,
     String? email,
@@ -49,9 +52,10 @@ class ProfileState extends Equatable {
     String? uid,
     String? userType,
     String? referralCode,
+    String? phone,
   }) {
     return ProfileState(
-      fullName: fullName ?? this.fullName,
+      firstName: firstName ?? this.firstName,
       middleName: middleName ?? this.middleName,
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
@@ -59,12 +63,13 @@ class ProfileState extends Equatable {
       uid: uid ?? this.uid,
       userType: userType ?? this.userType,
       referralCode: referralCode ?? this.referralCode,
+      phone: phone ?? this.phone,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'fullName': fullName,
+      'firstName': firstName,
       'middleName': middleName,
       'lastName': lastName,
       'email': email,
@@ -72,12 +77,13 @@ class ProfileState extends Equatable {
       'uid': uid,
       'userType': userType,
       'referralCode': referralCode,
+      'phone': phone,
     };
   }
 
   factory ProfileState.fromMap(Map<String, dynamic> map) {
     return ProfileState(
-      fullName: map['fullName'] ?? '',
+      firstName: map['firstName'] ?? '',
       middleName: map['middleName'] ?? '',
       lastName: map['lastName'] ?? '',
       email: map['email'] ?? '',
@@ -85,6 +91,7 @@ class ProfileState extends Equatable {
       uid: map['uid'] ?? '',
       userType: map['userType'] ?? '',
       referralCode: map['referralCode'] ?? '',
+      phone: map['phone'] ?? '',
     );
   }
 
@@ -92,7 +99,7 @@ class ProfileState extends Equatable {
 }
 
 enum ProfileFields {
-  fullName,
+  firstName,
   middleName,
   lastName,
   email,
@@ -103,7 +110,7 @@ enum ProfileFields {
 class ProfileInitial extends ProfileState {
   const ProfileInitial()
       : super(
-          fullName: '',
+          firstName: '',
           email: '',
           middleName: '',
           code: '',
@@ -111,13 +118,14 @@ class ProfileInitial extends ProfileState {
           referralCode: '',
           userType: 'admin',
           uid: '',
+          phone: '',
         );
 }
 
 class NewProfile extends ProfileState {
-  const NewProfile({required String userType, required String uid})
+  const NewProfile({required String userType, required String uid,required String phone})
       : super(
-          fullName: '',
+          firstName: '',
           email: '',
           middleName: '',
           code: '',
@@ -125,5 +133,6 @@ class NewProfile extends ProfileState {
           referralCode: '',
           userType: userType,
           uid: uid,
+          phone: phone
         );
 }

@@ -26,8 +26,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   void changeProfileField(dynamic data, ProfileFields field) {
     var profileState = state;
     switch (field) {
-      case ProfileFields.fullName:
-        profileState = profileState.copyWith(fullName: data);
+      case ProfileFields.firstName:
+        profileState = profileState.copyWith(firstName: data);
         break;
       case ProfileFields.middleName:
         profileState = profileState.copyWith(middleName: data);
@@ -59,12 +59,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     ///
     ///
 
-    bool isRegistered = true;
+    bool isRegistered = false;
     if (isRegistered) {
       var map = <String, dynamic>{};
       emit(ProfileState.fromMap(map));
     } else {
-      emit(NewProfile(userType: state.userType, uid: uid));
+      emit(NewProfile(userType: state.userType, uid: uid,phone: '+919000000001'));
     }
   }
 

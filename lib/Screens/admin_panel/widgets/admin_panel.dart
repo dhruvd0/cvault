@@ -1,4 +1,4 @@
-import 'package:cvault/Screens/admin_panel/admin_panel_grid.dart';
+import 'package:cvault/Screens/admin_panel/widgets/admin_panel_grid.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/Screens/transactions/widgets/transactions_page.dart';

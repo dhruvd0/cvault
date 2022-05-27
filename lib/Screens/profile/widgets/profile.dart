@@ -62,7 +62,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   ProfileTextField(
                     hintText: 'Full Name',
-                    fieldName: ProfileFields.fullName,
+                    fieldName: ProfileFields.firstName,
                   ),
                 ],
               ),
@@ -229,32 +229,38 @@ class ProfilePage extends StatelessWidget {
                     )
                   : Container(),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (mode == ProfilePageMode.registration) {
-                      await BlocProvider.of<ProfileCubit>(context)
-                          .createNewProfile();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(),
-                        ),
-                      );
-                    } else {
-                      /// TODO: profile edit api
-                    }
-                  },
-                  child: Text(
-                    mode == ProfilePageMode.registration ? "Submit" : "Edit",
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    elevation: 10,
-                    shape: const StadiumBorder(),
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.65,
+                    child: FloatingActionButton.extended(
+                        backgroundColor: const Color(0xff03dac6),
+                        foregroundColor: Colors.black,
+                        onPressed: () async {
+                          if (mode == ProfilePageMode.registration) {
+                            await BlocProvider.of<ProfileCubit>(context)
+                                .createNewProfile();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          } else {
+                            /// TODO: profile edit api
+                          }
+                        },
+                        label: Text(
+                            mode == ProfilePageMode.registration
+                                ? "Submit"
+                                : "Edit",
+                            style: TextStyle(
+                              fontSize: 18,
+                            ))),
                   ),
                 ),
               ),
