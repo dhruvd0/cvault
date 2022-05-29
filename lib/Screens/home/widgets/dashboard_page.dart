@@ -3,12 +3,11 @@ import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
 import 'package:cvault/Screens/home/bloc/cubit/home_state.dart';
 import 'package:cvault/Screens/home/widgets/margin_selector.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/Screens/profile/widgets/profile.dart';
 import 'package:cvault/constants/user_types.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../drawer.dart';
 
@@ -46,12 +45,12 @@ class _DashboardPageState extends State<DashboardPage> {
         elevation: 0,
         toolbarHeight: 100,
         centerTitle: true,
-        title: BlocBuilder<ProfileCubit, ProfileState>(
-          builder: (context, state) {
-            var userType = state.userType;
+        title: Consumer<ProfileNotifier>(
+          builder: (context, profileNotifier, _) {
+            var userType = profileNotifier.state.userType;
 
             return Text(
-              "Hello, ${state.firstName.isEmpty ? 'User' : state.firstName}.\n Welcome to ${userType[0].toUpperCase() + userType.substring(1)} Dashboard",
+              "Hello, ${profileNotifier.state.firstName.isEmpty ? 'User' : profileNotifier.state.firstName}.\n Welcome to ${userType[0].toUpperCase() + userType.substring(1)} Dashboard",
               textAlign: TextAlign.center,
               maxLines: 3,
               style: const TextStyle(
@@ -97,12 +96,14 @@ class _DashboardPageState extends State<DashboardPage> {
           }),
         ],
       ),
-      body: BlocBuilder<ProfileCubit, ProfileState>(
-        builder: (context, state) {
-          var userType = state.userType;
+      body: Consumer<ProfileNotifier>(
+        builder: (context, profileNotifier, _) {
+          var userType = profileNotifier.state.userType;
 
-          return BlocBuilder<HomeCubit, HomeState>(
-            builder: (context, state) {
+          return Consumer<HomeStateNotifier>(
+            builder: (context, homeStateNotifier, _) {
+              final state = homeStateNotifier.state;
+
               return Container(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -143,18 +144,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                   0,
                                   0,
                                 ),
-                                child: BlocBuilder<HomeCubit, HomeState>(
-                                  builder: (context, state) {
-                                    return Text(
-                                      '1 ${state.selectedCurrencyKey.toUpperCase()}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Poppins',
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    );
-                                  },
+                                child: Text(
+                                  '1 ${state.selectedCurrencyKey.toUpperCase()}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Poppins',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
@@ -172,25 +169,21 @@ class _DashboardPageState extends State<DashboardPage> {
                                 fontSize: 20,
                               ),
                             ),
-                            BlocBuilder<HomeCubit, HomeState>(
-                              builder: (context, state) {
-                                return Switch(
-                                  autofocus: true,
-                                  activeColor: Colors.white,
-                                  activeTrackColor: Colors.lightGreen,
-                                  inactiveThumbColor: Colors.grey,
-                                  inactiveTrackColor: Colors.black,
-                                  value: toggle,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      toggle = value;
-                                    });
-                                    BlocProvider.of<HomeCubit>(
-                                      context,
-                                      listen: false,
-                                    ).toggleUSDToINR(!value);
-                                  },
-                                );
+                            Switch(
+                              autofocus: true,
+                              activeColor: Colors.white,
+                              activeTrackColor: Colors.lightGreen,
+                              inactiveThumbColor: Colors.grey,
+                              inactiveTrackColor: Colors.black,
+                              value: toggle,
+                              onChanged: (value) {
+                                setState(() {
+                                  toggle = value;
+                                });
+                                Provider.of<HomeStateNotifier>(
+                                  context,
+                                  listen: false,
+                                ).toggleUSDToINR(!value);
                               },
                             ),
                           ],
@@ -212,7 +205,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    state is HomeInitial
+                    homeStateNotifier is HomeInitial
                         ? const Text("Loading")
                         : Text(
                             (state.isUSD ? '\$' : '₹') +
@@ -278,7 +271,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                         ),
                                       ),
                                       Text(
-                                        '',
+                                        fixedDifference.toString(),
                                         style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 18,

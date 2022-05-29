@@ -1,11 +1,10 @@
 import 'package:cvault/Screens/admin_panel/widgets/admin_panel_grid.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/Screens/transactions/widgets/transactions_page.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class AdminPanel extends StatefulWidget {
   const AdminPanel({Key? key}) : super(key: key);
@@ -46,9 +45,9 @@ class _AdminPanelState extends State<AdminPanel> {
         ),
       ),
       body: SingleChildScrollView(
-        child: BlocBuilder<ProfileCubit, ProfileState>(
-          builder: (context, state) {
-            var userType = state.userType;
+        child: Consumer<ProfileNotifier>(
+          builder: (context, profileNotifier, _) {
+            var userType = profileNotifier.state.userType;
 
             return Container(
               padding: const EdgeInsets.all(20),

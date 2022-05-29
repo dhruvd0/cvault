@@ -1,11 +1,12 @@
-import 'package:bloc/bloc.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileCubit extends Cubit<ProfileState> {
-  ProfileCubit() : super(const ProfileInitial()) {
+class ProfileNotifier extends ChangeNotifier {
+  ProfileState state = ProfileInitial();
+  ProfileNotifier() : super() {
     FirebaseAuth.instance
         .authStateChanges()
         .asBroadcastStream()
@@ -19,6 +20,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
     });
   }
+  void emit(ProfileState newState) {
+    state = newState;
+    notifyListeners();
+  }
+
   void changeUserType(String newType) {
     emit(state.copyWith(userType: newType));
   }
@@ -60,14 +66,22 @@ class ProfileCubit extends Cubit<ProfileState> {
     ///
 
     bool isRegistered = false;
+    // ignore: dead_code, change isRegistered to mock register api
     if (isRegistered) {
       var map = <String, dynamic>{};
       emit(ProfileState.fromMap(map));
     } else {
-      emit(NewProfile(
-          userType: state.userType, uid: uid, phone: '+919000000001'));
+      emit(
+        NewProfile(
+          userType: state.userType,
+          uid: uid,
+          phone: '+919000000001',
+        ),
+      );
     }
   }
 
-  createNewProfile() {}
+  createNewProfile() {
+    /// TODO: implement new profile
+  }
 }

@@ -36,14 +36,19 @@ class _MyDrawerState extends State<MyDrawer> {
                 "Settings",
                 textAlign: TextAlign.right,
                 style: TextStyle(
-                    fontStyle: FontStyle.normal,
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Roboto'),
+                  fontStyle: FontStyle.normal,
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'Roboto',
+                ),
               ),
               onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (builder) => const Settings()));
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => const Settings(),
+                  ),
+                );
               },
             ),
             const SizedBox(
@@ -62,9 +67,12 @@ class _MyDrawerState extends State<MyDrawer> {
                     fontStyle: FontStyle.normal,
                     color: Colors.white,
                     fontSize: 16,
-                    fontFamily: 'Roboto'),
+                    fontFamily: 'Roboto',),
               ),
-              onTap: () {},
+              onTap: () {
+
+                /// TODO: navigate to messages
+              },
             ),
             const SizedBox(
               height: 10,
@@ -82,9 +90,11 @@ class _MyDrawerState extends State<MyDrawer> {
                     fontStyle: FontStyle.normal,
                     color: Colors.white,
                     fontSize: 16,
-                    fontFamily: 'Roboto'),
+                    fontFamily: 'Roboto',),
               ),
-              onTap: () {},
+              onTap: () {
+                /// TODO: navigate to notifications
+              },
             ),
             const SizedBox(
               height: 10,
@@ -102,7 +112,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     fontStyle: FontStyle.normal,
                     color: Colors.white,
                     fontSize: 16,
-                    fontFamily: 'Roboto'),
+                    fontFamily: 'Roboto',),
               ),
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
@@ -110,7 +120,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (builder) => const LogInScreen()));
+                        builder: (builder) => const LogInScreen(),),);
               },
             ),
           ],

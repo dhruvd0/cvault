@@ -6,13 +6,14 @@ import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
-class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(HomeInitial()) {
+class HomeStateNotifier extends ChangeNotifier {
+  HomeState state = HomeInitial();
+  HomeStateNotifier() : super() {
     if (Firebase.apps.isNotEmpty) {
       FirebaseAuth.instance
           .authStateChanges()
@@ -25,6 +26,13 @@ class HomeCubit extends Cubit<HomeState> {
       });
     }
   }
+
+  /// Changes state and notifies listeners
+  void emit(HomeState newState) {
+    state = newState;
+    notifyListeners();
+  }
+
   final wazirXChannel = IOWebSocketChannel.connect(
     Uri.parse('wss://stream.wazirx.com/stream'),
   );
@@ -60,7 +68,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> logout(BuildContext context) async {
     emit(HomeInitial());
-    BlocProvider.of<ProfileCubit>(context).reset();
+    Provider.of<ProfileNotifier>(context).reset();
     (await SharedPreferences.getInstance()).clear();
     await FirebaseAuth.instance.signOut();
   }
@@ -74,7 +82,7 @@ class HomeCubit extends Cubit<HomeState> {
     'shibinr',
   ];
   void changeCryptoKey(String key) {
-    assert(HomeCubit.cryptoKeys.contains(key));
+    assert(HomeStateNotifier.cryptoKeys.contains(key));
     emit(state.copyWith(selectedCurrencyKey: key));
   }
 

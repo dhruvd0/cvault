@@ -1,7 +1,6 @@
 import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({
@@ -32,8 +31,9 @@ class ProfileHeader extends StatelessWidget {
             // color: Color(0xff1E2022),
             borderRadius: BorderRadius.circular(40),
           ),
-          child: CircleAvatar(child: BlocBuilder<ProfileCubit, ProfileState>(
-            builder: (context, state) {
+          child: CircleAvatar(child: Consumer<ProfileNotifier>(
+            builder: (context, profileNotifier, _) {
+              var state = profileNotifier.state;
               if (state.firstName.isEmpty) {
                 return const Text('AB');
               }
@@ -42,8 +42,10 @@ class ProfileHeader extends StatelessWidget {
             },
           )),
         ),
-        BlocBuilder<ProfileCubit, ProfileState>(
-          builder: (context, state) {
+        Consumer<ProfileNotifier>(
+          builder: (context, profileNotifier, _) {
+            var state = profileNotifier.state;
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

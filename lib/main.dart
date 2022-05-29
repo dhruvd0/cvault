@@ -9,8 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,15 +21,15 @@ Future<void> main() async {
     builder: (context) {
       return MaterialApp(
         useInheritedMediaQuery: true,
-        home: MultiBlocProvider(
+        home: MultiProvider(
           providers: [
-            BlocProvider(
+            ChangeNotifierProvider(
               lazy: false,
-              create: (context) => HomeCubit(),
+              create: (context) => HomeStateNotifier(),
             ),
-            BlocProvider(
+            Provider(
               lazy: false,
-              create: (context) => ProfileCubit(),
+              create: (context) => ProfileNotifier(),
             ),
           ],
           child: MaterialApp(home: CVaultApp()),
@@ -53,12 +53,12 @@ class _CVaultAppState extends State<CVaultApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
-        var bloc = BlocProvider.of<ProfileCubit>(context);
-        await bloc.fetchProfile();
-        widget = bloc.state is NewProfile
+        var notifier = Provider.of<ProfileNotifier>(context);
+        await notifier.fetchProfile();
+        widget = notifier.state is NewProfile
             ? ProfilePage(mode: ProfilePageMode.registration)
             : HomePage();
       }

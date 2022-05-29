@@ -7,12 +7,12 @@ import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -302,10 +302,10 @@ class _LogInScreenState extends State<LogInScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('login', true);
-    var bloc = BlocProvider.of<ProfileCubit>(context);
+    var notifier = Provider.of<ProfileNotifier>(context);
     if (phone == "+911111111111") {
       await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
-      bloc.changeUserType(UserTypes.admin);
+      notifier.changeUserType(UserTypes.admin);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (builder) => const HomePage()),
@@ -314,8 +314,8 @@ class _LogInScreenState extends State<LogInScreen> {
       return;
     }
 
-    await bloc.fetchProfile();
-    if (bloc.state is NewProfile) {
+    await notifier.fetchProfile();
+    if (notifier.state is NewProfile) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

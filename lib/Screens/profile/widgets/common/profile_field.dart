@@ -1,7 +1,7 @@
 import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:regexed_validator/regexed_validator.dart';
 
 class ProfileTextField extends StatelessWidget {
@@ -44,12 +44,14 @@ class ProfileTextField extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.only(left: 10),
-        child: BlocBuilder<ProfileCubit, ProfileState>(
-          builder: (context, state) {
+        child: Consumer<ProfileNotifier>(
+          builder: (context, profileNotifier, _) {
+            final state = profileNotifier.state;
+
             return TextFormField(
               initialValue: fixedValue ?? getInitialValueFromFieldName(state),
               onChanged: (string) {
-                BlocProvider.of<ProfileCubit>(context)
+                Provider.of<ProfileNotifier>(context)
                     .changeProfileField(string, fieldName);
               },
               validator: (string) {

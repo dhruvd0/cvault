@@ -5,7 +5,7 @@ import 'package:cvault/Screens/profile/widgets/profile_header.dart';
 import 'package:cvault/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 enum ProfilePageMode { registration, edit }
 
@@ -246,7 +246,7 @@ class ProfilePage extends StatelessWidget {
                         onPressed: () async {
                           if (mode == ProfilePageMode.registration) {
                             if (_formKey.currentState!.validate()) {
-                              await BlocProvider.of<ProfileCubit>(context)
+                              await Provider.of<ProfileNotifier>(context)
                                   .createNewProfile();
                               Navigator.pushReplacement(
                                 context,

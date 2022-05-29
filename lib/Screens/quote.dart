@@ -1,9 +1,8 @@
 import 'package:cvault/Screens/Setting.dart';
 import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
-import 'package:cvault/Screens/home/bloc/cubit/home_state.dart';
 import 'package:cvault/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import '../drawer.dart';
 
@@ -20,6 +19,7 @@ class _QuoteState extends State<Quote> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
       key: scaffoldKey,
       endDrawer: const MyDrawer(),
@@ -29,7 +29,7 @@ class _QuoteState extends State<Quote> {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (builder) => const HomePage()));
+                MaterialPageRoute(builder: (builder) => const HomePage(),),);
           },
         ),
         centerTitle: true,
@@ -43,7 +43,7 @@ class _QuoteState extends State<Quote> {
             icon: const Icon(Icons.menu),
             color: Colors.white,
             iconSize: 30,
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -68,16 +68,16 @@ class _QuoteState extends State<Quote> {
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.40,
                           margin: const EdgeInsets.all(5),
-                          color: price == true ? Colors.white : Colors.black,
+                          color: price ? Colors.white : Colors.black,
                           child: Center(
                             child: Text(
                               "Price",
                               style: TextStyle(
-                                  color: price == true
+                                  color: price
                                       ? Colors.black
                                       : Colors.white,
                                   fontSize: 22,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w600,),
                             ),
                           ),
                         ),
@@ -89,24 +89,24 @@ class _QuoteState extends State<Quote> {
                           });
                         },
                         child: Container(
-                          color: price == false ? Colors.white : Colors.black,
+                          color: !price ? Colors.white : Colors.black,
                           width: MediaQuery.of(context).size.width * 0.40,
                           margin: const EdgeInsets.all(5),
                           child: Center(
                             child: Text(
                               "Quantity",
                               style: TextStyle(
-                                  color: price == false
+                                  color: !price
                                       ? Colors.black
                                       : Colors.white,
                                   fontSize: 20,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w600,),
                             ),
                           ),
                         ),
                       ),
                     ],
-                  )),
+                  ),),
             ),
             const SizedBox(
               height: 25,
@@ -118,20 +118,20 @@ class _QuoteState extends State<Quote> {
                 GestureDetector(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Settings()));
+                        MaterialPageRoute(builder: (context) => Settings()),);
                   },
-                  child: BlocBuilder<HomeCubit, HomeState>(
-                    builder: (context, state) {
+                  child: Consumer<HomeStateNotifier>(
+                    builder: (context, notifier, _) {
                       return Row(
                         children: [
                           CircleAvatar(
                             radius: 25,
                             backgroundColor: Colors.blue,
                             backgroundImage: NetworkImage(
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoG97VgQYJGXN8kDJkOMvh79mgLvO5iEfVWA&usqp=CAU"),
+                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoG97VgQYJGXN8kDJkOMvh79mgLvO5iEfVWA&usqp=CAU",),
                           ),
                           Text(
-                            state.selectedCurrencyKey.toUpperCase(),
+                            notifier.state.selectedCurrencyKey.toUpperCase(),
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ],
@@ -156,7 +156,7 @@ class _QuoteState extends State<Quote> {
                           setState(() {
                             toggle = value;
                           });
-                        }),
+                        },),
                   ],
                 ),
               ],
@@ -191,7 +191,7 @@ class _QuoteState extends State<Quote> {
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 Column(
@@ -210,9 +210,9 @@ class _QuoteState extends State<Quote> {
                           setState(() {
                             toggle = value;
                           });
-                        }),
+                        },),
                   ],
-                )
+                ),
               ],
             ),
             const SizedBox(
@@ -235,7 +235,9 @@ class _QuoteState extends State<Quote> {
                       height: 15,
                     ),
                     InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          /// TODO: change margin
+                        },
                         child: SizedBox(
                           height: 50,
                           width: 120,
@@ -250,11 +252,11 @@ class _QuoteState extends State<Quote> {
                               child: Text(
                                 '5.00%',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
+                                    color: Colors.white, fontSize: 18,),
                               ),
                             ),
                           ),
-                        ))
+                        ),),
                   ],
                 ),
                 Column(
@@ -285,9 +287,9 @@ class _QuoteState extends State<Quote> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
             const SizedBox(
@@ -300,27 +302,29 @@ class _QuoteState extends State<Quote> {
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: Colors.grey,
-                  )),
+                  ),),
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                price == true
+                price
                     ? const Text("25,33,118.00",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 22,
-                            fontWeight: FontWeight.w600))
+                            fontWeight: FontWeight.w600,),)
                     : const Text("BTC 0.3211214",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 22,
-                            fontWeight: FontWeight.w600)),
+                            fontWeight: FontWeight.w600,),),
                 const SizedBox(
                   height: 25,
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.45,
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        /// TODO: send quote
+                      },
                       child: const Text(
                         "Send Quote",
                         style: TextStyle(
@@ -330,7 +334,7 @@ class _QuoteState extends State<Quote> {
                       style: ElevatedButton.styleFrom(
                           primary: Colors.black,
                           elevation: 10,
-                          shape: const StadiumBorder())),
+                          shape: const StadiumBorder(),),),
                 ),
                 const SizedBox(height: 10),
                 const Text(
@@ -344,7 +348,7 @@ class _QuoteState extends State<Quote> {
                   child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Colors.grey, width: 1)),
+                          border: Border.all(color: Colors.grey, width: 1,),),
                       child: TextFormField(
                         style:
                             const TextStyle(color: Colors.white, fontSize: 18),
@@ -354,14 +358,14 @@ class _QuoteState extends State<Quote> {
                             hintStyle: TextStyle(
                                 color: Colors.white54,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w600)),
-                      )),
+                                fontWeight: FontWeight.w600,),),
+                      ),),
                 ),
                 const SizedBox(
                   height: 20,
-                )
+                ),
               ]),
-            )
+            ),
           ]),
         ),
       ),
