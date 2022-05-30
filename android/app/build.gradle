@@ -49,6 +49,7 @@ android {
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        setProperty("archivesBaseName", applicationId + "-" +  versionName + "+" + versionCode)
     }
 
     buildTypes {
