@@ -12,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
 class HomeStateNotifier extends ChangeNotifier {
-  HomeState state = HomeInitial();
   HomeStateNotifier() : super() {
     if (Firebase.apps.isNotEmpty) {
       FirebaseAuth.instance
@@ -27,15 +26,26 @@ class HomeStateNotifier extends ChangeNotifier {
     }
   }
 
+  static List<String> cryptoKeys = [
+    'btcinr',
+    'solinr',
+    'ethinr',
+    'maticinr',
+    'adainr',
+    'shibinr',
+  ];
+
+  HomeState state = HomeInitial();
+  final wazirXChannel = IOWebSocketChannel.connect(
+    Uri.parse('wss://stream.wazirx.com/stream'),
+  );
+
   /// Changes state and notifies listeners
   void emit(HomeState newState) {
     state = newState;
     notifyListeners();
   }
 
-  final wazirXChannel = IOWebSocketChannel.connect(
-    Uri.parse('wss://stream.wazirx.com/stream'),
-  );
   void startWazirXCryptoTicker() {
     wazirXChannel.stream.listen((event) {
       if (event != null && event.contains('connected')) {
@@ -73,14 +83,6 @@ class HomeStateNotifier extends ChangeNotifier {
     await FirebaseAuth.instance.signOut();
   }
 
-  static List<String> cryptoKeys = [
-    'btcinr',
-    'solinr',
-    'ethinr',
-    'maticinr',
-    'adainr',
-    'shibinr',
-  ];
   void changeCryptoKey(String key) {
     assert(HomeStateNotifier.cryptoKeys.contains(key));
     emit(state.copyWith(selectedCurrencyKey: key));
@@ -106,6 +108,11 @@ class HomeStateNotifier extends ChangeNotifier {
         );
       }
     }
+  }
+
+  void toggleUSDToINR(bool value) {
+    emit(state.copyWith(isUSD: value));
+    assert(state.isUSD == value);
   }
 
   List<CryptoCurrency> _parseCurrenciesFromCryptoData(
@@ -135,10 +142,5 @@ class HomeStateNotifier extends ChangeNotifier {
     }
 
     return currencies;
-  }
-
-  void toggleUSDToINR(bool value) {
-    emit(state.copyWith(isUSD: value));
-    assert(state.isUSD == value);
   }
 }

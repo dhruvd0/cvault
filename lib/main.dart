@@ -27,7 +27,7 @@ Future<void> main() async {
               lazy: false,
               create: (context) => HomeStateNotifier(),
             ),
-            Provider(
+            ChangeNotifierProvider(
               lazy: false,
               create: (context) => ProfileNotifier(),
             ),
