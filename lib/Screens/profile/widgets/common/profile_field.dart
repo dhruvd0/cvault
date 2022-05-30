@@ -47,6 +47,11 @@ class ProfileTextField extends StatelessWidget {
         child: Consumer<ProfileNotifier>(
           builder: (context, profileNotifier, _) {
             final state = profileNotifier.state;
+            List<ProfileFields> uncheckedFIelds = [
+              ProfileFields.code,
+              ProfileFields.referralCode,
+              ProfileFields.middleName,
+            ];
 
             return TextFormField(
               initialValue: fixedValue ?? getInitialValueFromFieldName(state),
@@ -55,6 +60,9 @@ class ProfileTextField extends StatelessWidget {
                     .changeProfileField(string, fieldName);
               },
               validator: (string) {
+                if (uncheckedFIelds.contains(fieldName)) {
+                  return null;
+                }
                 if (string == null) {
                   return 'This should not be empty.';
                 }

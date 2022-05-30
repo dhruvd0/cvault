@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             )),
           ),
           child: NavigationBar(
-            height: 50,
+            height: 80,
             backgroundColor: Colors.transparent,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
             selectedIndex: index,
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         Icons.home,
                         color: Colors.white,
                       ),
-                      label: "home",
+                      label: "Home",
                     ),
                     NavigationDestination(
                       selectedIcon: Icon(
@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         Icons.person,
                         color: Colors.white,
                       ),
-                      label: "profile",
+                      label: "Profile",
                     ),
                   ]
                 : [
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         Icons.home,
                         color: Colors.white,
                       ),
-                      label: "home",
+                      label: "Home",
                     ),
                     NavigationDestination(
                       selectedIcon: Icon(
@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         Icons.person,
                         color: Colors.white,
                       ),
-                      label: "profile",
+                      label: "Profile",
                     ),
                   ],
           ),
