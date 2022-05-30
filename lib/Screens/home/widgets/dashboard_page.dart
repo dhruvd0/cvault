@@ -205,16 +205,18 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    homeStateNotifier is HomeInitial
+                    homeStateNotifier.state is HomeInitial
                         ? const Text("Loading")
                         : Text(
-                            (state.isUSD ? '\$' : '₹') +
-                                state.cryptoCurrencies
-                                    .firstWhere((element) =>
-                                        element.key ==
-                                        state.selectedCurrencyKey)
-                                    .wazirxPrice
-                                    .toString(),
+                            state.cryptoCurrencies.isEmpty
+                                ? ''
+                                : (state.isUSD ? '\$' : '₹') +
+                                    state.cryptoCurrencies
+                                        .firstWhere((element) =>
+                                            element.key ==
+                                            state.selectedCurrencyKey)
+                                        .wazirxPrice
+                                        .toString(),
                             textAlign: TextAlign.start,
                             style: const TextStyle(
                               fontFamily: 'Poppins',

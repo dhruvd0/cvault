@@ -30,6 +30,7 @@ class _LogInScreenState extends State<LogInScreen> {
   bool codeSent = false;
   bool isLoading = false;
   bool otpLoading = false;
+  String otp = '';
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -98,6 +99,11 @@ class _LogInScreenState extends State<LogInScreen> {
                     ),
                     child: !otpLoading
                         ? OTPTextField(
+                            onChanged: (string) {
+                              setState(() {
+                                otp = string;
+                              });
+                            },
                             outlineBorderRadius: 25,
                             keyboardType: TextInputType.number,
                             otpFieldStyle: OtpFieldStyle(
@@ -117,18 +123,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             textFieldAlignment: MainAxisAlignment.spaceAround,
                             fieldStyle: FieldStyle.underline,
                             onCompleted: (pin) {
-                              setState(() {
-                                // showDialog(
-                                //     context: context,
-                                //     builder: (builder) => const Center(
-                                //           child: CircularProgressIndicator(
-                                //             color: Colors.white,
-                                //           ),
-                                //         ));
-                                if (otpLoading) {
-                                  verifyPin(pin);
-                                }
-                              });
+                              verifyPin(pin);
                             },
                           )
                         : const CircularProgressIndicator(
@@ -188,7 +183,6 @@ class _LogInScreenState extends State<LogInScreen> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         counter: Container(),
-                        contentPadding: const EdgeInsets.only(top: 6),
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         hintText: '00000-00000',
                         hintStyle: TextStyle(
@@ -253,6 +247,10 @@ class _LogInScreenState extends State<LogInScreen> {
       },
       verificationFailed: (FirebaseAuthException e) {
         final snackBar = SnackBar(content: Text("${e.message}"));
+        setState(() {
+          otpLoading = false;
+          codeSent = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       },
       codeSent: (String verificationId, int? resendToken) {
