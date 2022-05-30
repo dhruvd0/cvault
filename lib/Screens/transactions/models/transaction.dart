@@ -4,16 +4,26 @@ import 'package:equatable/equatable.dart';
 
 class Transaction extends Equatable {
   final String transactionId;
+
+  /// "buy" or "sell"
   final String transactionType;
+
+  /// crypto name, for example: btcinr
   final String cryptoType;
+
+   /// cost of 1 unit crypto currency
   final double price;
+
+  /// Total price
   final double costPrice;
+
   final double quantity;
   final String accepted;
+  /// "USD" or "INR"
   final String currency;
-  final String valueType;
+  final String sendersID;
   final String status;
-  final String userID;
+  final String receiversPhone;
   final String userName;
   const Transaction({
     required this.transactionId,
@@ -24,9 +34,9 @@ class Transaction extends Equatable {
     required this.quantity,
     required this.accepted,
     required this.currency,
-    required this.valueType,
+    required this.sendersID,
     required this.status,
-    required this.userID,
+    required this.receiversPhone,
     required this.userName,
   });
 
@@ -39,9 +49,9 @@ class Transaction extends Equatable {
     double? quantity,
     String? accepted,
     String? currency,
-    String? valueType,
+    String? sendersID,
     String? status,
-    String? userID,
+    String? receiversPhone,
     String? userName,
   }) {
     return Transaction(
@@ -53,9 +63,9 @@ class Transaction extends Equatable {
       quantity: quantity ?? this.quantity,
       accepted: accepted ?? this.accepted,
       currency: currency ?? this.currency,
-      valueType: valueType ?? this.valueType,
+      sendersID: sendersID ?? this.sendersID,
       status: status ?? this.status,
-      userID: userID ?? this.userID,
+      receiversPhone: receiversPhone ?? this.receiversPhone,
       userName: userName ?? this.userName,
     );
   }
@@ -70,9 +80,9 @@ class Transaction extends Equatable {
       'quantity': quantity,
       'accepted': accepted,
       'currency': currency,
-      'valueType': valueType,
+      'sendersID': sendersID,
       'status': status,
-      'userID': userID,
+      'receiversPhone': receiversPhone,
       'userName': userName,
     };
   }
@@ -87,9 +97,9 @@ class Transaction extends Equatable {
       quantity: map['quantity']?.toDouble() ?? 0.0,
       accepted: map['accepted'] ?? '',
       currency: map['currency'] ?? '',
-      valueType: map['valueType'] ?? '',
+      sendersID: map['sendersID'] ?? '',
       status: map['status'] ?? '',
-      userID: map['userID'] ?? '',
+      receiversPhone: map['receiversPhone'] ?? '',
       userName: map['userName'] ?? '',
     );
   }
@@ -98,7 +108,7 @@ class Transaction extends Equatable {
 
   @override
   String toString() {
-    return 'Transaction(transactionId: $transactionId, transactionType: $transactionType, cryptoType: $cryptoType, price: $price, costPrice: $costPrice, quantity: $quantity, accepted: $accepted, currency: $currency, valueType: $valueType, status: $status, userID: $userID, userName: $userName)';
+    return 'Transaction(transactionId: $transactionId, transactionType: $transactionType, cryptoType: $cryptoType, price: $price, costPrice: $costPrice, quantity: $quantity, accepted: $accepted, currency: $currency, sendersID: $sendersID, status: $status, receiversPhone: $receiversPhone, userName: $userName)';
   }
 
   @override
@@ -112,9 +122,9 @@ class Transaction extends Equatable {
       quantity,
       accepted,
       currency,
-      valueType,
+      sendersID,
       status,
-      userID,
+      receiversPhone,
       userName,
     ];
   }
