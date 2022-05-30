@@ -13,7 +13,7 @@ enum ProfilePageMode { registration, edit }
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key, this.mode}) : super(key: key);
   ProfilePageMode? mode;
-  final _formKey = GlobalKey<FormState>();
+  static final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     mode = mode ?? ProfilePageMode.edit;
@@ -246,7 +246,8 @@ class ProfilePage extends StatelessWidget {
                         onPressed: () async {
                           if (mode == ProfilePageMode.registration) {
                             if (_formKey.currentState!.validate()) {
-                              await Provider.of<ProfileNotifier>(context)
+                              await Provider.of<ProfileNotifier>(context,
+                                      listen: false,)
                                   .createNewProfile();
                               Navigator.pushReplacement(
                                 context,

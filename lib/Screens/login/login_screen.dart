@@ -179,11 +179,8 @@ class _LogInScreenState extends State<LogInScreen> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: IntlPhoneField(
-                      countryCodeTextColor: Colors.white,
-                      dropDownIcon: const Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.white,
-                      ),
+                      showCountryFlag: true,
+                      showDropdownIcon: true,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -251,7 +248,8 @@ class _LogInScreenState extends State<LogInScreen> {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phone,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        _postLoginSubRoutine();
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        await _postLoginSubRoutine();
       },
       verificationFailed: (FirebaseAuthException e) {
         final snackBar = SnackBar(content: Text("${e.message}"));
@@ -302,7 +300,7 @@ class _LogInScreenState extends State<LogInScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('login', true);
-    var notifier = Provider.of<ProfileNotifier>(context);
+    var notifier = Provider.of<ProfileNotifier>(context, listen: false);
     if (phone == "+911111111111") {
       await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
       notifier.changeUserType(UserTypes.admin);

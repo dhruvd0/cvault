@@ -51,7 +51,7 @@ class ProfileTextField extends StatelessWidget {
             return TextFormField(
               initialValue: fixedValue ?? getInitialValueFromFieldName(state),
               onChanged: (string) {
-                Provider.of<ProfileNotifier>(context)
+                Provider.of<ProfileNotifier>(context, listen: false)
                     .changeProfileField(string, fieldName);
               },
               validator: (string) {

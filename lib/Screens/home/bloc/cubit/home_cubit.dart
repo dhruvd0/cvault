@@ -78,7 +78,7 @@ class HomeStateNotifier extends ChangeNotifier {
 
   Future<void> logout(BuildContext context) async {
     emit(HomeInitial());
-    Provider.of<ProfileNotifier>(context).reset();
+    Provider.of<ProfileNotifier>(context, listen: false).reset();
     (await SharedPreferences.getInstance()).clear();
     await FirebaseAuth.instance.signOut();
   }

@@ -36,7 +36,7 @@ class _SettingsState extends State<Settings> {
   }
 
   DropdownMenuItem<String> buildCurrencyList(String item) {
-    final state = Provider.of<HomeStateNotifier>(context).state;
+    final state = Provider.of<HomeStateNotifier>(context,listen: false).state;
     String name = state.cryptoCurrencies.firstWhere((e) => e.key == item).name;
 
     return DropdownMenuItem(
@@ -219,7 +219,7 @@ class _SettingsState extends State<Settings> {
                     const SizedBox(height: 40),
                     InkWell(
                       onTap: () async {
-                        await Provider.of<HomeStateNotifier>(context)
+                        await Provider.of<HomeStateNotifier>(context,listen: false)
                             .logout(context);
 
                         Navigator.pushReplacement(
