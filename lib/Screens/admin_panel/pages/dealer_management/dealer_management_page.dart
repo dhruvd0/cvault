@@ -1,40 +1,28 @@
-import 'dart:convert';
+import 'dart:ui';
 
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_tile.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
+import 'package:cvault/models/dealer.dart';
+import 'package:cvault/providers/dealers_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
-class DealerManagementPage extends StatefulWidget {
+class DealerManagementPage extends StatelessWidget {
   const DealerManagementPage({Key? key}) : super(key: key);
 
-  @override
-  State<DealerManagementPage> createState() => _DealerManagementPageState();
-}
-
-class _DealerManagementPageState extends State<DealerManagementPage> {
-  List<dynamic> data = [];
-  List<ProfileState> profiles = [];
-
-  Future<void> apiCall() async {
-    final response = await http.get(
-      Uri.parse("https://cvault-backend.herokuapp.com/dealer/getAllDealer"),
-    );
-
-    data = jsonDecode(response.body);
-  }
-
-  Widget _buildListView() {
+  Widget _buildListView(List<Dealer> dealers) {
     return ListView.builder(
-      itemCount: profiles.length,
+      itemCount: dealers.length,
       itemBuilder: (BuildContext context, int index) {
-        return DealerTile(profile: profiles[index]);
+        return DealerTile(dealer: dealers[index]);
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    late DealersProvider dealerProvider;
+    dealerProvider = Provider.of<DealersProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -78,38 +66,34 @@ class _DealerManagementPageState extends State<DealerManagementPage> {
               height: 20,
             ),
             Flexible(
-              child: (profiles.isEmpty)
-                  ? FutureBuilder(
-                      future: apiCall(),
+              child: (dealerProvider.isDealersLoaded)
+                  ? _buildListView(dealerProvider.dealers)
+                  : FutureBuilder(
+                      future: dealerProvider.fetchAndSetDealers(),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
                           case ConnectionState.active:
                           case ConnectionState.waiting:
-                            return Expanded(
-                              child: Center(child: CircularProgressIndicator()),
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: const Color(0xff03dac6),
+                              ),
                             );
                           case ConnectionState.done:
                             if (snapshot.hasError) {
-                              return Text("Error");
-                            }
-                            List<ProfileState> temp = [];
-                            data.forEach(
-                              (element) => temp.add(
-                                ProfileInitial().copyWith(
-                                  firstName: element["name"],
-                                  email: element["email"],
-                                  phone: element["phone"],
-                                  code: element["dealerId"],
+                              return Center(
+                                child: Text(
+                                  "An error has occurred!",
+                                  style: TextStyle(color: Colors.white),
                                 ),
-                              ),
-                            );
-                            profiles = temp;
-                            return _buildListView();
+                              );
+                            }
+
+                            return _buildListView(dealerProvider.dealers);
                         }
                       },
-                    )
-                  : _buildListView(),
+                    ),
             ),
             SizedBox(
               height: 10,
