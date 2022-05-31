@@ -53,7 +53,7 @@ class _CVaultAppState extends State<CVaultApp> {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
-        var notifier = Provider.of<ProfileNotifier>(context,listen: false);
+        var notifier = Provider.of<ProfileNotifier>(context, listen: false);
         await notifier.fetchProfile();
         widget = notifier.state is NewProfile
             ? ProfilePage(mode: ProfilePageMode.registration)

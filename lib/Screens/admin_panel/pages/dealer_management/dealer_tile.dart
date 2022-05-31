@@ -1,3 +1,4 @@
+import 'package:cvault/Screens/admin_panel/pages/dealer_management/customer_list.dart';
 import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:flutter/material.dart';
@@ -79,10 +80,17 @@ class _DealerTileState extends State<DealerTile> {
           ),
           Column(
             children: [
-              Icon(
-                Icons.person,
-                color: ThemeColors.lightGreenAccentColor,
-                size: 30,
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CustomerList(),
+                  ),
+                ),
+                child: Icon(
+                  Icons.person,
+                  color: ThemeColors.lightGreenAccentColor,
+                  size: 30,
+                ),
               ),
               const SizedBox(
                 height: 10,
