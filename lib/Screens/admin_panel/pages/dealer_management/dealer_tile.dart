@@ -29,56 +29,56 @@ class _DealerTileState extends State<DealerTile> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Name: " + widget.dealer.firstName,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
+          Container(
+            constraints:
+                BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Name: " + widget.dealer.firstName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(
-                    height: 10,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Email: " + widget.dealer.email,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    "Email: " + widget.dealer.email,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Mobile: " + widget.dealer.phone,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(
-                    height: 10,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "ID: " + widget.dealer.dealerId,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    "Mobile: " + widget.dealer.phone,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "ID: " + widget.dealer.dealerId,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
           Column(
             children: [
