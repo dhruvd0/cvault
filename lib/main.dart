@@ -6,6 +6,7 @@ import 'package:cvault/constants/theme.dart';
 import 'package:cvault/firebase_options.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
+import 'package:cvault/providers/dealers_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,20 +19,19 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    MaterialApp(
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            lazy: false,
-            create: (context) => HomeStateNotifier(),
-          ),
-          ChangeNotifierProvider(
-            lazy: false,
-            create: (context) => ProfileNotifier(),
-          ),
-        ],
-        child: MaterialApp(home: CVaultApp()),
-      ),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => HomeStateNotifier(),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => ProfileNotifier(),
+        ),
+        ChangeNotifierProvider.value(value: DealersProvider()),
+      ],
+      child: MaterialApp(home: CVaultApp()),
     ),
   );
 }
@@ -53,7 +53,7 @@ class _CVaultAppState extends State<CVaultApp> {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
-        var notifier = Provider.of<ProfileNotifier>(context,listen: false);
+        var notifier = Provider.of<ProfileNotifier>(context, listen: false);
         await notifier.fetchProfile();
         widget = notifier.state is NewProfile
             ? ProfilePage(mode: ProfilePageMode.registration)

@@ -1,10 +1,11 @@
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
+import 'package:cvault/Screens/admin_panel/pages/dealer_management/customer_list.dart';
 import 'package:cvault/constants/theme.dart';
+import 'package:cvault/models/dealer.dart';
 import 'package:flutter/material.dart';
 
 class DealerTile extends StatefulWidget {
-  const DealerTile({Key? key, required this.profile}) : super(key: key);
-  final ProfileState profile;
+  const DealerTile({Key? key, required this.dealer}) : super(key: key);
+  final Dealer dealer;
 
   @override
   State<DealerTile> createState() => _DealerTileState();
@@ -33,7 +34,7 @@ class _DealerTileState extends State<DealerTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Name: " + widget.profile.firstName,
+                    "Name: " + widget.dealer.name,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -44,7 +45,7 @@ class _DealerTileState extends State<DealerTile> {
                     height: 10,
                   ),
                   Text(
-                    "Email: " + widget.profile.email,
+                    "Email: " + widget.dealer.email,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -55,7 +56,7 @@ class _DealerTileState extends State<DealerTile> {
                     height: 10,
                   ),
                   Text(
-                    "Mobile: " + widget.profile.phone,
+                    "Mobile: " + widget.dealer.phone,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -66,7 +67,7 @@ class _DealerTileState extends State<DealerTile> {
                     height: 10,
                   ),
                   Text(
-                    "ID: " + widget.profile.code,
+                    "ID: " + widget.dealer.dealerId,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -79,10 +80,17 @@ class _DealerTileState extends State<DealerTile> {
           ),
           Column(
             children: [
-              Icon(
-                Icons.person,
-                color: ThemeColors.lightGreenAccentColor,
-                size: 30,
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CustomerList(),
+                  ),
+                ),
+                child: Icon(
+                  Icons.person,
+                  color: ThemeColors.lightGreenAccentColor,
+                  size: 30,
+                ),
               ),
               const SizedBox(
                 height: 10,

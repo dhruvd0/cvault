@@ -1,12 +1,28 @@
+import 'dart:ui';
+
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_tile.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
+import 'package:cvault/models/dealer.dart';
+import 'package:cvault/providers/dealers_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DealerManagementPage extends StatelessWidget {
   const DealerManagementPage({Key? key}) : super(key: key);
 
+  Widget _buildListView(List<Dealer> dealers) {
+    return ListView.builder(
+      itemCount: dealers.length,
+      itemBuilder: (BuildContext context, int index) {
+        return DealerTile(dealer: dealers[index]);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    late DealersProvider dealerProvider;
+    dealerProvider = Provider.of<DealersProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -50,19 +66,34 @@ class DealerManagementPage extends StatelessWidget {
               height: 20,
             ),
             Flexible(
-              child: ListView.builder(
-                itemCount: 2,
-                itemBuilder: (BuildContext context, int index) {
-                  ProfileState profile = ProfileInitial().copyWith(
-                    firstName: 'Test Name',
-                    email: 'test@gmail.com',
-                    phone: '+9191111111111',
-                    code: 'TP001',
-                  );
+              child: (dealerProvider.isDealersLoaded)
+                  ? _buildListView(dealerProvider.dealers)
+                  : FutureBuilder(
+                      future: dealerProvider.fetchAndSetDealers(),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                          case ConnectionState.active:
+                          case ConnectionState.waiting:
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: const Color(0xff03dac6),
+                              ),
+                            );
+                          case ConnectionState.done:
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(
+                                  "An error has occurred!",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              );
+                            }
 
-                  return DealerTile(profile: profile);
-                },
-              ),
+                            return _buildListView(dealerProvider.dealers);
+                        }
+                      },
+                    ),
             ),
             SizedBox(
               height: 10,
