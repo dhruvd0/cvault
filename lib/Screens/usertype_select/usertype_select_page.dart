@@ -12,7 +12,7 @@ class UserTypeSelectPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          leading: null,
+          leading: SizedBox(),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),

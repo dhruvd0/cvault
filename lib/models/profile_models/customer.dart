@@ -39,8 +39,8 @@ class Customer extends Profile {
         "firstName": firstName,
         "middleName": middleName,
         "lastName": lastName,
-        "email": email,
         "phone": phone,
+        "email": email,
       };
 
   Customer copyWith({

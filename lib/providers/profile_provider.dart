@@ -10,8 +10,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+enum LoadStatus {
+  intial,
+  loading,
+  done,
+  error,
+}
+
 class ProfileChangeNotifier extends ChangeNotifier {
   Profile profile = ProfileInitial();
+  LoadStatus loadStatus = LoadStatus.intial;
   ProfileChangeNotifier() : super() {
     FirebaseAuth.instance
         .authStateChanges()
@@ -34,13 +42,13 @@ class ProfileChangeNotifier extends ChangeNotifier {
   void changeUserType(String newType, String uid) {
     switch (newType) {
       case UserTypes.admin:
-        emit(Dealer.fromJson('admin',{'dealerId': uid})
+        emit(Dealer.fromJson('admin', {'dealerId': uid})
           ..copyWith(userType: UserTypes.admin));
         assert(profile.userType == 'admin');
         break;
 
       case UserTypes.dealer:
-        emit(Dealer.fromJson('dealer',{'dealerId': uid})
+        emit(Dealer.fromJson('dealer', {'dealerId': uid})
           ..copyWith(userType: UserTypes.dealer));
         break;
       case UserTypes.customer:
@@ -111,22 +119,23 @@ class ProfileChangeNotifier extends ChangeNotifier {
       // emit(ProfileInitial());
     } else {
       emit(
-        Dealer.fromJson('admin',{'dealerId': FirebaseAuth.instance.currentUser!.uid}),
+        Dealer.fromJson(profile.userType,
+            {'dealerId': FirebaseAuth.instance.currentUser!.uid}),
       );
     }
   }
 
   Future<Profile?> _fetchProfileFromCache() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if(prefs.containsKey(UserTypes.admin)){
+    if (prefs.containsKey(UserTypes.admin)) {
       String dealerJson = await prefs.getString(UserTypes.dealer) ?? '';
 
-      return Dealer.fromJson('admin',jsonDecode(dealerJson));
+      return Dealer.fromJson('admin', jsonDecode(dealerJson));
     }
     if (prefs.containsKey(UserTypes.dealer)) {
       String dealerJson = await prefs.getString(UserTypes.dealer) ?? '';
 
-      return Dealer.fromJson('dealer',jsonDecode(dealerJson));
+      return Dealer.fromJson('dealer', jsonDecode(dealerJson));
     } else if (prefs.containsKey(UserTypes.customer)) {
       String customerJson = await prefs.getString(UserTypes.customer) ?? '';
 
@@ -140,15 +149,18 @@ class ProfileChangeNotifier extends ChangeNotifier {
   }
 
   Future<void> createNewProfile() async {
-    String url = profile.userType == UserTypes.dealer
+    String path = profile.userType == UserTypes.dealer
         ? 'dealer/createDealer'
         : 'customer/create-customer';
     Map<String, dynamic> data = profile.toJson();
+    data['phone'] = FirebaseAuth.instance.currentUser!.phoneNumber;
+    var uri = "https://cvault-backend.herokuapp.com/$path";
+    loadStatus = LoadStatus.loading;
     final response = await http.post(
       Uri.parse(
-        "https://cvault-backend.herokuapp.com/$url",
+        uri,
       ),
-       headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json"},
       body: jsonEncode(data),
     );
     await _saveProfileToCache();
@@ -156,8 +168,14 @@ class ProfileChangeNotifier extends ChangeNotifier {
       var json = jsonDecode(response.body)[
           profile.userType == UserTypes.dealer ? 'InsertDealer' : 'data'];
       emit(profile.userType == UserTypes.dealer
-          ? Dealer.fromJson('dealer',json)
+          ? Dealer.fromJson('dealer', json)
           : Customer.fromJson(json));
+      loadStatus = LoadStatus.done;
+    } else {
+      loadStatus = LoadStatus.error;
+      notifyListeners();
+      throw Exception('$uri ${response.statusCode}');
     }
+    notifyListeners();
   }
 }

@@ -38,9 +38,9 @@ class Dealer extends Profile {
   factory Dealer.fromJson(String userType,Map<String, dynamic> json) => Dealer(
         uid: json["dealerId"] ?? '',
         dealerId: json["dealerId"] ?? '',
-        firstName: json["name"] ?? '',
-        lastName: json['name'] ?? '',
-        middleName: json['name'] ?? '',
+        firstName: json["firstName"] ?? '',
+        lastName: json['lastName'] ?? '',
+        middleName: json['middleName'] ?? '',
       userType: userType,
         phone: json["phone"] ?? '',
         email: json["email"] ?? '',
@@ -67,10 +67,12 @@ class Dealer extends Profile {
 
   Map<String, dynamic> toJson() => {
         "dealerId": dealerId,
-        "name": firstName,
+        "firstName": firstName,
+        "middleName":middleName,
+        "lastName":lastName,
         "phone": phone,
         "email": email,
-        "active": active,
+        
       };
 
   Dealer copyWith({
