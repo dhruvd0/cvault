@@ -10,6 +10,7 @@ import 'package:cvault/firebase_options.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/dealers_provider.dart';
+import 'package:cvault/providers/transactions_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ Future<void> main() async {
           create: (context) => ProfileChangeNotifier(),
         ),
         ChangeNotifierProvider.value(value: DealersProvider()),
+        ChangeNotifierProvider.value(value: TransactionsProvider()),
       ],
       child: MaterialApp(home: CVaultApp()),
     ),
