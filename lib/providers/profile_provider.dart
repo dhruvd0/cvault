@@ -148,6 +148,7 @@ class ProfileChangeNotifier extends ChangeNotifier {
       Uri.parse(
         "https://cvault-backend.herokuapp.com/$url",
       ),
+       headers: {"Content-Type": "application/json"},
       body: jsonEncode(data),
     );
     await _saveProfileToCache();
