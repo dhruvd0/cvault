@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:cvault/models/profile_models/profile.dart';
+import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/Screens/admin_panel/pages/customer_management/customer_tile.dart';
-import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_tile.dart';
 
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
@@ -16,7 +15,7 @@ class CustomerManagementPage extends StatefulWidget {
 
 class _CustomerManagementPageState extends State<CustomerManagementPage> {
   Map<String, dynamic> data = {};
-  List<Profile> customer = [];
+  List<Customer> customers = [];
   apiCall() async {
     final response = await http.get(
       Uri.parse(
@@ -28,9 +27,9 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
 
   Widget _buildListView() {
     return ListView.builder(
-      itemCount: customer.length,
+      itemCount: customers.length,
       itemBuilder: (BuildContext context, int index) {
-        return DealerTile(dealer: customer![index]);
+        return CustomerTile(customer: customers[index]);
       },
     );
   }
@@ -60,7 +59,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
               height: 20,
             ),
             Flexible(
-              child: (customer.isEmpty)
+              child: (customers.isEmpty)
                   ? FutureBuilder(
                       future: apiCall(),
                       builder: (context, snapshot) {
@@ -75,20 +74,13 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                             if (snapshot.hasError) {
                               Text("Try again");
                             }
-                            List<ProfileState> temp = [];
+                            List<Customer> temp = [];
                             data["data"].forEach(
                               (element) => temp.add(
-                                ProfileInitial().copyWith(
-                                  firstName: element["firstName"] +
-                                      element[" middleName"] +
-                                      element[" lastName"],
-                                  email: element["email"],
-                                  phone: element["phone"],
-                                  code: element["customerId"],
-                                ),
+                                Customer.fromJson(element),
                               ),
                             );
-                            customer = temp;
+                            customers = temp;
                             return _buildListView();
                         }
                       },
