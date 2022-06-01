@@ -45,15 +45,17 @@ class TransactionsPage extends StatelessWidget {
       ),
       backgroundColor: const Color(0xff1E2224),
       body: (transactionsProvider.isLoadedTransactions(
-        retriever: dealerId ?? "admin",
+        retriever: dealerId ??
+            "1234", // TODO: change 1234 to admin when admin api is ready
       ))
           ? _buildTransactionList(transactionsProvider.transactions)
           : FutureBuilder(
               future: (dealerId == null)
-                  ? Provider.of<TransactionsProvider>(context, listen: false)
-                      .getDealerTransaction("1234")
-                  : Provider.of<TransactionsProvider>(context, listen: false)
-                      .getDealerTransaction(dealerId),
+                  // TODO: call admin api here when ready
+                  ? transactionsProvider.getDealerTransaction(
+                      "1234",
+                    )
+                  : transactionsProvider.getDealerTransaction(dealerId),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:

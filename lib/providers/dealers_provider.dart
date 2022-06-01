@@ -37,19 +37,23 @@ class DealersProvider extends ChangeNotifier {
         Uri.parse("https://cvault-backend.herokuapp.com/dealer/getAllDealer"),
       );
 
-      List<Dealer> dealers = [];
+      if (response.statusCode == 200) {
+        List<Dealer> dealers = [];
 
-      final List<dynamic> data = jsonDecode(response.body);
-      data.forEach(
-        (dt) {
-          dealers.add(
-            Dealer.fromJson('dealer', dt),
-          );
-        },
-      );
+        final List<dynamic> data = jsonDecode(response.body);
+        data.forEach(
+          (dt) {
+            dealers.add(
+              Dealer.fromJson('dealer', dt),
+            );
+          },
+        );
 
-      _dealers = dealers;
-      notifyListeners();
+        _dealers = dealers;
+        notifyListeners();
+      } else {
+        throw Exception(response.statusCode);
+      }
     } catch (error, stacktrace) {
       print(error);
       print(stacktrace);

@@ -60,6 +60,7 @@ class ProfileChangeNotifier extends ChangeNotifier {
     }
   }
 
+  // ignore: long-method
   void changeProfileField(dynamic data, ProfileFields field) {
     var editProfile =
         profile.userType == 'dealer' ? profile as Dealer : profile as Customer;
@@ -102,6 +103,7 @@ class ProfileChangeNotifier extends ChangeNotifier {
     emit(ProfileInitial());
   }
 
+  // ignore: long-method
   Future<void> fetchProfile() async {
     if (profile.userType == 'admin') {
       return;
@@ -125,7 +127,8 @@ class ProfileChangeNotifier extends ChangeNotifier {
         uri,
       ),
       body: jsonEncode(
-          {'${profile.userType}Id': FirebaseAuth.instance.currentUser!.uid}),
+        {'${profile.userType}Id': FirebaseAuth.instance.currentUser!.uid},
+      ),
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {

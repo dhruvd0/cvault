@@ -27,6 +27,7 @@ class TransactionsProvider extends ChangeNotifier {
   }
 
   // To get transactions for a dealer
+  // ignore: long-method
   Future<void> getDealerTransaction(String dealerId) async {
     try {
       final response = await http.post(
@@ -39,6 +40,8 @@ class TransactionsProvider extends ChangeNotifier {
           },
         ),
       );
+
+      print(response.body);
 
       if (response.statusCode == 200) {
         List<Transaction> transactions = [];
@@ -77,6 +80,7 @@ class TransactionsProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final Map<String, dynamic> trUpdated = jsonDecode(response.body);
         _transactions[index] = Transaction.fromJson(trUpdated["updated"]);
+        notifyListeners();
       } else {
         throw Exception(response.statusCode);
       }

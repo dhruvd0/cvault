@@ -30,9 +30,15 @@ class Transaction {
 
   String toRawJson() => json.encode(toJson());
 
-  factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
+  factory Transaction.fromJson(
+    Map<String, dynamic> json, {
+    String receiver = "transaction",
+  }) =>
+      Transaction(
         id: json["_id"],
-        sender: json["sender"]["firstName"],
+        sender: (receiver == "transaction")
+            ? json["sender"]["firstName"]
+            : json["sender"],
         customer: json["customer"]["firstName"],
         transactionType: json["transactionType"],
         currency: json["currency"],
