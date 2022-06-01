@@ -120,7 +120,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
               ),
               onTap: () async {
-               await Provider.of<HomeStateNotifier>(
+                Provider.of<HomeStateNotifier>(
                   context,
                   listen: false,
                 ).logout(context);

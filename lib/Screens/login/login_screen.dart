@@ -314,7 +314,7 @@ class _LogInScreenState extends State<LogInScreen> {
     }
 
     await notifier.fetchProfile();
-    if ((notifier.profile is Dealer || notifier.profile is Customer) && notifier.profile.firstName.isNotEmpty) {
+    if (notifier.profile.firstName.isNotEmpty) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

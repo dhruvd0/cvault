@@ -59,8 +59,7 @@ class _CVaultAppState extends State<CVaultApp> {
         var notifier =
             Provider.of<ProfileChangeNotifier>(context, listen: false);
         await notifier.fetchProfile();
-        widget = (notifier.profile is Dealer ||
-                notifier.profile is Customer ||
+        widget = (notifier.profile.firstName.isNotEmpty ||
                 notifier.profile.userType == UserTypes.admin)
             ? HomePage()
             : ProfilePage(mode: ProfilePageMode.registration);

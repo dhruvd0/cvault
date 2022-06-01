@@ -72,6 +72,7 @@ class Dealer extends Profile {
         "lastName":lastName,
         "phone": phone,
         "email": email,
+        'referralCode':referralCode,
         
       };
 

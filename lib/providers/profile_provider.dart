@@ -111,18 +111,39 @@ class ProfileChangeNotifier extends ChangeNotifier {
       return;
     }
 
-    /// TODO: implement fetch profile
+    String path = profile.userType == UserTypes.dealer
+        ? 'dealer/getDealer'
+        : 'customer/getCustomer';
 
-    bool isRegistered = false;
-    // ignore: dead_code, change isRegistered to mock register api
-    if (isRegistered) {
-      // emit(ProfileInitial());
+    var uri = "https://cvault-backend.herokuapp.com/$path";
+    loadStatus = LoadStatus.loading;
+    notifyListeners();
+    final response = await http.post(
+      Uri.parse(
+        uri,
+      ),
+      body: jsonEncode(
+          {'${profile.userType}Id': FirebaseAuth.instance.currentUser!.uid}),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body)['${profile.userType}Data'];
+      var user = profile.userType == 'dealer'
+          ? Dealer.fromJson('dealer', data)
+          : Customer.fromJson(data);
+      emit(user);
+    } else if (response.statusCode == 400) {
+      var user = profile.userType == 'dealer'
+          ? Dealer.fromJson('dealer', {})
+          : Customer.fromJson({});
+      emit(user);
     } else {
-      emit(
-        Dealer.fromJson(profile.userType,
-            {'dealerId': FirebaseAuth.instance.currentUser!.uid}),
-      );
+      loadStatus = LoadStatus.error;
+      notifyListeners();
+      throw Exception(path + response.statusCode.toString());
     }
+    loadStatus = LoadStatus.done;
+    notifyListeners();
   }
 
   Future<Profile?> _fetchProfileFromCache() async {
@@ -154,8 +175,10 @@ class ProfileChangeNotifier extends ChangeNotifier {
         : 'customer/create-customer';
     Map<String, dynamic> data = profile.toJson();
     data['phone'] = FirebaseAuth.instance.currentUser!.phoneNumber;
+    data['${profile.userType}Id'] = FirebaseAuth.instance.currentUser!.uid;
     var uri = "https://cvault-backend.herokuapp.com/$path";
     loadStatus = LoadStatus.loading;
+    notifyListeners();
     final response = await http.post(
       Uri.parse(
         uri,
