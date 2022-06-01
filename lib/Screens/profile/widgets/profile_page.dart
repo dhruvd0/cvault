@@ -196,7 +196,7 @@ class ProfilePage extends StatelessWidget {
                               child: ProfileTextField(
                                 showVerified: true,
                                 hintText: 'Phone',
-                                fieldName: ProfileFields.email,
+                                fieldName: ProfileFields.phone,
                                 fixedValue: FirebaseAuth
                                         .instance.currentUser?.phoneNumber ??
                                     '',

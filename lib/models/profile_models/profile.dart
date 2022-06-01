@@ -66,7 +66,7 @@ enum ProfileFields {
   middleName,
   lastName,
   email,
-
+  phone,
   referralCode,
 }
 

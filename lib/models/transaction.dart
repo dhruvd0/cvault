@@ -20,8 +20,8 @@ class Transaction {
   final String transactionType;
   final String currency;
   final String cryptoType;
-  final int price;
-  final int costPrice;
+  final double price;
+  final double costPrice;
   final int quantity;
   final String status;
 
@@ -37,8 +37,8 @@ class Transaction {
         transactionType: json["transactionType"],
         currency: json["currency"],
         cryptoType: json["cryptoType"],
-        price: json["price"],
-        costPrice: json["costPrice"],
+        price: (json["price"]??0).toDouble(),
+        costPrice: (json["costPrice"] ?? 0.0).toDouble(),
         quantity: json["quantity"],
         status: json["status"],
       );
@@ -61,7 +61,13 @@ class Transaction {
       'userName': 'Test Name',
       'price': 2300000000.1,
       'status': 'Received',
+      '_id': "1",
       'currency': 'INR',
+      'sender': '',
+      'customer': '',
+      'transactionType': 'buy',
+      'cryptoType': 'btcinr',
+      'quantity': 1,
     });
   }
 }

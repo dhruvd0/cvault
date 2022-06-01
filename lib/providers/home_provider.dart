@@ -47,7 +47,7 @@ class HomeStateNotifier extends ChangeNotifier {
   }
 
   void startWazirXCryptoTicker() {
-    wazirXChannel.stream.listen((event) {
+    wazirXChannel.stream.asBroadcastStream().listen((event) {
       if (event != null && event.contains('connected')) {
         wazirXChannel.sink.add(jsonEncode({
           "event": "subscribe",
