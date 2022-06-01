@@ -1,4 +1,5 @@
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/customer_list.dart';
+import 'package:cvault/Screens/reportingScrenn.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:flutter/material.dart';
@@ -95,10 +96,19 @@ class _DealerTileState extends State<DealerTile> {
               const SizedBox(
                 height: 10,
               ),
-              Icon(
-                Icons.document_scanner,
-                color: ThemeColors.lightGreenAccentColor,
-                size: 30,
+              GestureDetector(
+                onTap: (){
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Reporting(),
+                    ),);
+                },
+                child: Icon(
+                  Icons.document_scanner,
+                  color: ThemeColors.lightGreenAccentColor,
+                  size: 30,
+                ),
               ),
               const SizedBox(
                 height: 10,

@@ -247,8 +247,18 @@ class _DashboardPageState extends State<DashboardPage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              (state.isUSD ? '\$' : '₹') + '35253435245',
+                            homeStateNotifier.state is HomeInitial
+                        ? const Text("Loading")
+                        : Text(
+                            state.cryptoCurrencies.isEmpty
+                                ? ''
+                                : (state.isUSD ? '\$' : '₹') +
+                                    state.cryptoCurrencies
+                                        .firstWhere((element) =>
+                                            element.key ==
+                                            state.selectedCurrencyKey)
+                                        .krakenPrice
+                                        .toString(),
                               textAlign: TextAlign.start,
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
