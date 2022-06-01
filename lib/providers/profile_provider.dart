@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:cvault/constants/user_types.dart';
+import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
@@ -17,7 +21,7 @@ class ProfileChangeNotifier extends ChangeNotifier {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         if (userType != null && userType.isNotEmpty) {
-          changeUserType(userType);
+          changeUserType(userType, event.uid);
         }
       }
     });
@@ -27,30 +31,62 @@ class ProfileChangeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeUserType(String newType) {
-    emit(profile.copyWith(userType: newType));
+  void changeUserType(String newType, String uid) {
+    switch (newType) {
+      case UserTypes.admin:
+        emit(Dealer.fromJson({'dealerId': uid})
+          ..copyWith(userType: UserTypes.admin));
+        break;
+
+      case UserTypes.dealer:
+        emit(Dealer.fromJson({'dealerId': uid})
+          ..copyWith(userType: UserTypes.dealer));
+        break;
+      case UserTypes.customer:
+        emit(Customer.fromJson({'customerId': uid})
+          ..copyWith(userType: UserTypes.customer));
+        break;
+
+      default:
+    }
   }
 
   void changeProfileField(dynamic data, ProfileFields field) {
-    var Profile = profile;
+    var editProfile =
+        profile.userType == 'dealer' ? profile as Dealer : profile as Customer;
     switch (field) {
       case ProfileFields.firstName:
-        Profile = Profile.copyWith(firstName: data);
+        editProfile = editProfile.userType == 'dealer'
+            ? (editProfile as Dealer).copyWith(firstName: data)
+            : (editProfile as Customer).copyWith(firstName: data);
+
         break;
       case ProfileFields.middleName:
-        Profile = Profile.copyWith(middleName: data);
+         editProfile = editProfile.userType == 'dealer'
+            ? (editProfile as Dealer).copyWith(middleName: data)
+            : (editProfile as Customer).copyWith(middleName: data);
         break;
       case ProfileFields.lastName:
-        Profile = Profile.copyWith(lastName: data);
+         editProfile = editProfile.userType == 'dealer'
+            ? (editProfile as Dealer).copyWith(lastName: data)
+            : (editProfile as Customer).copyWith(lastName: data);
         break;
       case ProfileFields.email:
-        Profile = Profile.copyWith(email: data);
+       editProfile = editProfile.userType == 'dealer'
+            ? (editProfile as Dealer).copyWith(email: data)
+            : (editProfile as Customer).copyWith(email: data);
         break;
 
       case ProfileFields.referralCode:
-        Profile = Profile.copyWith(referralCode: data);
+        editProfile = editProfile.userType == 'dealer'
+            ? (editProfile as Dealer).copyWith(referralCode: data)
+            : (editProfile as Customer).copyWith(referralCode: data);
+        break;
+      case ProfileFields.phone:
+        // TODO: Handle this case.
+        break;
     }
-    emit(Profile);
+    emit(editProfile);
   }
 
   void reset() {
@@ -59,28 +95,62 @@ class ProfileChangeNotifier extends ChangeNotifier {
 
   Future<void> fetchProfile() async {
     //String phone = FirebaseAuth.instance.currentUser!.phoneNumber!;
+    var cachedProfile = await _fetchProfileFromCache();
+    if (cachedProfile != null) {
+      emit(cachedProfile);
+
+      return;
+    }
 
     /// TODO: implement fetch profile
 
     bool isRegistered = false;
     // ignore: dead_code, change isRegistered to mock register api
     if (isRegistered) {
-     
-      emit(ProfileInitial());
+      // emit(ProfileInitial());
     } else {
       emit(
-        Dealer.mock(),
+        Dealer.fromJson({'dealerId': FirebaseAuth.instance.currentUser!.uid}),
       );
     }
   }
 
-  // Future<void> _fetchProfileFromCache() async {}
-  // Future<void> _saveProfileToCache() async {}
+  Future<Profile?> _fetchProfileFromCache() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(UserTypes.dealer)) {
+      String dealerJson = await prefs.getString(UserTypes.dealer) ?? '';
 
-  createNewProfile() async {
-    final response = await http.get(
-      Uri.parse("https://cvault-backend.herokuapp.com/dealer/createDealer"),
+      return Dealer.fromJson(jsonDecode(dealerJson));
+    } else if (prefs.containsKey(UserTypes.customer)) {
+      String customerJson = await prefs.getString(UserTypes.customer) ?? '';
+
+      return Customer.fromJson(jsonDecode(customerJson));
+    }
+  }
+
+  Future<void> _saveProfileToCache() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(profile.userType, jsonEncode(profile.toJson()));
+  }
+
+  Future<void> createNewProfile() async {
+    String url = profile.userType == UserTypes.dealer
+        ? 'dealer/createDealer'
+        : 'customer/create-customer';
+    Map<String, dynamic> data = profile.toJson();
+    final response = await http.post(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/$url",
+      ),
+      body: jsonEncode(data),
     );
-    print(response);
+    await _saveProfileToCache();
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body)[
+          profile.userType == UserTypes.dealer ? 'InsertDealer' : 'data'];
+      emit(profile.userType == UserTypes.dealer
+          ? Dealer.fromJson(json)
+          : Customer.fromJson(json));
+    }
   }
 }

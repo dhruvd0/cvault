@@ -35,18 +35,20 @@ class Dealer extends Profile {
   final List<Transaction> transactions;
 
   factory Dealer.fromJson(Map<String, dynamic> json) => Dealer(
-        uid: json["_id"],
-        dealerId: json["dealerId"],
-        firstName: json["name"],
-        lastName: json['name'],
-        middleName: json['name'],
-        phone: json["phone"],
-        email: json["email"],
-        active: json["active"],
+        uid: json["dealerId"] ?? '',
+        dealerId: json["dealerId"] ?? '',
+        firstName: json["name"] ?? '',
+        lastName: json['name'] ?? '',
+        middleName: json['name'] ?? '',
+        phone: json["phone"] ?? '',
+        email: json["email"] ?? '',
+        active: json["active"] ?? false,
         referralCode: '',
-        transactions: List<Transaction>.from(
-          json["transactions"].map((x) => Transaction.fromJson(x)),
-        ),
+        transactions: json['transactions'] == null
+            ? []
+            : List<Transaction>.from(
+                json["transactions"].map((x) => Transaction.fromJson(x)),
+              ),
       );
 
   static Dealer mock() {
@@ -68,4 +70,31 @@ class Dealer extends Profile {
         "email": email,
         "active": active,
       };
+
+  Dealer copyWith({
+    String? dealerId,
+    bool? active,
+    List<Transaction>? transactions,
+      String? firstName,
+    String? middleName,
+    String? lastName,
+    String? email,
+    String? uid,
+    String? userType,
+    String? referralCode,
+    String? phone,
+  }) {
+    return Dealer(
+      dealerId: dealerId ?? this.dealerId,
+      active: active ?? this.active,
+      transactions: transactions ?? this.transactions,
+      firstName: firstName ?? this.firstName,
+      middleName: middleName ?? this.middleName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      uid: uid ?? this.uid,
+      referralCode: referralCode ?? this.referralCode,
+      phone: phone ?? this.phone,
+    );
+  }
 }

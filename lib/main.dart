@@ -62,8 +62,8 @@ class _CVaultAppState extends State<CVaultApp> {
         widget = (notifier.profile is Dealer ||
                 notifier.profile is Customer ||
                 notifier.profile.userType == UserTypes.admin)
-            ? ProfilePage(mode: ProfilePageMode.registration)
-            : HomePage();
+            ? HomePage()
+            : ProfilePage(mode: ProfilePageMode.registration);
       }
       if (mounted) {
         Navigator.pushReplacement(

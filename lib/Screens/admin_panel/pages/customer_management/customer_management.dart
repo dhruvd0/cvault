@@ -1,4 +1,5 @@
 import 'package:cvault/Screens/admin_panel/pages/customer_management/customer_tile.dart';
+import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 
 import 'package:flutter/material.dart';
@@ -34,11 +35,7 @@ class CustomerManagementPage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: 2,
                 itemBuilder: (BuildContext context, int index) {
-                  Profile profile = ProfileInitial().copyWith(
-                    firstName: 'Test Name',
-                    email: 'test@gmail.com',
-                    phone: '+9191111111111',
-                  );
+                  Customer profile = Customer.mock();
 
                   return CustomerTile(profile: profile);
                 },

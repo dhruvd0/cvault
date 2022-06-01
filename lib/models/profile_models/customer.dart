@@ -42,4 +42,40 @@ class Customer extends Profile {
         "email": email,
         "phone": phone,
       };
+
+  Customer copyWith({
+    String? customerId,
+    String? firstName,
+    String? middleName,
+    String? lastName,
+    String? email,
+    String? uid,
+    String? userType,
+    String? referralCode,
+    String? phone,
+  }) {
+    return Customer(
+      customerId: customerId ?? this.customerId,
+      firstName: firstName ?? this.firstName,
+      middleName: middleName ?? this.middleName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      uid: uid ?? this.uid,
+      referralCode: referralCode ?? this.referralCode,
+      phone: phone ?? this.phone,
+    );
+  }
+
+    static Customer mock() {
+    return Customer.fromJson({
+      "_id": "6295d8859efa452712a145b8",
+      "customerId": "4321",
+      "name": "Test dealer",
+      "phone": "9876543210",
+      "email": "test@gmail.com",
+      "active": true,
+      "transactions": [],
+    });
+  }
+
 }
