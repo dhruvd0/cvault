@@ -28,7 +28,7 @@ class DealersProvider extends ChangeNotifier {
       data.forEach(
         (dt) {
           dealers.add(
-            Dealer.fromJson(dt),
+            Dealer.fromJson('dealer', dt),
           );
         },
       );

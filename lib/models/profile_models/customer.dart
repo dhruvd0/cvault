@@ -24,14 +24,14 @@ class Customer extends Profile {
         );
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-        uid: json['customerId'],
-        customerId: json["customerId"],
-        firstName: json["firstName"],
-        middleName: json["middleName"],
-        lastName: json["lastName"],
-        email: json["email"],
+        uid: json['customerId']??'',
+        customerId: json["customerId"]??'',
+        firstName: json["firstName"]??'',
+        middleName: json["middleName"]??'',
+        lastName: json["lastName"]??'',
+        email: json["email"]??'',
         referralCode: '',
-        phone: json["phone"],
+        phone: json["phone"]??'',
       );
 
   Map<String, dynamic> toJson() => {

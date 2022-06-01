@@ -34,12 +34,13 @@ class ProfileChangeNotifier extends ChangeNotifier {
   void changeUserType(String newType, String uid) {
     switch (newType) {
       case UserTypes.admin:
-        emit(Dealer.fromJson({'dealerId': uid})
+        emit(Dealer.fromJson('admin',{'dealerId': uid})
           ..copyWith(userType: UserTypes.admin));
+        assert(profile.userType == 'admin');
         break;
 
       case UserTypes.dealer:
-        emit(Dealer.fromJson({'dealerId': uid})
+        emit(Dealer.fromJson('dealer',{'dealerId': uid})
           ..copyWith(userType: UserTypes.dealer));
         break;
       case UserTypes.customer:
@@ -62,17 +63,17 @@ class ProfileChangeNotifier extends ChangeNotifier {
 
         break;
       case ProfileFields.middleName:
-         editProfile = editProfile.userType == 'dealer'
+        editProfile = editProfile.userType == 'dealer'
             ? (editProfile as Dealer).copyWith(middleName: data)
             : (editProfile as Customer).copyWith(middleName: data);
         break;
       case ProfileFields.lastName:
-         editProfile = editProfile.userType == 'dealer'
+        editProfile = editProfile.userType == 'dealer'
             ? (editProfile as Dealer).copyWith(lastName: data)
             : (editProfile as Customer).copyWith(lastName: data);
         break;
       case ProfileFields.email:
-       editProfile = editProfile.userType == 'dealer'
+        editProfile = editProfile.userType == 'dealer'
             ? (editProfile as Dealer).copyWith(email: data)
             : (editProfile as Customer).copyWith(email: data);
         break;
@@ -110,17 +111,22 @@ class ProfileChangeNotifier extends ChangeNotifier {
       // emit(ProfileInitial());
     } else {
       emit(
-        Dealer.fromJson({'dealerId': FirebaseAuth.instance.currentUser!.uid}),
+        Dealer.fromJson('admin',{'dealerId': FirebaseAuth.instance.currentUser!.uid}),
       );
     }
   }
 
   Future<Profile?> _fetchProfileFromCache() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.containsKey(UserTypes.admin)){
+      String dealerJson = await prefs.getString(UserTypes.dealer) ?? '';
+
+      return Dealer.fromJson('admin',jsonDecode(dealerJson));
+    }
     if (prefs.containsKey(UserTypes.dealer)) {
       String dealerJson = await prefs.getString(UserTypes.dealer) ?? '';
 
-      return Dealer.fromJson(jsonDecode(dealerJson));
+      return Dealer.fromJson('dealer',jsonDecode(dealerJson));
     } else if (prefs.containsKey(UserTypes.customer)) {
       String customerJson = await prefs.getString(UserTypes.customer) ?? '';
 
@@ -149,7 +155,7 @@ class ProfileChangeNotifier extends ChangeNotifier {
       var json = jsonDecode(response.body)[
           profile.userType == UserTypes.dealer ? 'InsertDealer' : 'data'];
       emit(profile.userType == UserTypes.dealer
-          ? Dealer.fromJson(json)
+          ? Dealer.fromJson('dealer',json)
           : Customer.fromJson(json));
     }
   }
