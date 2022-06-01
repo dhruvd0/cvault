@@ -1,5 +1,6 @@
 import 'package:cvault/Screens/admin_panel/pages/customer_management/customer_management.dart';
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_management_page.dart';
+import 'package:cvault/Screens/reportingScrenn.dart';
 import 'package:flutter/material.dart';
 
 class AdminPanelGrid extends StatelessWidget {
@@ -147,43 +148,52 @@ class AdminPanelGrid extends StatelessWidget {
                 ),
               ],
             ),
-            Column(
-              children: [
-                const Text(
-                  "Reporting",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(25),
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        blurRadius: 10,
-                        spreadRadius: 1,
-                        offset: const Offset(4, 4),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      width: 1.5,
-                      color: Colors.white54,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Reporting(),
+                    ),);
+              },
+              child: Column(
+                children: [
+                  const Text(
+                    "Reporting",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
-                  child: Image.asset(
-                    "assets/line-chart.png",
-                    color: Colors.grey,
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(25),
+                    height: 150,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                          offset: const Offset(4, 4),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        width: 1.5,
+                        color: Colors.white54,
+                      ),
+                    ),
+                    child: Image.asset(
+                      "assets/line-chart.png",
+                      color: Colors.grey,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

@@ -262,13 +262,20 @@ class ProfilePage extends StatelessWidget {
                             /// TODO: profile edit api
                           }
                         },
-                        label: Text(
-                          mode == ProfilePageMode.registration
-                              ? "Submit"
-                              : "Edit",
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
+                        label: Consumer<ProfileChangeNotifier>(
+                          builder: ((context, notifier, child) =>
+                              notifier.loadStatus == LoadStatus.loading
+                                  ? CircularProgressIndicator(
+                                      color: Colors.black,
+                                    )
+                                  : Text(
+                                      mode == ProfilePageMode.registration
+                                          ? "Submit"
+                                          : "Edit",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    )),
                         ),
                       ),
                     ),

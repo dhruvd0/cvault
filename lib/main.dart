@@ -14,7 +14,6 @@ import 'package:cvault/providers/transactions_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -61,8 +60,7 @@ class _CVaultAppState extends State<CVaultApp> {
         var notifier =
             Provider.of<ProfileChangeNotifier>(context, listen: false);
         await notifier.fetchProfile();
-        widget = (notifier.profile is Dealer ||
-                notifier.profile is Customer ||
+        widget = (notifier.profile.firstName.isNotEmpty ||
                 notifier.profile.userType == UserTypes.admin)
             ? HomePage()
             : ProfilePage(mode: ProfilePageMode.registration);

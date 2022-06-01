@@ -11,6 +11,7 @@ Future register(Customer data) async {
       Uri.parse(
         "https://cvault-backend.herokuapp.com/customer/create-customer",
       ),
+       headers: {"Content-Type": "application/json"},
       body: jsonEncode(data.toJson()),
     );
   } catch (e) {

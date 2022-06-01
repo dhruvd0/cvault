@@ -1,3 +1,4 @@
+
 import 'package:cvault/Screens/Setting.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/models/home_state.dart';
@@ -48,6 +49,9 @@ class _DashboardPageState extends State<DashboardPage> {
         title: Consumer<ProfileChangeNotifier>(
           builder: (context, profileNotifier, _) {
             var userType = profileNotifier.profile.userType;
+            if (userType.isEmpty) {
+              return Text('');
+            }
 
             return Text(
               "Hello, ${profileNotifier.profile.firstName.isEmpty ? 'User' : profileNotifier.profile.firstName}.\n Welcome to ${userType[0].toUpperCase() + userType.substring(1)} Dashboard",
@@ -247,8 +251,18 @@ class _DashboardPageState extends State<DashboardPage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Text(
-                              (state.isUSD ? '\$' : '₹') + '35253435245',
+                            homeStateNotifier.state is HomeInitial
+                        ? const Text("Loading")
+                        : Text(
+                            state.cryptoCurrencies.isEmpty
+                                ? ''
+                                : (state.isUSD ? '\$' : '₹') +
+                                    state.cryptoCurrencies
+                                        .firstWhere((element) =>
+                                            element.key ==
+                                            state.selectedCurrencyKey)
+                                        .krakenPrice
+                                        .toString(),
                               textAlign: TextAlign.start,
                               style: const TextStyle(
                                 fontFamily: 'Poppins',

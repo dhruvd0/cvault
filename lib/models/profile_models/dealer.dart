@@ -11,6 +11,7 @@ class Dealer extends Profile {
     required this.dealerId,
     required this.active,
     required this.transactions,
+    required String userType,
     required String firstName,
     required String middleName,
     required String lastName,
@@ -22,7 +23,7 @@ class Dealer extends Profile {
           middleName: middleName,
           referralCode: referralCode,
           email: email,
-          userType: UserTypes.dealer,
+          userType: userType,
           firstName: firstName,
           uid: uid,
           phone: phone,
@@ -34,12 +35,13 @@ class Dealer extends Profile {
   final bool active;
   final List<Transaction> transactions;
 
-  factory Dealer.fromJson(Map<String, dynamic> json) => Dealer(
+  factory Dealer.fromJson(String userType,Map<String, dynamic> json) => Dealer(
         uid: json["dealerId"] ?? '',
         dealerId: json["dealerId"] ?? '',
-        firstName: json["name"] ?? '',
-        lastName: json['name'] ?? '',
-        middleName: json['name'] ?? '',
+        firstName: json["firstName"] ?? '',
+        lastName: json['lastName'] ?? '',
+        middleName: json['middleName'] ?? '',
+      userType: userType,
         phone: json["phone"] ?? '',
         email: json["email"] ?? '',
         active: json["active"] ?? false,
@@ -52,7 +54,7 @@ class Dealer extends Profile {
       );
 
   static Dealer mock() {
-    return Dealer.fromJson({
+    return Dealer.fromJson('dealer',{
       "_id": "6295d8859efa452712a145b8",
       "dealerId": "4321",
       "name": "Test dealer",
@@ -65,10 +67,13 @@ class Dealer extends Profile {
 
   Map<String, dynamic> toJson() => {
         "dealerId": dealerId,
-        "name": firstName,
+        "firstName": firstName,
+        "middleName":middleName,
+        "lastName":lastName,
         "phone": phone,
         "email": email,
-        "active": active,
+        'referralCode':referralCode,
+        
       };
 
   Dealer copyWith({
@@ -92,6 +97,7 @@ class Dealer extends Profile {
       middleName: middleName ?? this.middleName,
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
+      userType: userType??this.userType,
       uid: uid ?? this.uid,
       referralCode: referralCode ?? this.referralCode,
       phone: phone ?? this.phone,

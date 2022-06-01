@@ -20,6 +20,7 @@ class HomeStateNotifier extends ChangeNotifier {
           .listen((event) {
         if (event != null) {
           fetchCurrencyDataFromWazirX();
+          fetchCurrencyDataFromKraken();
           startWazirXCryptoTicker();
         }
       });
@@ -110,6 +111,20 @@ class HomeStateNotifier extends ChangeNotifier {
     }
   }
 
+//kraken
+
+  Future<void> fetchCurrencyDataFromKraken() async {
+    final Response response = await get(Uri.parse(
+        "https://api.kraken.com/0/public/Ticker?pair=${state.selectedCurrencyKey.toUpperCase()}",));
+
+    if (response.statusCode == 200) {
+      // response.body["result"]["XETHZUSD"]["a"][0];
+      }
+    }
+  
+
+  
+//kraken
   void toggleUSDToINR(bool value) {
     emit(state.copyWith(isUSD: value));
     assert(state.isUSD == value);

@@ -220,7 +220,7 @@ class _SettingsState extends State<Settings> {
                     const SizedBox(height: 40),
                     InkWell(
                       onTap: () async {
-                        await Provider.of<HomeStateNotifier>(
+                         Provider.of<HomeStateNotifier>(
                           context,
                           listen: false,
                         ).logout(context);
