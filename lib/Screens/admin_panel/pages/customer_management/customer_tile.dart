@@ -1,11 +1,12 @@
 import 'package:cvault/constants/theme.dart';
+import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:flutter/material.dart';
 
 class CustomerTile extends StatefulWidget {
-  const CustomerTile({Key? key, required this.profile}) : super(key: key);
-  final Profile profile;
+  const CustomerTile({Key? key, required this.customer}) : super(key: key);
+  final Customer customer;
 
   @override
   State<CustomerTile> createState() => _CustomerTileState();
@@ -34,7 +35,7 @@ class _CustomerTileState extends State<CustomerTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Customer: " + widget.profile.firstName,
+                    "Customer: " + widget.customer.firstName,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -45,7 +46,7 @@ class _CustomerTileState extends State<CustomerTile> {
                     height: 10,
                   ),
                   Text(
-                    "Email: " + widget.profile.email,
+                    "Email: " + widget.customer.email,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -56,7 +57,7 @@ class _CustomerTileState extends State<CustomerTile> {
                     height: 10,
                   ),
                   Text(
-                    "Mobile: " + widget.profile.phone,
+                    "Mobile: " + widget.customer.phone,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -67,7 +68,7 @@ class _CustomerTileState extends State<CustomerTile> {
                     height: 20,
                   ),
                   Text(
-                    "Dealer : " + widget.profile.uid,
+                    "Dealer : " + widget.customer.uid,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,

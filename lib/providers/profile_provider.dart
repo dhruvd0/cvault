@@ -103,7 +103,9 @@ class ProfileChangeNotifier extends ChangeNotifier {
   }
 
   Future<void> fetchProfile() async {
-    //String phone = FirebaseAuth.instance.currentUser!.phoneNumber!;
+    if (profile.userType == 'admin') {
+      return;
+    }
     var cachedProfile = await _fetchProfileFromCache();
     if (cachedProfile != null) {
       emit(cachedProfile);
