@@ -1,5 +1,6 @@
-import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
+import 'package:cvault/models/profile_models/profile.dart';
+import 'package:cvault/providers/profile_provider.dart';
+
 import 'package:cvault/Screens/profile/widgets/common/profile_field.dart';
 import 'package:cvault/Screens/profile/widgets/profile_header.dart';
 import 'package:cvault/home_page.dart';
@@ -195,7 +196,7 @@ class ProfilePage extends StatelessWidget {
                               child: ProfileTextField(
                                 showVerified: true,
                                 hintText: 'Phone',
-                                fieldName: ProfileFields.code,
+                                fieldName: ProfileFields.email,
                                 fixedValue: FirebaseAuth
                                         .instance.currentUser?.phoneNumber ??
                                     '',
@@ -246,9 +247,10 @@ class ProfilePage extends StatelessWidget {
                         onPressed: () async {
                           if (mode == ProfilePageMode.registration) {
                             if (_formKey.currentState!.validate()) {
-                              await Provider.of<ProfileNotifier>(context,
-                                      listen: false,)
-                                  .createNewProfile();
+                              await Provider.of<ProfileChangeNotifier>(
+                                context,
+                                listen: false,
+                              ).createNewProfile();
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cvault/models/dealer.dart';
+import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;

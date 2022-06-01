@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:cvault/Screens/home/bloc/cubit/home_state.dart';
+import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/models/crypto_currency.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
+import 'package:cvault/providers/profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -78,7 +78,7 @@ class HomeStateNotifier extends ChangeNotifier {
 
   Future<void> logout(BuildContext context) async {
     emit(HomeInitial());
-    Provider.of<ProfileNotifier>(context, listen: false).reset();
+    Provider.of<ProfileChangeNotifier>(context, listen: false).reset();
     (await SharedPreferences.getInstance()).clear();
     await FirebaseAuth.instance.signOut();
   }

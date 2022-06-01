@@ -1,12 +1,14 @@
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
+import 'package:cvault/models/profile_models/dealer.dart';
+import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-class ProfileNotifier extends ChangeNotifier {
-  ProfileState state = ProfileInitial();
-  ProfileNotifier() : super() {
+class ProfileChangeNotifier extends ChangeNotifier {
+  Profile profile = ProfileInitial();
+  ProfileChangeNotifier() : super() {
     FirebaseAuth.instance
         .authStateChanges()
         .asBroadcastStream()
@@ -20,37 +22,35 @@ class ProfileNotifier extends ChangeNotifier {
       }
     });
   }
-  void emit(ProfileState newState) {
-    state = newState;
+  void emit(Profile newState) {
+    profile = newState;
     notifyListeners();
   }
 
   void changeUserType(String newType) {
-    emit(state.copyWith(userType: newType));
+    emit(profile.copyWith(userType: newType));
   }
 
   void changeProfileField(dynamic data, ProfileFields field) {
-    var profileState = state;
+    var Profile = profile;
     switch (field) {
       case ProfileFields.firstName:
-        profileState = profileState.copyWith(firstName: data);
+        Profile = Profile.copyWith(firstName: data);
         break;
       case ProfileFields.middleName:
-        profileState = profileState.copyWith(middleName: data);
+        Profile = Profile.copyWith(middleName: data);
         break;
       case ProfileFields.lastName:
-        profileState = profileState.copyWith(lastName: data);
+        Profile = Profile.copyWith(lastName: data);
         break;
       case ProfileFields.email:
-        profileState = profileState.copyWith(email: data);
+        Profile = Profile.copyWith(email: data);
         break;
-      case ProfileFields.code:
-        profileState = profileState.copyWith(code: data);
-        break;
+
       case ProfileFields.referralCode:
-        profileState = profileState.copyWith(referralCode: data);
+        Profile = Profile.copyWith(referralCode: data);
     }
-    emit(profileState);
+    emit(Profile);
   }
 
   void reset() {
@@ -58,30 +58,29 @@ class ProfileNotifier extends ChangeNotifier {
   }
 
   Future<void> fetchProfile() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
+    //String phone = FirebaseAuth.instance.currentUser!.phoneNumber!;
 
-    /// TODO: implement fetch profile here
-    ///
-    ///
-    ///
+    /// TODO: implement fetch profile
 
     bool isRegistered = false;
     // ignore: dead_code, change isRegistered to mock register api
     if (isRegistered) {
-      var map = <String, dynamic>{};
-      emit(ProfileState.fromMap(map));
+     
+      emit(ProfileInitial());
     } else {
       emit(
-        NewProfile(
-          userType: state.userType,
-          uid: uid,
-          phone: '+919000000001',
-        ),
+        Dealer.mock(),
       );
     }
   }
 
-  createNewProfile() {
-    /// TODO: implement new profile
+  // Future<void> _fetchProfileFromCache() async {}
+  // Future<void> _saveProfileToCache() async {}
+
+  createNewProfile() async {
+    final response = await http.get(
+      Uri.parse("https://cvault-backend.herokuapp.com/dealer/createDealer"),
+    );
+    print(response);
   }
 }

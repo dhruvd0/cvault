@@ -1,5 +1,5 @@
 import 'package:cvault/Screens/Setting.dart';
-import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
+import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -378,7 +378,7 @@ class _QuoteState extends State<Quote> {
                       autovalidateMode: AutovalidateMode.always,
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.phone,
-                    inputFormatters: [],
+                      inputFormatters: [],
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Mobile Number',

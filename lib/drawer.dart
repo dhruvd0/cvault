@@ -64,13 +64,13 @@ class _MyDrawerState extends State<MyDrawer> {
                 "Messages",
                 textAlign: TextAlign.right,
                 style: TextStyle(
-                    fontStyle: FontStyle.normal,
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Roboto',),
+                  fontStyle: FontStyle.normal,
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'Roboto',
+                ),
               ),
               onTap: () {
-
                 /// TODO: navigate to messages
               },
             ),
@@ -87,10 +87,11 @@ class _MyDrawerState extends State<MyDrawer> {
                 "Notification",
                 textAlign: TextAlign.right,
                 style: TextStyle(
-                    fontStyle: FontStyle.normal,
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Roboto',),
+                  fontStyle: FontStyle.normal,
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'Roboto',
+                ),
               ),
               onTap: () {
                 /// TODO: navigate to notifications
@@ -109,18 +110,21 @@ class _MyDrawerState extends State<MyDrawer> {
                 "Log Out",
                 textAlign: TextAlign.right,
                 style: TextStyle(
-                    fontStyle: FontStyle.normal,
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Roboto',),
+                  fontStyle: FontStyle.normal,
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'Roboto',
+                ),
               ),
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
 
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (builder) => const LogInScreen(),),);
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => const LogInScreen(),
+                  ),
+                );
               },
             ),
           ],

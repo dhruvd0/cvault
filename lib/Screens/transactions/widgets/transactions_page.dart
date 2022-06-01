@@ -1,6 +1,7 @@
-import 'package:cvault/Screens/transactions/models/transaction.dart';
 import 'package:cvault/Screens/transactions/widgets/transaction_tile.dart';
 import 'package:flutter/material.dart';
+
+import '../../../models/transaction.dart';
 
 class TransactionsPage extends StatelessWidget {
   const TransactionsPage({Key? key}) : super(key: key);

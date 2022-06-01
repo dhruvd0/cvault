@@ -1,5 +1,5 @@
 import 'package:cvault/Screens/admin_panel/widgets/admin_panel_grid.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
+import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/transactions/widgets/transactions_page.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/home_page.dart';
@@ -45,9 +45,9 @@ class _AdminPanelState extends State<AdminPanel> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Consumer<ProfileNotifier>(
+        child: Consumer<ProfileChangeNotifier>(
           builder: (context, profileNotifier, _) {
-            var userType = profileNotifier.state.userType;
+            var userType = profileNotifier.profile.userType;
 
             return Container(
               padding: const EdgeInsets.all(20),

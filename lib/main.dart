@@ -1,11 +1,14 @@
-import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
-import 'package:cvault/Screens/profile/widgets/profile.dart';
+import 'package:cvault/constants/user_types.dart';
+import 'package:cvault/models/profile_models/customer.dart';
+import 'package:cvault/models/profile_models/dealer.dart';
+import 'package:cvault/providers/profile_provider.dart';
+
+import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/firebase_options.dart';
 import 'package:cvault/home_page.dart';
-import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
+import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/dealers_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +30,7 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           lazy: false,
-          create: (context) => ProfileNotifier(),
+          create: (context) => ProfileChangeNotifier(),
         ),
         ChangeNotifierProvider.value(value: DealersProvider()),
       ],
@@ -50,12 +53,15 @@ class _CVaultAppState extends State<CVaultApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
-        var notifier = Provider.of<ProfileNotifier>(context, listen: false);
+        var notifier =
+            Provider.of<ProfileChangeNotifier>(context, listen: false);
         await notifier.fetchProfile();
-        widget = notifier.state is NewProfile
+        widget = (notifier.profile is Dealer ||
+                notifier.profile is Customer ||
+                notifier.profile.userType == UserTypes.admin)
             ? ProfilePage(mode: ProfilePageMode.registration)
             : HomePage();
       }

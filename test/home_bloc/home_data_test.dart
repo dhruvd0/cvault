@@ -1,4 +1,4 @@
-import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
+import 'package:cvault/providers/home_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

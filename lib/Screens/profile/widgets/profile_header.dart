@@ -1,4 +1,4 @@
-import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
+import 'package:cvault/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,9 +31,9 @@ class ProfileHeader extends StatelessWidget {
             // color: Color(0xff1E2022),
             borderRadius: BorderRadius.circular(40),
           ),
-          child: CircleAvatar(child: Consumer<ProfileNotifier>(
+          child: CircleAvatar(child: Consumer<ProfileChangeNotifier>(
             builder: (context, profileNotifier, _) {
-              var state = profileNotifier.state;
+              var state = profileNotifier.profile;
               if (state.firstName.isEmpty) {
                 return const Text('AB');
               }
@@ -42,9 +42,9 @@ class ProfileHeader extends StatelessWidget {
             },
           )),
         ),
-        Consumer<ProfileNotifier>(
+        Consumer<ProfileChangeNotifier>(
           builder: (context, profileNotifier, _) {
-            var state = profileNotifier.state;
+            var state = profileNotifier.profile;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,

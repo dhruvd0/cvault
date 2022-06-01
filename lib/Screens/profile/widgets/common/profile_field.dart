@@ -1,5 +1,6 @@
-import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
+import 'package:cvault/models/profile_models/profile.dart';
+import 'package:cvault/providers/profile_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:regexed_validator/regexed_validator.dart';
@@ -17,7 +18,7 @@ class ProfileTextField extends StatelessWidget {
   final bool? showVerified;
   final String? fixedValue;
   final ProfileFields fieldName;
-  String getInitialValueFromFieldName(ProfileState state) {
+  String getInitialValueFromFieldName(Profile state) {
     switch (fieldName) {
       case ProfileFields.firstName:
         return state.firstName;
@@ -27,10 +28,9 @@ class ProfileTextField extends StatelessWidget {
         return state.lastName;
       case ProfileFields.email:
         return state.email;
-      case ProfileFields.code:
-        return state.code;
+
       case ProfileFields.referralCode:
-        return state.code;
+        return state.referralCode;
     }
   }
 
@@ -44,11 +44,10 @@ class ProfileTextField extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.only(left: 10),
-        child: Consumer<ProfileNotifier>(
+        child: Consumer<ProfileChangeNotifier>(
           builder: (context, profileNotifier, _) {
-            final state = profileNotifier.state;
+            final state = profileNotifier.profile;
             List<ProfileFields> uncheckedFIelds = [
-              ProfileFields.code,
               ProfileFields.referralCode,
               ProfileFields.middleName,
             ];
@@ -56,7 +55,7 @@ class ProfileTextField extends StatelessWidget {
             return TextFormField(
               initialValue: fixedValue ?? getInitialValueFromFieldName(state),
               onChanged: (string) {
-                Provider.of<ProfileNotifier>(context, listen: false)
+                Provider.of<ProfileChangeNotifier>(context, listen: false)
                     .changeProfileField(string, fieldName);
               },
               validator: (string) {

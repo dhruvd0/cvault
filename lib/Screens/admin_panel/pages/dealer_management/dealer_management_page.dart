@@ -1,7 +1,5 @@
-import 'dart:ui';
-
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_tile.dart';
-import 'package:cvault/models/dealer.dart';
+import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/dealers_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

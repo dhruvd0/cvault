@@ -1,6 +1,6 @@
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/customer_list.dart';
 import 'package:cvault/constants/theme.dart';
-import 'package:cvault/models/dealer.dart';
+import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:flutter/material.dart';
 
 class DealerTile extends StatefulWidget {
@@ -34,7 +34,7 @@ class _DealerTileState extends State<DealerTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Name: " + widget.dealer.name,
+                    "Name: " + widget.dealer.firstName,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,

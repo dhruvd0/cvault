@@ -1,6 +1,8 @@
-import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
-import 'package:cvault/Screens/profile/widgets/profile.dart';
+import 'package:cvault/models/profile_models/customer.dart';
+import 'package:cvault/models/profile_models/dealer.dart';
+import 'package:cvault/providers/profile_provider.dart';
+
+import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/constants/user_types.dart';
@@ -298,7 +300,7 @@ class _LogInScreenState extends State<LogInScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('login', true);
-    var notifier = Provider.of<ProfileNotifier>(context, listen: false);
+    var notifier = Provider.of<ProfileChangeNotifier>(context, listen: false);
     if (phone == "+911111111111") {
       await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
       notifier.changeUserType(UserTypes.admin);
@@ -311,7 +313,7 @@ class _LogInScreenState extends State<LogInScreen> {
     }
 
     await notifier.fetchProfile();
-    if (notifier.state is NewProfile) {
+    if (notifier.profile is Dealer || notifier.profile is Customer) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

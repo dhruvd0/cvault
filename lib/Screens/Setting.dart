@@ -1,9 +1,9 @@
-import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
-import 'package:cvault/Screens/home/bloc/cubit/home_state.dart';
+import 'package:cvault/providers/home_provider.dart';
+import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/login/login_screen.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
+import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/home_page.dart';
-import 'package:cvault/Screens/profile/widgets/profile.dart';
+import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/constants/user_types.dart';
 
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class _SettingsState extends State<Settings> {
   }
 
   DropdownMenuItem<String> buildCurrencyList(String item) {
-    final state = Provider.of<HomeStateNotifier>(context,listen: false).state;
+    final state = Provider.of<HomeStateNotifier>(context, listen: false).state;
     String name = state.cryptoCurrencies.firstWhere((e) => e.key == item).name;
 
     return DropdownMenuItem(
@@ -76,9 +76,9 @@ class _SettingsState extends State<Settings> {
         child: SafeArea(
           bottom: true,
           top: true,
-          child: Consumer<ProfileNotifier>(
+          child: Consumer<ProfileChangeNotifier>(
             builder: (context, profileNotifier, _) {
-              final state = profileNotifier.state;
+              final state = profileNotifier.profile;
               final userType = state.userType;
 
               return Container(
@@ -219,8 +219,10 @@ class _SettingsState extends State<Settings> {
                     const SizedBox(height: 40),
                     InkWell(
                       onTap: () async {
-                        await Provider.of<HomeStateNotifier>(context,listen: false)
-                            .logout(context);
+                        await Provider.of<HomeStateNotifier>(
+                          context,
+                          listen: false,
+                        ).logout(context);
 
                         Navigator.pushReplacement(
                           context,

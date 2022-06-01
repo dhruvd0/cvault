@@ -1,6 +1,7 @@
-import 'package:cvault/Screens/transactions/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../../models/transaction.dart';
 
 class TransactionTile extends StatelessWidget {
   const TransactionTile({Key? key, required this.transaction})
@@ -27,7 +28,7 @@ class TransactionTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    transaction.userName,
+                    transaction.customer,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,

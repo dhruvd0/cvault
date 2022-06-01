@@ -1,10 +1,10 @@
-import 'package:cvault/Screens/profile/cubit/cubit/profile_state.dart';
 import 'package:cvault/constants/theme.dart';
+import 'package:cvault/models/profile_models/profile.dart';
 import 'package:flutter/material.dart';
 
 class CustomerTile extends StatefulWidget {
   const CustomerTile({Key? key, required this.profile}) : super(key: key);
-  final ProfileState profile;
+  final Profile profile;
 
   @override
   State<CustomerTile> createState() => _CustomerTileState();
@@ -66,7 +66,7 @@ class _CustomerTileState extends State<CustomerTile> {
                     height: 20,
                   ),
                   Text(
-                    "Dealer : " + widget.profile.code,
+                    "Dealer : " + widget.profile.uid,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,

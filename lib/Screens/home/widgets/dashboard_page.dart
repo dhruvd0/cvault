@@ -1,9 +1,9 @@
 import 'package:cvault/Screens/Setting.dart';
-import 'package:cvault/Screens/home/bloc/cubit/home_cubit.dart';
-import 'package:cvault/Screens/home/bloc/cubit/home_state.dart';
+import 'package:cvault/providers/home_provider.dart';
+import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/widgets/margin_selector.dart';
-import 'package:cvault/Screens/profile/cubit/cubit/profile_cubit.dart';
-import 'package:cvault/Screens/profile/widgets/profile.dart';
+import 'package:cvault/providers/profile_provider.dart';
+import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/constants/user_types.dart';
 
 import 'package:flutter/material.dart';
@@ -45,12 +45,12 @@ class _DashboardPageState extends State<DashboardPage> {
         elevation: 0,
         toolbarHeight: 100,
         centerTitle: true,
-        title: Consumer<ProfileNotifier>(
+        title: Consumer<ProfileChangeNotifier>(
           builder: (context, profileNotifier, _) {
-            var userType = profileNotifier.state.userType;
+            var userType = profileNotifier.profile.userType;
 
             return Text(
-              "Hello, ${profileNotifier.state.firstName.isEmpty ? 'User' : profileNotifier.state.firstName}.\n Welcome to ${userType[0].toUpperCase() + userType.substring(1)} Dashboard",
+              "Hello, ${profileNotifier.profile.firstName.isEmpty ? 'User' : profileNotifier.profile.firstName}.\n Welcome to ${userType[0].toUpperCase() + userType.substring(1)} Dashboard",
               textAlign: TextAlign.center,
               maxLines: 3,
               style: const TextStyle(
@@ -96,9 +96,9 @@ class _DashboardPageState extends State<DashboardPage> {
           }),
         ],
       ),
-      body: Consumer<ProfileNotifier>(
+      body: Consumer<ProfileChangeNotifier>(
         builder: (context, profileNotifier, _) {
-          var userType = profileNotifier.state.userType;
+          var userType = profileNotifier.profile.userType;
 
           return Consumer<HomeStateNotifier>(
             builder: (context, homeStateNotifier, _) {

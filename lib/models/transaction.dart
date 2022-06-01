@@ -55,4 +55,13 @@ class Transaction {
         "quantity": quantity,
         "status": status,
       };
+
+  static Transaction mock() {
+    return Transaction.fromJson(const {
+      'userName': 'Test Name',
+      'price': 2300000000.1,
+      'status': 'Received',
+      'currency': 'INR',
+    });
+  }
 }
