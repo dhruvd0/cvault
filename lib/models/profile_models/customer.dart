@@ -24,14 +24,14 @@ class Customer extends Profile {
         );
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-        uid: json['customerId'],
-        customerId: json["customerId"],
-        firstName: json["firstName"],
-        middleName: json["middleName"],
-        lastName: json["lastName"],
-        email: json["email"],
+        uid: json['customerId']??'',
+        customerId: json["customerId"]??'',
+        firstName: json["firstName"]??'',
+        middleName: json["middleName"]??'',
+        lastName: json["lastName"]??'',
+        email: json["email"]??'',
         referralCode: '',
-        phone: json["phone"],
+        phone: json["phone"]??'',
       );
 
   Map<String, dynamic> toJson() => {
@@ -39,7 +39,43 @@ class Customer extends Profile {
         "firstName": firstName,
         "middleName": middleName,
         "lastName": lastName,
-        "email": email,
         "phone": phone,
+        "email": email,
       };
+
+  Customer copyWith({
+    String? customerId,
+    String? firstName,
+    String? middleName,
+    String? lastName,
+    String? email,
+    String? uid,
+    String? userType,
+    String? referralCode,
+    String? phone,
+  }) {
+    return Customer(
+      customerId: customerId ?? this.customerId,
+      firstName: firstName ?? this.firstName,
+      middleName: middleName ?? this.middleName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      uid: uid ?? this.uid,
+      referralCode: referralCode ?? this.referralCode,
+      phone: phone ?? this.phone,
+    );
+  }
+
+    static Customer mock() {
+    return Customer.fromJson({
+      "_id": "6295d8859efa452712a145b8",
+      "customerId": "4321",
+      "name": "Test dealer",
+      "phone": "9876543210",
+      "email": "test@gmail.com",
+      "active": true,
+      "transactions": [],
+    });
+  }
+
 }

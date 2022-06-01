@@ -32,8 +32,8 @@ class Transaction {
 
   factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
         id: json["_id"],
-        sender: json["sender"],
-        customer: json["customer"],
+        sender: json["sender"]['firstName'],
+        customer: json["customer"]['firstName'],
         transactionType: json["transactionType"],
         currency: json["currency"],
         cryptoType: json["cryptoType"],

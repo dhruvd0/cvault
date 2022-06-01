@@ -1,6 +1,9 @@
+import 'package:cvault/constants/user_types.dart';
+import 'package:cvault/models/profile_models/customer.dart';
+import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:equatable/equatable.dart';
 
-class Profile extends Equatable {
+abstract class Profile extends Equatable {
   final String firstName;
   final String middleName;
   final String lastName;
@@ -37,27 +40,10 @@ class Profile extends Equatable {
   factory Profile.fromMap(Map<String, dynamic> map) {
     throw UnimplementedError('Use either Dealer or Customer .fromMap');
   }
+   
 
-  Profile copyWith({
-    String? firstName,
-    String? middleName,
-    String? lastName,
-    String? email,
-    String? uid,
-    String? userType,
-    String? referralCode,
-    String? phone,
-  }) {
-    return Profile(
-      firstName: firstName ?? this.firstName,
-      middleName: middleName ?? this.middleName,
-      lastName: lastName ?? this.lastName,
-      email: email ?? this.email,
-      uid: uid ?? this.uid,
-      userType: userType ?? this.userType,
-      referralCode: referralCode ?? this.referralCode,
-      phone: phone ?? this.phone,
-    );
+  Map<String, dynamic> toJson() {
+    throw UnimplementedError('Use either Dealer or Customer .toJson');
   }
 }
 

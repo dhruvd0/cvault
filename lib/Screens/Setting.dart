@@ -1,3 +1,4 @@
+import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/login/login_screen.dart';
@@ -219,7 +220,7 @@ class _SettingsState extends State<Settings> {
                     const SizedBox(height: 40),
                     InkWell(
                       onTap: () async {
-                        await Provider.of<HomeStateNotifier>(
+                         Provider.of<HomeStateNotifier>(
                           context,
                           listen: false,
                         ).logout(context);
@@ -227,7 +228,7 @@ class _SettingsState extends State<Settings> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (builder) => const LogInScreen(),
+                            builder: (builder) => const UserTypeSelectPage(),
                           ),
                         );
                       },

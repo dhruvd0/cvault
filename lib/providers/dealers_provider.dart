@@ -16,6 +16,21 @@ class DealersProvider extends ChangeNotifier {
     return [..._dealers];
   }
 
+  Future<bool> changeDealerActiveState(String dealerId) async {
+    final response = await http.post(
+      Uri.parse("https://cvault-backend.herokuapp.com/dealer/changeActive/"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(
+        {'dealerId': dealerId},
+      ),
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('dealer/changeActive:' + response.statusCode.toString());
+    }
+  }
+
   Future<void> fetchAndSetDealers() async {
     try {
       final response = await http.get(
@@ -28,7 +43,7 @@ class DealersProvider extends ChangeNotifier {
       data.forEach(
         (dt) {
           dealers.add(
-            Dealer.fromJson(dt),
+            Dealer.fromJson('dealer', dt),
           );
         },
       );

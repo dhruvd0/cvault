@@ -2,7 +2,9 @@ import 'package:cvault/Screens/admin_panel/pages/dealer_management/customer_list
 import 'package:cvault/Screens/reportingScrenn.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
+import 'package:cvault/providers/dealers_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DealerTile extends StatefulWidget {
   const DealerTile({Key? key, required this.dealer}) : super(key: key);
@@ -13,7 +15,7 @@ class DealerTile extends StatefulWidget {
 }
 
 class _DealerTileState extends State<DealerTile> {
-  bool toggle = false;
+  bool toggle = true;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,56 +30,56 @@ class _DealerTileState extends State<DealerTile> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Name: " + widget.dealer.firstName,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
+          Container(
+            constraints:
+                BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Name: " + widget.dealer.firstName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(
-                    height: 10,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Email: " + widget.dealer.email,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    "Email: " + widget.dealer.email,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Mobile: " + widget.dealer.phone,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(
-                    height: 10,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "ID: " + widget.dealer.dealerId,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    "Mobile: " + widget.dealer.phone,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "ID: " + widget.dealer.dealerId,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
           Column(
             children: [
@@ -123,6 +125,7 @@ class _DealerTileState extends State<DealerTile> {
                   setState(() {
                     toggle = value;
                   });
+                  _changeActiveStatus(context);
                 },
               ),
             ],
@@ -130,5 +133,16 @@ class _DealerTileState extends State<DealerTile> {
         ],
       ),
     );
+  }
+
+  void _changeActiveStatus(BuildContext context) async {
+    bool success = await Provider.of<DealersProvider>(context, listen: false)
+        .changeDealerActiveState(widget.dealer.dealerId);
+    String status = toggle ? 'Enabled' : 'Disabled';
+    if (success) {
+      final snackBar = SnackBar(content: Text("Dealer $status"));
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 }

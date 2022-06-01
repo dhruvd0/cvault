@@ -303,7 +303,8 @@ class _LogInScreenState extends State<LogInScreen> {
     var notifier = Provider.of<ProfileChangeNotifier>(context, listen: false);
     if (phone == "+911111111111") {
       await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
-      notifier.changeUserType(UserTypes.admin);
+      notifier.changeUserType(
+          UserTypes.admin, FirebaseAuth.instance.currentUser!.uid);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (builder) => const HomePage()),
@@ -313,7 +314,14 @@ class _LogInScreenState extends State<LogInScreen> {
     }
 
     await notifier.fetchProfile();
-    if (notifier.profile is Dealer || notifier.profile is Customer) {
+    if (notifier.profile.firstName.isNotEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (builder) => HomePage(),
+        ),
+      );
+    } else {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -321,11 +329,6 @@ class _LogInScreenState extends State<LogInScreen> {
             mode: ProfilePageMode.registration,
           ),
         ),
-      );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (builder) => const HomePage()),
       );
     }
   }
