@@ -1,5 +1,5 @@
-
 import 'package:cvault/Screens/Setting.dart';
+import 'package:cvault/providers/exchange_provider.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/widgets/margin_selector.dart';
@@ -33,7 +33,7 @@ class _DashboardPageState extends State<DashboardPage> {
     double globalPrice = 2415313.58;
     double difference = 100 * ((LocalPrice - globalPrice) / globalPrice);
     double fixedDifference = double.parse(difference.toStringAsFixed(2));
-
+    final exchangeRate = Provider.of<ExchangeProvider>(context).usdToInrRate;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
@@ -214,13 +214,23 @@ class _DashboardPageState extends State<DashboardPage> {
                         : Text(
                             state.cryptoCurrencies.isEmpty
                                 ? ''
-                                : (state.isUSD ? '\$' : '₹') +
-                                    state.cryptoCurrencies
-                                        .firstWhere((element) =>
-                                            element.key ==
-                                            state.selectedCurrencyKey)
-                                        .wazirxPrice
-                                        .toString(),
+                                : (state.isUSD
+                                    ? '\$' +
+                                        (state.cryptoCurrencies
+                                                    .firstWhere((element) =>
+                                                        element.key ==
+                                                        state
+                                                            .selectedCurrencyKey)
+                                                    .wazirxPrice /
+                                                exchangeRate)
+                                            .toStringAsFixed(2)
+                                    : '₹' +
+                                        state.cryptoCurrencies
+                                            .firstWhere((element) =>
+                                                element.key ==
+                                                state.selectedCurrencyKey)
+                                            .wazirxPrice
+                                            .toString()),
                             textAlign: TextAlign.start,
                             style: const TextStyle(
                               fontFamily: 'Poppins',
@@ -252,24 +262,24 @@ class _DashboardPageState extends State<DashboardPage> {
                               height: 10,
                             ),
                             homeStateNotifier.state is HomeInitial
-                        ? const Text("Loading")
-                        : Text(
-                            state.cryptoCurrencies.isEmpty
-                                ? ''
-                                : (state.isUSD ? '\$' : '₹') +
-                                    state.cryptoCurrencies
-                                        .firstWhere((element) =>
-                                            element.key ==
-                                            state.selectedCurrencyKey)
-                                        .krakenPrice
-                                        .toString(),
-                              textAlign: TextAlign.start,
-                              style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                                fontSize: 32,
-                              ),
-                            ),
+                                ? const Text("Loading")
+                                : Text(
+                                    state.cryptoCurrencies.isEmpty
+                                        ? ''
+                                        : (state.isUSD ? '\$' : '₹') +
+                                            state.cryptoCurrencies
+                                                .firstWhere((element) =>
+                                                    element.key ==
+                                                    state.selectedCurrencyKey)
+                                                .krakenPrice
+                                                .toString(),
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                      fontSize: 32,
+                                    ),
+                                  ),
                           ],
                         ),
                         userType == UserTypes.admin
