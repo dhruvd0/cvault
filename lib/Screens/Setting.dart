@@ -37,7 +37,8 @@ class _SettingsState extends State<Settings> {
   }
 
   DropdownMenuItem<String> buildCurrencyList(String item) {
-    final state = Provider.of<HomeStateNotifier>(context, listen: false).state;
+    var provider = Provider.of<HomeStateNotifier>(context, listen: false);
+    final state = provider.state;
     String name =
         state.cryptoCurrencies.firstWhere((e) => e.wazirxKey == item).name;
 
@@ -115,32 +116,40 @@ class _SettingsState extends State<Settings> {
                                         child: CircularProgressIndicator(),
                                       )
                                     : Flexible(
-                                        child: SizedBox(
-                                          width: 100,
-                                          child: DropdownButton<String>(
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            underline: const SizedBox(),
-                                            isExpanded: true,
-                                            dropdownColor: Colors.transparent,
-                                            items: HomeStateNotifier.cryptoKeys(
-                                              homeNotifier.state.isUSD
-                                                  ? 'usdt'
-                                                  : 'inr',
-                                            ).map(buildCurrencyList).toList(),
-                                            value: homeNotifier
-                                                .state.selectedCurrencyKey,
-                                            onChanged: (value) {
-                                              if (value != null) {
-                                                Provider.of<HomeStateNotifier>(
-                                                  context,
-                                                  listen: false,
-                                                ).changeCryptoKey(value);
-                                              }
-                                            },
-                                          ),
-                                        ),
+                                        child: homeNotifier
+                                                .state.cryptoCurrencies.isEmpty
+                                            ? SizedBox()
+                                            : SizedBox(
+                                                width: 100,
+                                                child: DropdownButton<String>(
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                  underline: const SizedBox(),
+                                                  isExpanded: true,
+                                                  dropdownColor:
+                                                      Colors.transparent,
+                                                  items: HomeStateNotifier
+                                                          .cryptoKeys(
+                                                    homeNotifier.state.isUSD
+                                                        ? 'usdt'
+                                                        : 'inr',
+                                                  )
+                                                      .map(buildCurrencyList)
+                                                      .toList(),
+                                                  value: homeNotifier.state
+                                                      .selectedCurrencyKey,
+                                                  onChanged: (value) {
+                                                    if (value != null) {
+                                                      Provider.of<
+                                                          HomeStateNotifier>(
+                                                        context,
+                                                        listen: false,
+                                                      ).changeCryptoKey(value);
+                                                    }
+                                                  },
+                                                ),
+                                              ),
                                       ),
                               ],
                             );

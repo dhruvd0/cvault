@@ -221,10 +221,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                   state.cryptoCurrencies.isEmpty
                                       ? ''
                                       : (state.isUSD ? '\$' : '₹') +
-                                          state.cryptoCurrencies
-                                              .firstWhere((element) =>
-                                                  element.wazirxKey ==
-                                                  state.selectedCurrencyKey)
+                                          homeStateNotifier
+                                              .currentCryptoCurrency()
                                               .wazirxPrice
                                               .toString(),
                                   textAlign: TextAlign.start,
@@ -294,7 +292,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                               ),
                                             ),
                                             Text(
-                                              homeStateNotifier.state.difference.toString(),
+                                              homeStateNotifier.state.difference
+                                                  .toString(),
                                               style: const TextStyle(
                                                 fontFamily: 'Poppins',
                                                 fontSize: 18,

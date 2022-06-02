@@ -100,15 +100,16 @@ class HomeStateNotifier extends ChangeNotifier {
     await FirebaseAuth.instance.signOut();
   }
 
-  void changeCryptoKey(String key) {
-    assert(HomeStateNotifier.cryptoKeys(state.isUSD ? 'usdt' : 'inr')
-        .contains(key));
+  void changeCryptoKey(String key) async {
+    var cryptoKeys = HomeStateNotifier.cryptoKeys(state.isUSD ? 'usdt' : 'inr');
+    assert(cryptoKeys.contains(key));
     emit(state.copyWith(selectedCurrencyKey: key));
-    getCryptoDataFromAPIs();
+
+    await getCryptoDataFromAPIs();
   }
 
   Future<void> fetchCurrencyDataFromWazirX() async {
-    emit(state.copyWith(cryptoCurrencies: []));
+    
     final Response response =
         await get(Uri.parse("https://api.wazirx.com/api/v2/tickers"));
 
@@ -122,7 +123,7 @@ class HomeStateNotifier extends ChangeNotifier {
         emit(
           HomeData(
             cryptoCurrencies: currencies,
-            selectedCurrencyKey: cryptoKeys(state.isUSD ? 'usdt' : 'inr').first,
+            selectedCurrencyKey: state.selectedCurrencyKey,
             isUSD: state.isUSD,
           ),
         );
@@ -215,11 +216,15 @@ class HomeStateNotifier extends ChangeNotifier {
 
 //kraken
   Future<void> toggleUSDToINR(bool value) async {
-    emit(state.copyWith(isUSD: value));
+    emit(state.copyWith(isUSD: value, loadStatus: LoadStatus.loading));
 
     assert(state.isUSD == value);
-    await getCryptoDataFromAPIs();
-    emit(state.copyWith(isUSD: value));
+    String newKey = state.isUSD
+        ? state.selectedCurrencyKey.replaceAll('inr', 'usdt')
+        : state.selectedCurrencyKey.replaceAll('usdt', 'int');
+    changeCryptoKey(newKey);
+
+    emit(state.copyWith(loadStatus: LoadStatus.done));
   }
 
   List<CryptoCurrency> _parseCurrenciesFromCryptoData(
