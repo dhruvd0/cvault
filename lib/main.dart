@@ -1,6 +1,5 @@
 import 'package:cvault/constants/user_types.dart';
-import 'package:cvault/models/profile_models/customer.dart';
-import 'package:cvault/models/profile_models/dealer.dart';
+import 'package:cvault/providers/exchange_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
@@ -36,6 +35,7 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider.value(value: DealersProvider()),
         ChangeNotifierProvider.value(value: TransactionsProvider()),
+        ChangeNotifierProvider.value(value: ExchangeProvider()),
       ],
       child: MaterialApp(home: CVaultApp()),
     ),
@@ -59,7 +59,7 @@ class _CVaultAppState extends State<CVaultApp> {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
-         String? userType = (await SharedPreferences.getInstance())
+        String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         var notifier =
             Provider.of<ProfileChangeNotifier>(context, listen: false);
