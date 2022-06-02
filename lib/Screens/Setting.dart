@@ -38,7 +38,8 @@ class _SettingsState extends State<Settings> {
 
   DropdownMenuItem<String> buildCurrencyList(String item) {
     final state = Provider.of<HomeStateNotifier>(context, listen: false).state;
-    String name = state.cryptoCurrencies.firstWhere((e) => e.key == item).name;
+    String name =
+        state.cryptoCurrencies.firstWhere((e) => e.wazirxKey == item).name;
 
     return DropdownMenuItem(
       value: item,
@@ -123,9 +124,11 @@ class _SettingsState extends State<Settings> {
                                             underline: const SizedBox(),
                                             isExpanded: true,
                                             dropdownColor: Colors.transparent,
-                                            items: HomeStateNotifier.cryptoKeys
-                                                .map(buildCurrencyList)
-                                                .toList(),
+                                            items: HomeStateNotifier.cryptoKeys(
+                                              homeNotifier.state.isUSD
+                                                  ? 'usdt'
+                                                  : 'inr',
+                                            ).map(buildCurrencyList).toList(),
                                             value: homeNotifier
                                                 .state.selectedCurrencyKey,
                                             onChanged: (value) {
@@ -220,7 +223,7 @@ class _SettingsState extends State<Settings> {
                     const SizedBox(height: 40),
                     InkWell(
                       onTap: () async {
-                         Provider.of<HomeStateNotifier>(
+                        Provider.of<HomeStateNotifier>(
                           context,
                           listen: false,
                         ).logout(context);

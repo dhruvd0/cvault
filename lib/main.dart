@@ -59,7 +59,7 @@ class _CVaultAppState extends State<CVaultApp> {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
-         String? userType = (await SharedPreferences.getInstance())
+        String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         var notifier =
             Provider.of<ProfileChangeNotifier>(context, listen: false);

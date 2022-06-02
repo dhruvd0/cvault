@@ -1,30 +1,56 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 import 'package:cvault/Screens/home/models/crypto_currency.dart';
+import 'package:cvault/providers/home_provider.dart';
+import 'package:cvault/providers/profile_provider.dart';
 
 class HomeState extends Equatable {
-  final List<CryptoCurrency> cryptoCurrencies;
-  final String selectedCurrencyKey;
-  final bool isUSD;
   const HomeState({
     required this.cryptoCurrencies,
-    required this.selectedCurrencyKey,
     required this.isUSD,
+    required this.selectedCurrencyKey,
+    required this.loadStatus,
+    required this.difference,
   });
 
+  final List<CryptoCurrency> cryptoCurrencies;
+  final bool isUSD;
+  final String selectedCurrencyKey;
+  final LoadStatus loadStatus;
+  final double difference;
+
   @override
-  List<Object> get props => [cryptoCurrencies, selectedCurrencyKey, isUSD];
+  List<Object> get props {
+    return [
+      cryptoCurrencies,
+      isUSD,
+      selectedCurrencyKey,
+      loadStatus,
+      difference,
+    ];
+  }
 
   HomeState copyWith({
     List<CryptoCurrency>? cryptoCurrencies,
-    String? selectedCurrencyKey,
     bool? isUSD,
+    String? selectedCurrencyKey,
+    LoadStatus? loadStatus,
+    double? difference,
   }) {
     return HomeState(
       cryptoCurrencies: cryptoCurrencies ?? this.cryptoCurrencies,
-      selectedCurrencyKey: selectedCurrencyKey ?? this.selectedCurrencyKey,
       isUSD: isUSD ?? this.isUSD,
+      selectedCurrencyKey: selectedCurrencyKey ?? this.selectedCurrencyKey,
+      loadStatus: loadStatus ?? this.loadStatus,
+      difference: difference ?? this.difference,
     );
+  }
+
+  @override
+  String toString() {
+    return 'HomeState(cryptoCurrencies: $cryptoCurrencies, isUSD: $isUSD, selectedCurrencyKey: $selectedCurrencyKey, loadStatus: $loadStatus)';
   }
 }
 
@@ -32,8 +58,10 @@ class HomeInitial extends HomeState {
   HomeInitial()
       : super(
           cryptoCurrencies: [],
-          selectedCurrencyKey: '',
-          isUSD: true,
+          selectedCurrencyKey: HomeStateNotifier.cryptoKeys('inr').first,
+          isUSD: false,
+          loadStatus: LoadStatus.initial,
+          difference: 0,
         );
 }
 
@@ -46,5 +74,7 @@ class HomeData extends HomeState {
           cryptoCurrencies: cryptoCurrencies,
           selectedCurrencyKey: selectedCurrencyKey,
           isUSD: isUSD,
+          loadStatus: LoadStatus.done,
+          difference: 0.0,
         );
 }

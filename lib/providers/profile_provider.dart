@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 enum LoadStatus {
-  intial,
+  initial,
   loading,
   done,
   error,
@@ -19,7 +19,7 @@ enum LoadStatus {
 
 class ProfileChangeNotifier extends ChangeNotifier {
   Profile profile = ProfileInitial();
-  LoadStatus loadStatus = LoadStatus.intial;
+  LoadStatus loadStatus = LoadStatus.initial;
   ProfileChangeNotifier() : super() {
     FirebaseAuth.instance
         .authStateChanges()
