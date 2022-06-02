@@ -70,11 +70,12 @@ class HomeData extends HomeState {
     required List<CryptoCurrency> cryptoCurrencies,
     required String selectedCurrencyKey,
     required bool isUSD,
+    required LoadStatus loadStatus,
   }) : super(
           cryptoCurrencies: cryptoCurrencies,
           selectedCurrencyKey: selectedCurrencyKey,
           isUSD: isUSD,
-          loadStatus: LoadStatus.done,
+          loadStatus: loadStatus,
           difference: 0.0,
         );
 }

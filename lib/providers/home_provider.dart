@@ -37,7 +37,7 @@ class HomeStateNotifier extends ChangeNotifier {
     emit(state.copyWith(loadStatus: LoadStatus.done));
     _calculateDifference();
     wazirXChannel?.sink.close();
-    startWazirXCryptoTicker();
+    //startWazirXCryptoTicker();
   }
 
   /// [currency] corresponsds to either "inr" or "usdt"
@@ -100,16 +100,18 @@ class HomeStateNotifier extends ChangeNotifier {
     await FirebaseAuth.instance.signOut();
   }
 
-  void changeCryptoKey(String key) async {
+  Future<void> changeCryptoKey(String key) async {
     var cryptoKeys = HomeStateNotifier.cryptoKeys(state.isUSD ? 'usdt' : 'inr');
     assert(cryptoKeys.contains(key));
-    emit(state.copyWith(selectedCurrencyKey: key));
+    emit(state.copyWith(
+      selectedCurrencyKey: key,
+      loadStatus: LoadStatus.loading,
+    ));
 
     await getCryptoDataFromAPIs();
   }
 
   Future<void> fetchCurrencyDataFromWazirX() async {
-    
     final Response response =
         await get(Uri.parse("https://api.wazirx.com/api/v2/tickers"));
 
@@ -125,6 +127,7 @@ class HomeStateNotifier extends ChangeNotifier {
             cryptoCurrencies: currencies,
             selectedCurrencyKey: state.selectedCurrencyKey,
             isUSD: state.isUSD,
+            loadStatus: state.loadStatus,
           ),
         );
       }
@@ -195,14 +198,6 @@ class HomeStateNotifier extends ChangeNotifier {
         wazirxKey: wazirXKey,
         krakenPrice: krakenPrice,
       );
-    } else {
-      currencies.add(CryptoCurrency(
-        wazirxKey: wazirXKey,
-        krakenKey: krakenKey,
-        name: '',
-        wazirxPrice: 0.0,
-        krakenPrice: krakenPrice,
-      ));
     }
 
     return currencies;
@@ -215,14 +210,14 @@ class HomeStateNotifier extends ChangeNotifier {
   }
 
 //kraken
-  Future<void> toggleUSDToINR(bool value) async {
+  Future<void> toggleIsUSD(bool value) async {
     emit(state.copyWith(isUSD: value, loadStatus: LoadStatus.loading));
 
     assert(state.isUSD == value);
     String newKey = state.isUSD
         ? state.selectedCurrencyKey.replaceAll('inr', 'usdt')
-        : state.selectedCurrencyKey.replaceAll('usdt', 'int');
-    changeCryptoKey(newKey);
+        : state.selectedCurrencyKey.replaceAll('usdt', 'inr');
+    await changeCryptoKey(newKey);
 
     emit(state.copyWith(loadStatus: LoadStatus.done));
   }

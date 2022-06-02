@@ -193,7 +193,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       Provider.of<HomeStateNotifier>(
                                         context,
                                         listen: false,
-                                      ).toggleUSDToINR(!value);
+                                      ).toggleIsUSD(!value);
                                     },
                                   ),
                                 ],
