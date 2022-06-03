@@ -9,8 +9,52 @@ void main() {
       await home.fetchCurrencyDataFromWazirX();
 
       expect(home.state.cryptoCurrencies, isNotEmpty);
-      expect(home.state.selectedCurrencyKey,HomeStateNotifier.cryptoKeys.first);
+      expect(
+          home.state.selectedCurrencyKey,
+          HomeStateNotifier.cryptoKeys(home.state.isUSD ? 'usdt' : 'inr')
+              .first);
       expect(home.state.cryptoCurrencies.first.wazirxPrice > 0.0, true);
+    });
+
+    test('Test to fetch data from kraken', () async {
+      final home = HomeStateNotifier();
+
+      await home.getCryptoDataFromAPIs();
+
+      expect(home.state.cryptoCurrencies, isNotEmpty);
+
+      expect(home.state.cryptoCurrencies.first.krakenPrice > 0.0, true);
+    });
+
+    test('Test toggle USD-INR', () async {
+      final home = HomeStateNotifier();
+
+      await home.getCryptoDataFromAPIs();
+
+      expect(home.state.cryptoCurrencies, isNotEmpty);
+
+      expect(home.currentCryptoCurrency().krakenPrice > 0.0, true);
+
+      await home.toggleIsUSD(false);
+      expect(home.currentCryptoCurrency().krakenPrice > 0.0, true);
+      await home.toggleIsUSD(true);
+      expect(home.currentCryptoCurrency().krakenPrice > 0.0, true);
+    });
+
+    test('Test to change crypto key', () async {
+      final home = HomeStateNotifier();
+
+      await home.getCryptoDataFromAPIs();
+
+      expect(home.state.cryptoCurrencies, isNotEmpty);
+
+      expect(home.currentCryptoCurrency().krakenPrice > 0.0, true);
+
+      await home.changeCryptoKey('shibinr');
+      expect(home.currentCryptoCurrency().krakenPrice > 0.0, true);
+      await home.toggleIsUSD(true);
+      expect(home.currentCryptoCurrency().krakenPrice > 0.0, true);
+      expect(home.currentCryptoCurrency().wazirxKey, 'shibusdt');
     });
   });
 }
