@@ -11,8 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:flutter/material.dart';
-import 'package:money_converter/Currency.dart';
-import 'package:money_converter/money_converter.dart';
 
 class HomeStateNotifier extends ChangeNotifier {
   HomeStateNotifier() : super() {
@@ -180,7 +178,6 @@ class HomeStateNotifier extends ChangeNotifier {
   }
 
   Future<double> _doConversionToINR(double dollars) async {
-    /// TODO: usd to inr conversion
     return dollars * 77.5;
   }
 
