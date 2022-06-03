@@ -1,4 +1,5 @@
 import 'package:cvault/constants/user_types.dart';
+import 'package:cvault/providers/customer_provider.dart';
 import 'package:cvault/providers/exchange_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
@@ -36,6 +37,7 @@ Future<void> main() async {
         ChangeNotifierProvider.value(value: DealersProvider()),
         ChangeNotifierProvider.value(value: TransactionsProvider()),
         ChangeNotifierProvider.value(value: ExchangeProvider()),
+        ChangeNotifierProvider.value(value: CustomerProvider()),
       ],
       child: MaterialApp(home: CVaultApp()),
     ),

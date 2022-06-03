@@ -224,7 +224,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                           homeStateNotifier
                                               .currentCryptoCurrency()
                                               .wazirxPrice
-                                              .toString(),
+                                              .toStringAsFixed(2),
                                   textAlign: TextAlign.start,
                                   style: const TextStyle(
                                     fontFamily: 'Poppins',
@@ -267,7 +267,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                           state
                                                               .selectedCurrencyKey)
                                                       .krakenPrice
-                                                      .toString(),
+                                                      .toStringAsFixed(2),
                                           textAlign: TextAlign.start,
                                           style: const TextStyle(
                                             fontFamily: 'Poppins',
@@ -293,7 +293,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                             ),
                                             Text(
                                               homeStateNotifier.state.difference
-                                                  .toString(),
+                                                  .toStringAsFixed(2),
                                               style: const TextStyle(
                                                 fontFamily: 'Poppins',
                                                 fontSize: 18,
