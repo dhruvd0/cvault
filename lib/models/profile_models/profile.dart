@@ -1,3 +1,5 @@
+import 'package:cvault/models/profile_models/customer.dart';
+import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class Profile extends Equatable {
@@ -35,7 +37,9 @@ abstract class Profile extends Equatable {
   }
 
   factory Profile.fromMap(Map<String, dynamic> map) {
-    throw UnimplementedError('Use either Dealer or Customer .fromMap');
+    return map.containsKey('dealerId')
+        ? Dealer.fromJson('dealer', map)
+        : Customer.fromJson(map);
   }
 
   Map<String, dynamic> toJson() {

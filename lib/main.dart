@@ -10,6 +10,7 @@ import 'package:cvault/firebase_options.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/dealers_provider.dart';
+import 'package:cvault/providers/quote_provider.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +34,10 @@ Future<void> main() async {
         ChangeNotifierProvider(
           lazy: false,
           create: (context) => ProfileChangeNotifier(),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => QuoteProvider(),
         ),
         ChangeNotifierProvider.value(value: DealersProvider()),
         ChangeNotifierProvider.value(value: TransactionsProvider()),

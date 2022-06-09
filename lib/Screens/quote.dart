@@ -1,5 +1,6 @@
 import 'package:cvault/Screens/Setting.dart';
 import 'package:cvault/providers/home_provider.dart';
+import 'package:cvault/widgets/usd_inr_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -147,27 +148,7 @@ class _QuoteState extends State<Quote> {
                         },
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Text(
-                          "USD-INR",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        Switch(
-                          activeColor: Colors.green,
-                          activeTrackColor: Colors.lightGreen,
-                          inactiveThumbColor: Colors.grey,
-                          inactiveTrackColor: Colors.black,
-                          value: toggle,
-                          onChanged: (value) {
-                            setState(() {
-                              toggle = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+                    USDToINRToggle(),
                   ],
                 ),
                 const SizedBox(

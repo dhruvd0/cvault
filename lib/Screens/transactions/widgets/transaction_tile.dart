@@ -29,7 +29,7 @@ class TransactionTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      transaction.customer,
+                      transaction.customer.firstName,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
