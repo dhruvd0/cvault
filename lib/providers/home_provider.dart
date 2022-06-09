@@ -202,8 +202,10 @@ class HomeStateNotifier extends ChangeNotifier {
 
   CryptoCurrency currentCryptoCurrency() {
     assert(state.cryptoCurrencies.isNotEmpty);
+    // ignore: newline-before-return
     return state.cryptoCurrencies.firstWhere(
-        (element) => element.wazirxKey == state.selectedCurrencyKey);
+      (element) => element.wazirxKey == state.selectedCurrencyKey,
+    );
   }
 
 //kraken
