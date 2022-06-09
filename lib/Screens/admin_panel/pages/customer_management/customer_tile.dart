@@ -23,15 +23,15 @@ class _CustomerTileState extends State<CustomerTile> {
         color: Colors.grey[850],
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer: " + widget.profile.firstName,
@@ -41,6 +41,7 @@ class _CustomerTileState extends State<CustomerTile> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+<<<<<<< Updated upstream
                   const SizedBox(
                     height: 10,
                   ),
@@ -54,15 +55,41 @@ class _CustomerTileState extends State<CustomerTile> {
                   ),
                   const SizedBox(
                     height: 10,
+=======
+                  Icon(
+                    Icons.chat,
+                    color: ThemeColors.lightGreenAccentColor,
+                    size: 30,
+>>>>>>> Stashed changes
                   ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                "Email: " + widget.customer.email,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   Text(
                     "Mobile: " + widget.profile.phone,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+<<<<<<< Updated upstream
                   const SizedBox(
                     height: 20,
                   ),
@@ -72,50 +99,50 @@ class _CustomerTileState extends State<CustomerTile> {
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
+=======
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: ThemeColors.lightGreenAccentColor,
+                      ),
+                    ),
+                    child: Text(
+                      'Change Dealer',
+                      style: TextStyle(color: Colors.white),
+>>>>>>> Stashed changes
                     ),
                   ),
                 ],
               ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Icon(
-                Icons.chat,
-                color: ThemeColors.lightGreenAccentColor,
-                size: 30,
-              ),
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: ThemeColors.lightGreenAccentColor,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Dealer : \n" + widget.customer.uid,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                child: Text(
-                  'Change Dealer',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.black,
-                value: toggle,
-                onChanged: (value) {
-                  setState(() {
-                    toggle = value;
-                  });
-                },
+                  Switch(
+                    activeColor: Colors.white,
+                    activeTrackColor: Colors.green,
+                    inactiveThumbColor: Colors.white,
+                    inactiveTrackColor: Colors.black,
+                    value: toggle,
+                    onChanged: (value) {
+                      setState(() {
+                        toggle = value;
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           ),

@@ -123,7 +123,21 @@ class HomeStateNotifier extends ChangeNotifier {
     }
   
 
+<<<<<<< Updated upstream
   
+=======
+    return currencies;
+  }
+
+  CryptoCurrency currentCryptoCurrency() {
+    assert(state.cryptoCurrencies.isNotEmpty);
+    // ignore: newline-before-return
+    return state.cryptoCurrencies.firstWhere(
+      (element) => element.wazirxKey == state.selectedCurrencyKey,
+    );
+  }
+
+>>>>>>> Stashed changes
 //kraken
   void toggleUSDToINR(bool value) {
     emit(state.copyWith(isUSD: value));

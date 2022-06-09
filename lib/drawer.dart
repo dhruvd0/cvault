@@ -1,8 +1,6 @@
 import 'package:cvault/Screens/Setting.dart';
-import 'package:cvault/Screens/login/login_screen.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/providers/home_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -74,7 +72,8 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
               ),
               onTap: () {
-                /// TODO: navigate to messages
+                // ignore: todo
+                //TODO: navigate to messages
               },
             ),
             const SizedBox(

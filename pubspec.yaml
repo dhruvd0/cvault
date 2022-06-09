@@ -31,6 +31,7 @@ dependencies:
   cloud_firestore: ^3.1.14
   cupertino_icons: ^1.0.2
   currency_picker: ^2.0.11
+  dropdown_button2: ^1.5.3
   easy_loading: ^0.0.4
   equatable: ^2.0.3
   firebase_auth: ^3.3.19 

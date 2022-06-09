@@ -214,25 +214,36 @@ class _LogInScreenState extends State<LogInScreen> {
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.65,
-                  child: FloatingActionButton.extended(
-                    backgroundColor: const Color(0xff03dac6),
-                    foregroundColor: Colors.black,
-                    onPressed: () {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      verifyPhone();
-                    },
-                    label: !isLoading
-                        ? const Text(
-                            'Get otp',
-                            style: TextStyle(
-                              fontSize: 18,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(255, 133, 128, 119),
+                          blurRadius: 15,
+                          spreadRadius: 1, //New
+                        ),
+                      ],
+                    ),
+                    child: FloatingActionButton.extended(
+                      backgroundColor: const Color(0xff03dac6),
+                      foregroundColor: Colors.black,
+                      onPressed: () {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        verifyPhone();
+                      },
+                      label: !isLoading
+                          ? const Text(
+                              'Get otp',
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            )
+                          : const CircularProgressIndicator(
+                              color: Colors.white,
                             ),
-                          )
-                        : const CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
+                    ),
                   ),
                 ),
               ),
@@ -295,6 +306,7 @@ class _LogInScreenState extends State<LogInScreen> {
     }
   }
 
+  // ignore: long-method
   Future<void> _postLoginSubRoutine() async {
     const snackBar = SnackBar(content: Text("Login Success"));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -304,7 +316,9 @@ class _LogInScreenState extends State<LogInScreen> {
     if (phone == "+911111111111") {
       await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
       notifier.changeUserType(
-          UserTypes.admin, FirebaseAuth.instance.currentUser!.uid);
+        UserTypes.admin,
+        FirebaseAuth.instance.currentUser!.uid,
+      );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (builder) => const HomePage()),

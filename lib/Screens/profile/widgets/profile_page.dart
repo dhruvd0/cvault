@@ -241,41 +241,52 @@ class ProfilePage extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.65,
-                      child: FloatingActionButton.extended(
-                        backgroundColor: const Color(0xff03dac6),
-                        foregroundColor: Colors.black,
-                        onPressed: () async {
-                          if (mode == ProfilePageMode.registration) {
-                            if (_formKey.currentState!.validate()) {
-                              await Provider.of<ProfileChangeNotifier>(
-                                context,
-                                listen: false,
-                              ).createNewProfile();
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                ),
-                              );
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromARGB(255, 133, 128, 119),
+                              blurRadius: 15,
+                              spreadRadius: 1, //New
+                            ),
+                          ],
+                        ),
+                        child: FloatingActionButton.extended(
+                          backgroundColor: const Color(0xff03dac6),
+                          foregroundColor: Colors.black,
+                          onPressed: () async {
+                            if (mode == ProfilePageMode.registration) {
+                              if (_formKey.currentState!.validate()) {
+                                await Provider.of<ProfileChangeNotifier>(
+                                  context,
+                                  listen: false,
+                                ).createNewProfile();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+                              }
+                            } else {
+                              /// TODO: profile edit api
                             }
-                          } else {
-                            /// TODO: profile edit api
-                          }
-                        },
-                        label: Consumer<ProfileChangeNotifier>(
-                          builder: ((context, notifier, child) =>
-                              notifier.loadStatus == LoadStatus.loading
-                                  ? CircularProgressIndicator(
-                                      color: Colors.black,
-                                    )
-                                  : Text(
-                                      mode == ProfilePageMode.registration
-                                          ? "Submit"
-                                          : "Edit",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    )),
+                          },
+                          label: Consumer<ProfileChangeNotifier>(
+                            builder: ((context, notifier, child) =>
+                                notifier.loadStatus == LoadStatus.loading
+                                    ? CircularProgressIndicator(
+                                        color: Colors.black,
+                                      )
+                                    : Text(
+                                        mode == ProfilePageMode.registration
+                                            ? "Submit"
+                                            : "Edit",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                        ),
+                                      )),
+                          ),
                         ),
                       ),
                     ),

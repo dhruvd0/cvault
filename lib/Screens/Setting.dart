@@ -6,6 +6,7 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/constants/user_types.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -114,6 +115,7 @@ class _SettingsState extends State<Settings> {
                                         child: CircularProgressIndicator(),
                                       )
                                     : Flexible(
+<<<<<<< Updated upstream
                                         child: SizedBox(
                                           width: 100,
                                           child: DropdownButton<String>(
@@ -138,6 +140,53 @@ class _SettingsState extends State<Settings> {
                                             },
                                           ),
                                         ),
+=======
+                                        child: homeNotifier
+                                                .state.cryptoCurrencies.isEmpty
+                                            ? SizedBox()
+                                            : SizedBox(
+                                                width: 120,
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton2(
+                                                    isExpanded: false,
+                                                    hint: Text(
+                                                      'Select Item',
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Theme.of(context)
+                                                            .hintColor,
+                                                      ),
+                                                    ),
+                                                    items: HomeStateNotifier
+                                                            .cryptoKeys(
+                                                      homeNotifier.state.isUSD
+                                                          ? 'usdt'
+                                                          : 'inr',
+                                                    )
+                                                        .map(buildCurrencyList)
+                                                        .toList(),
+                                                    value: homeNotifier.state
+                                                        .selectedCurrencyKey,
+                                                    onChanged: (value) {
+                                                      if (value != null) {
+                                                        Provider.of<
+                                                            HomeStateNotifier>(
+                                                          context,
+                                                          listen: false,
+                                                        ).changeCryptoKey(
+                                                          value.toString(),
+                                                        );
+                                                      }
+                                                    },
+                                                    dropdownDecoration:
+                                                        BoxDecoration(
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+>>>>>>> Stashed changes
                                       ),
                               ],
                             );
@@ -186,7 +235,7 @@ class _SettingsState extends State<Settings> {
                         ? ApplyMarginToggle()
                         : Container(),
                     const SizedBox(
-                      height: 200,
+                      height: 100,
                     ),
                     InkWell(
                       onTap: () {
