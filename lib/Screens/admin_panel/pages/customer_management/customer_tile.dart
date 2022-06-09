@@ -1,7 +1,6 @@
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/profile_models/customer.dart';
-import 'package:cvault/models/profile_models/dealer.dart';
-import 'package:cvault/models/profile_models/profile.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomerTile extends StatefulWidget {

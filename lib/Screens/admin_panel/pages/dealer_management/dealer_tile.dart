@@ -99,12 +99,13 @@ class _DealerTileState extends State<DealerTile> {
                 height: 10,
               ),
               GestureDetector(
-                onTap: (){
-                   Navigator.push(
+                onTap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => Reporting(),
-                    ),);
+                    ),
+                  );
                 },
                 child: Icon(
                   Icons.document_scanner,

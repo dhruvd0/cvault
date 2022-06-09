@@ -24,14 +24,14 @@ class Customer extends Profile {
         );
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-        uid: json['customerId']??'',
-        customerId: json["customerId"]??'',
-        firstName: json["firstName"]??'',
-        middleName: json["middleName"]??'',
-        lastName: json["lastName"]??'',
-        email: json["email"]??'',
+        uid: json['customerId'] ?? '',
+        customerId: json["customerId"] ?? '',
+        firstName: json["firstName"] ?? '',
+        middleName: json["middleName"] ?? '',
+        lastName: json["lastName"] ?? '',
+        email: json["email"] ?? '',
         referralCode: '',
-        phone: json["phone"]??'',
+        phone: json["phone"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -66,7 +66,7 @@ class Customer extends Profile {
     );
   }
 
-    static Customer mock() {
+  static Customer mock() {
     return Customer.fromJson({
       "_id": "6295d8859efa452712a145b8",
       "customerId": "4321",
@@ -77,5 +77,4 @@ class Customer extends Profile {
       "transactions": [],
     });
   }
-
 }

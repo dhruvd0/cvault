@@ -151,10 +151,11 @@ class AdminPanelGrid extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Reporting(),
-                    ),);
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Reporting(),
+                  ),
+                );
               },
               child: Column(
                 children: [
