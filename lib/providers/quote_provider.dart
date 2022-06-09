@@ -45,8 +45,11 @@ class QuoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> sendQuote() async {
-    String sendersID =  _profileChangeNotifier.authInstance.currentUser.uid;
+  /// Returns [true] if successful,
+  ///  [false] for 400, Bad Request(Customer not found)
+  ///  and null for failure
+  Future<bool?> sendQuote() async {
+    String sendersID = _profileChangeNotifier.authInstance.currentUser.uid;
     Map<String, dynamic> quoteData = {
       "transactionType": transaction.transactionType,
       "cryptoType": transaction.cryptoType,
@@ -55,7 +58,7 @@ class QuoteProvider extends ChangeNotifier {
       "currency": transaction.currency,
       "quantity": transaction.quantity,
       "receiversPhone": transaction.customer.phone,
-      "sendersID":sendersID,
+      "sendersID": sendersID,
     };
 
     final response = await post(
@@ -66,10 +69,13 @@ class QuoteProvider extends ChangeNotifier {
       body: jsonEncode(quoteData),
     );
 
-    if (response == 201) {
+    if (response.statusCode == 201) {
       return true;
-    } else {
-      throw Exception('post-transaction:' + response.statusCode.toString());
+    } else if (response.statusCode == 400) {
+      return false;
+    }
+    else{
+       throw Exception('post-transaction:' + response.statusCode.toString());
     }
   }
 
