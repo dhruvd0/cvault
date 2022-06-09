@@ -2,7 +2,6 @@ import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/customer_provider.dart';
 import 'package:cvault/providers/exchange_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
-
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/constants/theme.dart';
@@ -39,7 +38,10 @@ Future<void> main() async {
         ChangeNotifierProvider.value(value: ExchangeProvider()),
         ChangeNotifierProvider.value(value: CustomerProvider()),
       ],
-      child: MaterialApp(home: CVaultApp()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: CVaultApp(),
+      ),
     ),
   );
 }
@@ -56,7 +58,6 @@ class CVaultApp extends StatefulWidget {
 class _CVaultAppState extends State<CVaultApp> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();

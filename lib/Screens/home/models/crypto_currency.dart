@@ -16,10 +16,10 @@ class CryptoCurrency extends Equatable {
   /// Price retrieved from wazirx api
   final double wazirxPrice;
 
+  final double sellPrice;
+
   /// Price retrieved from kraken api
   final double krakenPrice;
-
-
 
   final String name;
   const CryptoCurrency({
@@ -28,6 +28,7 @@ class CryptoCurrency extends Equatable {
     required this.wazirxPrice,
     required this.krakenPrice,
     required this.name,
+    required this.sellPrice,
   });
 
   CryptoCurrency copyWith({
@@ -36,6 +37,7 @@ class CryptoCurrency extends Equatable {
     double? wazirxPrice,
     double? krakenPrice,
     String? name,
+    double? sellPrice,
   }) {
     return CryptoCurrency(
       wazirxKey: wazirxKey ?? this.wazirxKey,
@@ -43,6 +45,7 @@ class CryptoCurrency extends Equatable {
       wazirxPrice: wazirxPrice ?? this.wazirxPrice,
       krakenPrice: krakenPrice ?? this.krakenPrice,
       name: name ?? this.name,
+      sellPrice: sellPrice ?? this.sellPrice,
     );
   }
 
@@ -53,6 +56,7 @@ class CryptoCurrency extends Equatable {
       'wazirxPrice': wazirxPrice,
       'krakenPrice': krakenPrice,
       'name': name,
+      'sellPrice': sellPrice,
     };
   }
 
@@ -63,6 +67,7 @@ class CryptoCurrency extends Equatable {
       wazirxPrice: map['wazirxPrice']?.toDouble() ?? 0.0,
       krakenPrice: map['krakenPrice']?.toDouble() ?? 0.0,
       name: map['name'] ?? '',
+      sellPrice: map['sellprice']?.toDouble() ?? 0.0,
     );
   }
 
@@ -70,7 +75,7 @@ class CryptoCurrency extends Equatable {
 
   @override
   String toString() {
-    return 'CryptoCurrency(wazirxKey: $wazirxKey, krakenKey: $krakenKey, wazirxPrice: $wazirxPrice, krakenPrice: $krakenPrice, name: $name)';
+    return 'CryptoCurrency(wazirxKey: $wazirxKey, krakenKey: $krakenKey, wazirxPrice: $wazirxPrice, krakenPrice: $krakenPrice, name: $name,sellprice:$sellPrice)';
   }
 
   @override
@@ -81,6 +86,7 @@ class CryptoCurrency extends Equatable {
       wazirxPrice,
       krakenPrice,
       name,
+      sellPrice,
     ];
   }
 }

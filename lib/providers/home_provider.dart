@@ -242,6 +242,7 @@ class HomeStateNotifier extends ChangeNotifier {
             name: cryptoData['name'],
             wazirxPrice: double.parse(cryptoData['buy']),
             krakenPrice: 0.0,
+            sellPrice: double.parse(cryptoData['sell']),
           ));
         }
       }

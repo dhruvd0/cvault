@@ -1,7 +1,6 @@
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/models/home_state.dart';
-import 'package:cvault/Screens/login/login_screen.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
@@ -65,10 +64,7 @@ class _SettingsState extends State<Settings> {
           padding: const EdgeInsets.only(right: 8.0),
           child: IconButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (builder) => const HomePage()),
-              );
+              Navigator.of(context).pop();
             },
             icon: const Icon(Icons.arrow_back_ios),
           ),
@@ -264,6 +260,9 @@ class _SettingsState extends State<Settings> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                   ],
                 ),
