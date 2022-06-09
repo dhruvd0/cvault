@@ -28,11 +28,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    int LocalPrice = 2533118;
-    double globalPrice = 2415313.58;
-    double difference = 100 * ((LocalPrice - globalPrice) / globalPrice);
-    double fixedDifference = double.parse(difference.toStringAsFixed(2));
-
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(

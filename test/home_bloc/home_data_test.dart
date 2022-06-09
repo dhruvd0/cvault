@@ -10,9 +10,9 @@ void main() {
 
       expect(home.state.cryptoCurrencies, isNotEmpty);
       expect(
-          home.state.selectedCurrencyKey,
-          HomeStateNotifier.cryptoKeys(home.state.isUSD ? 'usdt' : 'inr')
-              .first);
+        home.state.selectedCurrencyKey,
+        HomeStateNotifier.cryptoKeys(home.state.isUSD ? 'usdt' : 'inr').first,
+      );
       expect(home.state.cryptoCurrencies.first.wazirxPrice > 0.0, true);
     });
 

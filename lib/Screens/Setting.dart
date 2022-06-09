@@ -6,6 +6,7 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/constants/user_types.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -120,34 +121,45 @@ class _SettingsState extends State<Settings> {
                                                 .state.cryptoCurrencies.isEmpty
                                             ? SizedBox()
                                             : SizedBox(
-                                                width: 100,
-                                                child: DropdownButton<String>(
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
+                                                width: 120,
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton2(
+                                                    isExpanded: false,
+                                                    hint: Text(
+                                                      'Select Item',
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Theme.of(context)
+                                                            .hintColor,
+                                                      ),
+                                                    ),
+                                                    items: HomeStateNotifier
+                                                            .cryptoKeys(
+                                                      homeNotifier.state.isUSD
+                                                          ? 'usdt'
+                                                          : 'inr',
+                                                    )
+                                                        .map(buildCurrencyList)
+                                                        .toList(),
+                                                    value: homeNotifier.state
+                                                        .selectedCurrencyKey,
+                                                    onChanged: (value) {
+                                                      if (value != null) {
+                                                        Provider.of<
+                                                            HomeStateNotifier>(
+                                                          context,
+                                                          listen: false,
+                                                        ).changeCryptoKey(
+                                                          value.toString(),
+                                                        );
+                                                      }
+                                                    },
+                                                    dropdownDecoration:
+                                                        BoxDecoration(
+                                                      color: Colors.black,
+                                                    ),
                                                   ),
-                                                  underline: const SizedBox(),
-                                                  isExpanded: true,
-                                                  dropdownColor:
-                                                      Colors.transparent,
-                                                  items: HomeStateNotifier
-                                                          .cryptoKeys(
-                                                    homeNotifier.state.isUSD
-                                                        ? 'usdt'
-                                                        : 'inr',
-                                                  )
-                                                      .map(buildCurrencyList)
-                                                      .toList(),
-                                                  value: homeNotifier.state
-                                                      .selectedCurrencyKey,
-                                                  onChanged: (value) {
-                                                    if (value != null) {
-                                                      Provider.of<
-                                                          HomeStateNotifier>(
-                                                        context,
-                                                        listen: false,
-                                                      ).changeCryptoKey(value);
-                                                    }
-                                                  },
                                                 ),
                                               ),
                                       ),
@@ -198,7 +210,7 @@ class _SettingsState extends State<Settings> {
                         ? ApplyMarginToggle()
                         : Container(),
                     const SizedBox(
-                      height: 200,
+                      height: 100,
                     ),
                     InkWell(
                       onTap: () {
