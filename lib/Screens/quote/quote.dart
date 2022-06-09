@@ -1,10 +1,13 @@
 import 'package:cvault/Screens/Setting.dart';
+import 'package:cvault/Screens/quote/widgets/buy_sell_toggle.dart';
+import 'package:cvault/Screens/quote/widgets/quantity.dart';
+import 'package:cvault/Screens/quote/widgets/send_quote_box.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/widgets/usd_inr_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../drawer.dart';
+import '../../drawer.dart';
 
 class Quote extends StatefulWidget {
   const Quote({Key? key}) : super(key: key);
@@ -15,7 +18,7 @@ class Quote extends StatefulWidget {
 
 class _QuoteState extends State<Quote> {
   bool price = true;
-  bool toggle = false;
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -25,12 +28,7 @@ class _QuoteState extends State<Quote> {
       endDrawer: const MyDrawer(),
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading:SizedBox(),
         centerTitle: true,
         title: const Text("Quote"),
         backgroundColor: Colors.transparent,
@@ -48,7 +46,7 @@ class _QuoteState extends State<Quote> {
       body: Consumer<HomeStateNotifier>(
         builder: (context, homeStateNotifier, _) {
           final state = homeStateNotifier.state;
-          // ignore: newline-before-return
+
           return SingleChildScrollView(
             child: Container(
               margin: const EdgeInsets.all(20),
@@ -182,31 +180,13 @@ class _QuoteState extends State<Quote> {
                                           .currentCryptoCurrency()
                                           .wazirxPrice
                                           .toStringAsFixed(2),
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    Column(
-                      children: [
-                        const Text(
-                          "Buy-Sell",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        Switch(
-                          activeColor: Colors.green,
-                          activeTrackColor: Colors.lightGreen,
-                          inactiveThumbColor: Colors.grey,
-                          inactiveTrackColor: Colors.black,
-                          value: toggle,
-                          onChanged: (value) {
-                            setState(() {
-                              toggle = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+                    BuySellToggle(),
                   ],
                 ),
                 const SizedBox(
@@ -258,142 +238,13 @@ class _QuoteState extends State<Quote> {
                         ),
                       ],
                     ),
-                    Column(
-                      children: [
-                        const Text(
-                          "Quantity",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        SizedBox(
-                          height: 50,
-                          width: 120,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              border:
-                                  Border.all(width: 1.5, color: Colors.white30),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                '20.0',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    Quantity(),
                   ],
                 ),
                 const SizedBox(
                   height: 15,
                 ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.grey,
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      price
-                          ? const Text(
-                              "25,33,118.00",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          : const Text(
-                              "BTC 0.3211214",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            /// TODO: send quote
-                          },
-                          child: const Text(
-                            "Send Quote",
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.black,
-                            elevation: 10,
-                            shape: const StadiumBorder(),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        "To",
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                          ),
-                          padding: EdgeInsets.all(5),
-                          child: TextFormField(
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                            ),
-                            autovalidateMode: AutovalidateMode.always,
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.phone,
-                            inputFormatters: [],
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Mobile Number',
-                              hintStyle: TextStyle(
-                                color: Colors.white54,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),
-                ),
+                SendQuoteBox(price: price),
               ]),
             ),
           );

@@ -2,7 +2,7 @@ import 'package:cvault/Screens/admin_panel/widgets/admin_panel.dart';
 import 'package:cvault/Screens/home/widgets/dashboard_page.dart';
 
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
-import 'package:cvault/Screens/quote.dart';
+import 'package:cvault/Screens/quote/quote.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/drawer.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';

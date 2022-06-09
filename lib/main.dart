@@ -37,7 +37,10 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           lazy: false,
-          create: (context) => QuoteProvider(),
+          create: (context) => QuoteProvider(
+            context.read<HomeStateNotifier>(),
+            context.read<ProfileChangeNotifier>(),
+          ),
         ),
         ChangeNotifierProvider.value(value: DealersProvider()),
         ChangeNotifierProvider.value(value: TransactionsProvider()),

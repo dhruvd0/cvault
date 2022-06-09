@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
 import 'package:cvault/models/profile_models/profile.dart';
 
-class Transaction {
+class Transaction extends Equatable {
   Transaction({
     required this.id,
     required this.sender,
@@ -24,32 +26,13 @@ class Transaction {
   final String cryptoType;
   final double price;
   final double costPrice;
-  final int quantity;
+  final double quantity;
   final String status;
 
   factory Transaction.fromRawJson(String str) =>
       Transaction.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
-
-  // factory Transaction.fromJson(
-  //   Map<String, dynamic> json, {
-  //   String receiver = "transaction",
-  // }) =>
-  //     Transaction(
-  //       id: json["_id"]??'',
-  //       sender: (receiver == "transaction")
-  //           ? json["sender"]["firstName"]??''
-  //           : json["sender"]??'',
-  //       customer: json["customer"]["firstName"]??'',
-  //       transactionType: json["transactionType"]??'',
-  //       currency: json["currency"]??'',
-  //       cryptoType: json["cryptoType"]??'',
-  //       price: (json["price"] ?? 0).toDouble(),
-  //       costPrice: (json["costPrice"] ?? 0.0).toDouble(),
-  //       quantity: json["quantity"]??0,
-  //       status: json["status"]??'',
-  //     );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -79,20 +62,6 @@ class Transaction {
     });
   }
 
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'id': id,
-  //     'sender': sender.userType==User .toMap(),
-  //     'customer': customer.toMap(),
-  //     'transactionType': transactionType,
-  //     'currency': currency,
-  //     'cryptoType': cryptoType,
-  //     'price': price,
-  //     'costPrice': costPrice,
-  //     'quantity': quantity,
-  //     'status': status,
-  //   };
-  // }
 
   factory Transaction.fromJson(
     Map<String, dynamic> map, {
@@ -107,8 +76,63 @@ class Transaction {
       cryptoType: map['cryptoType'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       costPrice: map['costPrice']?.toDouble() ?? 0.0,
-      quantity: map['quantity']?.toInt() ?? 0,
+      quantity: map['quantity']?.toDouble() ?? 0,
       status: map['status'] ?? '',
     );
   }
+
+  @override
+  List<Object> get props {
+    return [
+      id,
+      sender,
+      customer,
+      transactionType,
+      currency,
+      cryptoType,
+      price,
+      costPrice,
+      quantity,
+      status,
+    ];
+  }
+
+  Transaction copyWith({
+    String? id,
+    Profile? sender,
+    Profile? customer,
+    String? transactionType,
+    String? currency,
+    String? cryptoType,
+    double? price,
+    double? costPrice,
+    double? quantity,
+    String? status,
+  }) {
+    return Transaction(
+      id: id ?? this.id,
+      sender: sender ?? this.sender,
+      customer: customer ?? this.customer,
+      transactionType: transactionType ?? this.transactionType,
+      currency: currency ?? this.currency,
+      cryptoType: cryptoType ?? this.cryptoType,
+      price: price ?? this.price,
+      costPrice: costPrice ?? this.costPrice,
+      quantity: quantity ?? this.quantity,
+      status: status ?? this.status,
+    );
+  }
+}
+
+enum TransactionProps {
+  id,
+  sender,
+  customer,
+  transactionType,
+  currency,
+  cryptoType,
+  price,
+  costPrice,
+  quantity,
+  status,
 }
