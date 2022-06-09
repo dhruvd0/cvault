@@ -19,8 +19,6 @@ class CryptoCurrency extends Equatable {
   /// Price retrieved from kraken api
   final double krakenPrice;
 
-
-
   final String name;
   const CryptoCurrency({
     required this.wazirxKey,

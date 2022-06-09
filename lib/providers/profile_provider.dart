@@ -167,6 +167,8 @@ class ProfileChangeNotifier extends ChangeNotifier {
 
       return Customer.fromJson(jsonDecode(customerJson));
     }
+
+    return null;
   }
 
   Future<void> _saveProfileToCache() async {

@@ -33,7 +33,6 @@ class ProfileTextField extends StatelessWidget {
         return state.referralCode;
       case ProfileFields.phone:
         return state.phone;
-       
     }
   }
 

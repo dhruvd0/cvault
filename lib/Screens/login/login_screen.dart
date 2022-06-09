@@ -1,5 +1,3 @@
-import 'package:cvault/models/profile_models/customer.dart';
-import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';

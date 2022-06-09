@@ -35,10 +35,10 @@ class HomeStateNotifier extends ChangeNotifier {
     emit(state.copyWith(loadStatus: LoadStatus.done));
     _calculateDifference();
     wazirXChannel?.sink.close();
-    //startWazirXCryptoTicker();
+    startWazirXCryptoTicker();
   }
 
-  /// [currency] corresponsds to either "inr" or "usdt"
+  /// [currency] corresponds to either "inr" or "usdt"
   static List<String> cryptoKeys(String currency) => [
         'btc',
         'sol',

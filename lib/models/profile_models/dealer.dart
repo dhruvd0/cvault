@@ -2,7 +2,6 @@
 //
 //     final dealer = dealerFromJson(jsonString);
 
-import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/models/transaction.dart';
 

@@ -72,8 +72,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
               ),
               onTap: () {
-                // ignore: todo
-                //TODO: navigate to messages
+                /// TODO: navigate to messages
               },
             ),
             const SizedBox(

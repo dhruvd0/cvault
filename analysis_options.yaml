@@ -12,9 +12,10 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   plugins:
     - dart_code_metrics
+  
   errors:
-    
     missing_required_param: error
+    todo: ignore
 
 
 dart_code_metrics:
