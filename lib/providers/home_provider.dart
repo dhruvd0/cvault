@@ -13,9 +13,10 @@ import 'package:web_socket_channel/io.dart';
 import 'package:flutter/material.dart';
 
 class HomeStateNotifier extends ChangeNotifier {
-  HomeStateNotifier() : super() {
-    if (Firebase.apps.isNotEmpty) {
-      FirebaseAuth.instance
+  HomeStateNotifier([FirebaseAuth? firebaseAuthMock]) : super() {
+    final authInstance =firebaseAuthMock?? FirebaseAuth.instance;
+   
+      authInstance
           .authStateChanges()
           .asBroadcastStream()
           .listen((event) {
@@ -23,7 +24,7 @@ class HomeStateNotifier extends ChangeNotifier {
           getCryptoDataFromAPIs();
         }
       });
-    }
+    
   }
 
   Future<void> getCryptoDataFromAPIs() async {

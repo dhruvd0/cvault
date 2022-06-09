@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/models/transaction.dart';
@@ -5,6 +8,7 @@ import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 
 class QuoteProvider extends ChangeNotifier {
   Transaction transaction =
@@ -13,21 +17,22 @@ class QuoteProvider extends ChangeNotifier {
   final ProfileChangeNotifier _profileChangeNotifier;
   QuoteProvider(this._homeStateNotifier, this._profileChangeNotifier) {
     _homeStateNotifier.addListener(() {
-      homeNotifierListener();
+      updateWithHomeNotifierState();
     });
     _profileChangeNotifier.addListener(() {
-      profileProviderListener();
+      updateWithProfileProviderState();
     });
   }
-  void profileProviderListener() {
+  void updateWithProfileProviderState() {
     Profile profile = _profileChangeNotifier.profile;
+
     if (profile.uid.isNotEmpty) {
       transaction = transaction.copyWith(sender: profile);
     }
     notifyListeners();
   }
 
-  void homeNotifierListener() {
+  void updateWithHomeNotifierState() {
     HomeState homeState = _homeStateNotifier.state;
 
     transaction =
@@ -37,6 +42,35 @@ class QuoteProvider extends ChangeNotifier {
     if (homeState.cryptoCurrencies.isNotEmpty) {
       var crypto = _homeStateNotifier.currentCryptoCurrency();
       transaction = transaction.copyWith(costPrice: crypto.wazirxPrice);
+    }
+    notifyListeners();
+  }
+
+  Future<bool> sendQuote() async {
+    String sendersID =  _profileChangeNotifier.authInstance.currentUser.uid;
+    Map<String, dynamic> quoteData = {
+      "transactionType": transaction.transactionType,
+      "cryptoType": transaction.cryptoType,
+      "price": transaction.price,
+      "costPrice": transaction.costPrice,
+      "currency": transaction.currency,
+      "quantity": transaction.quantity,
+      "receiversPhone": transaction.customer.phone,
+      "sendersID":sendersID,
+    };
+
+    final response = await post(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/transaction/post-transaction",
+      ),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(quoteData),
+    );
+
+    if (response == 201) {
+      return true;
+    } else {
+      throw Exception('post-transaction:' + response.statusCode.toString());
     }
   }
 
@@ -52,7 +86,7 @@ class QuoteProvider extends ChangeNotifier {
       case TransactionProps.price:
         transaction = transaction.copyWith(price: data);
         transaction = transaction.copyWith(
-          quantity: transaction.costPrice/ transaction.price,
+          quantity: transaction.costPrice / transaction.price,
         );
         break;
 
