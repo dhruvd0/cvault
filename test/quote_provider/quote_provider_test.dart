@@ -55,5 +55,6 @@ Future<QuoteProvider> _setupQuoteProvider() async {
   );
   quoteProvider.updateWithHomeNotifierState();
   quoteProvider.updateWithProfileProviderState();
+  
   return quoteProvider;
 }

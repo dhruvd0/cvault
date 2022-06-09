@@ -54,7 +54,7 @@ class SendQuoteBox extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: ElevatedButton(
                   onPressed: () async {
-                   final success= await quoteProvider.sendQuote();
+                   await quoteProvider.sendQuote();
                    
                   },
                   child: const Text(
