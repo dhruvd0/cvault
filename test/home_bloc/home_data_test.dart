@@ -1,10 +1,12 @@
 import 'package:cvault/providers/home_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../config/mocks.dart';
+
 void main() {
   group('Home Data Tests', () {
     test('Test to fetch data from wazirx', () async {
-      final home = HomeStateNotifier();
+      final home = HomeStateNotifier(mockAuth);
 
       await home.fetchCurrencyDataFromWazirX();
 
@@ -17,7 +19,7 @@ void main() {
     });
 
     test('Test to fetch data from kraken', () async {
-      final home = HomeStateNotifier();
+      final home = HomeStateNotifier(mockAuth);
 
       await home.getCryptoDataFromAPIs();
 
@@ -27,7 +29,7 @@ void main() {
     });
 
     test('Test toggle USD-INR', () async {
-      final home = HomeStateNotifier();
+      final home = HomeStateNotifier(mockAuth);
 
       await home.getCryptoDataFromAPIs();
 
@@ -42,7 +44,7 @@ void main() {
     });
 
     test('Test to change crypto key', () async {
-      final home = HomeStateNotifier();
+      final home = HomeStateNotifier(mockAuth);
 
       await home.getCryptoDataFromAPIs();
 

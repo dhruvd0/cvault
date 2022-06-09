@@ -4,7 +4,6 @@ import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/models/crypto_currency.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -13,9 +12,10 @@ import 'package:web_socket_channel/io.dart';
 import 'package:flutter/material.dart';
 
 class HomeStateNotifier extends ChangeNotifier {
-  HomeStateNotifier() : super() {
-    if (Firebase.apps.isNotEmpty) {
-      FirebaseAuth.instance
+  HomeStateNotifier([FirebaseAuth? firebaseAuthMock]) : super() {
+    final authInstance =firebaseAuthMock?? FirebaseAuth.instance;
+   
+      authInstance
           .authStateChanges()
           .asBroadcastStream()
           .listen((event) {
@@ -23,7 +23,7 @@ class HomeStateNotifier extends ChangeNotifier {
           getCryptoDataFromAPIs();
         }
       });
-    }
+    
   }
 
   Future<void> getCryptoDataFromAPIs() async {

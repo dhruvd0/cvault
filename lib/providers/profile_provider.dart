@@ -20,16 +20,15 @@ enum LoadStatus {
 class ProfileChangeNotifier extends ChangeNotifier {
   Profile profile = ProfileInitial();
   LoadStatus loadStatus = LoadStatus.initial;
-  ProfileChangeNotifier() : super() {
-    FirebaseAuth.instance
-        .authStateChanges()
-        .asBroadcastStream()
-        .listen((event) async {
+   var authInstance ;
+  ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
+  authInstance = mockAuth ?? FirebaseAuth.instance;
+    authInstance.authStateChanges().asBroadcastStream().listen((event) async {
       if (event != null) {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         if (userType != null && userType.isNotEmpty) {
-          changeUserType(userType, event.uid);
+          changeUserType(mockAuth != null ? 'admin' : userType, event.uid);
         }
       }
     });
@@ -127,7 +126,7 @@ class ProfileChangeNotifier extends ChangeNotifier {
         uri,
       ),
       body: jsonEncode(
-        {'${profile.userType}Id': FirebaseAuth.instance.currentUser!.uid},
+        {'${profile.userType}Id':authInstance.currentUser.uid},
       ),
       headers: {"Content-Type": "application/json"},
     );

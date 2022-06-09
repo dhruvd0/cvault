@@ -5,6 +5,7 @@ import 'package:cvault/Screens/home/widgets/margin_selector.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/constants/user_types.dart';
+import 'package:cvault/widgets/usd_inr_toggle.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +20,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  bool toggle = true;
-
   @override
   void initState() {
     super.initState();
@@ -162,37 +161,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ),
                                 ],
                               ),
-                              Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  const Text(
-                                    'USD - INR',
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  Switch(
-                                    autofocus: true,
-                                    activeColor: Colors.white,
-                                    activeTrackColor: Colors.lightGreen,
-                                    inactiveThumbColor: Colors.grey,
-                                    inactiveTrackColor: Colors.black,
-                                    value: toggle,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        toggle = value;
-                                      });
-                                      Provider.of<HomeStateNotifier>(
-                                        context,
-                                        listen: false,
-                                      ).toggleIsUSD(!value);
-                                    },
-                                  ),
-                                ],
-                              ),
+                              USDToINRToggle(),
                             ],
                           ),
                           const SizedBox(
