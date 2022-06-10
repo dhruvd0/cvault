@@ -14,6 +14,7 @@ void main() {
 
       await transactionsProvider.getAllTransactions();
       expect(transactionsProvider.transactions, isNotEmpty);
+      
     });
   });
 }
