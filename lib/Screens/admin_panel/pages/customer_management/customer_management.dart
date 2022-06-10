@@ -13,7 +13,7 @@ class CustomerManagementPage extends StatefulWidget {
 }
 
 class _CustomerManagementPageState extends State<CustomerManagementPage> {
-  Map<String, dynamic> data = {};
+  // Map<String, dynamic> data = {};
 
   Widget _buildListView(List<Customer> customers) {
     return ListView.builder(

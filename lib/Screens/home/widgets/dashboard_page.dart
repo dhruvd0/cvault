@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'package:cvault/models/profile_models/getAdvertisemodel.dart';
+import 'package:cvault/providers/getadd.dart';
+import 'package:http/http.dart' as http;
 import 'package:cvault/Screens/Setting.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/models/home_state.dart';
@@ -19,10 +23,23 @@ class DashboardPage extends StatefulWidget {
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
+var res, add;
+
 class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
+    getadds();
+  }
+
+  getadds() async {
+    res = await http.get(Uri.parse(
+      "https://cvault-backend.herokuapp.com/advertisment/get-link",
+    ));
+    add = jsonDecode(res.body);
+    print(add[0]['link']);
+
+    setState(() {});
   }
 
   @override
@@ -291,29 +308,38 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                             userType == UserTypes.admin
                                 ? Container()
-                                : Expanded(
-                                    child: Container(
-                                      margin: const EdgeInsets.symmetric(
-                                        vertical: 5,
-                                        horizontal: 10,
-                                      ),
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          const Text('AD'),
-                                          Center(
-                                            child: Image.asset(
-                                              "assets/test_ad.gif",
+                                : Visibility(
+                                    visible: add == null ? false : true,
+                                    child: Expanded(
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                          vertical: 5,
+                                          horizontal: 10,
+                                        ),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            const Text('AD'),
+                                            Center(
+                                              child: add == null
+                                                  ? Image.asset(
+                                                      "assets/test_ad.gif",
+                                                    )
+                                                  : Image.network(
+                                                      add[0]["link"],
+                                                    ),
                                             ),
-                                          ),
-                                          const Text('AD'),
-                                        ],
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Colors.white,
+                                            const Text('AD'),
+                                          ],
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
