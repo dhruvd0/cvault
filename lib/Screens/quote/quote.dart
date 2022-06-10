@@ -28,7 +28,7 @@ class _QuoteState extends State<Quote> {
       endDrawer: const MyDrawer(),
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
-        leading:SizedBox(),
+        leading: SizedBox(),
         centerTitle: true,
         title: const Text("Quote"),
         backgroundColor: Colors.transparent,

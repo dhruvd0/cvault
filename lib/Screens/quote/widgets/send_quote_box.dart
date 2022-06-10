@@ -54,8 +54,22 @@ class SendQuoteBox extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: ElevatedButton(
                   onPressed: () async {
-                   await quoteProvider.sendQuote();
-                   
+                    final success = await quoteProvider.sendQuote();
+                    var snackBarText = '';
+
+                    if (success == null) {
+                      snackBarText = "Something Went Wrong";
+                    } else if (success) {
+                      snackBarText = 'Quote Sent';
+                    } else {
+                      snackBarText = 'This User does not exist';
+                    }
+                    var snackBar = SnackBar(
+                      content: Text(
+                        snackBarText,
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   child: const Text(
                     "Send Quote",

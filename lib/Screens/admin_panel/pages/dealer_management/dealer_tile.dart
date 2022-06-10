@@ -1,5 +1,5 @@
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/customer_list.dart';
-import 'package:cvault/Screens/reportingScrenn.dart';
+import 'package:cvault/Screens/reportingScreen.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/dealers_provider.dart';

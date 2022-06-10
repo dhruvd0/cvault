@@ -1,6 +1,6 @@
 import 'package:cvault/Screens/admin_panel/pages/customer_management/customer_management.dart';
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_management_page.dart';
-import 'package:cvault/Screens/reportingScrenn.dart';
+import 'package:cvault/Screens/reportingScreen.dart';
 import 'package:flutter/material.dart';
 
 class AdminPanelGrid extends StatelessWidget {

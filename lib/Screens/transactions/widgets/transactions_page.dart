@@ -1,5 +1,4 @@
 import 'package:cvault/Screens/transactions/widgets/transaction_tile.dart';
-import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +21,6 @@ class TransactionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final transactionsProvider = Provider.of<TransactionsProvider>(context);
-    final profileProvider = Provider.of<ProfileChangeNotifier>(context);
-    String? dealerId;
-
-    if (profileProvider.profile.userType == UserTypes.dealer) {
-      dealerId = profileProvider.profile.uid;
-    }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -44,43 +35,29 @@ class TransactionsPage extends StatelessWidget {
         elevation: 0,
       ),
       backgroundColor: const Color(0xff1E2224),
-      body: (transactionsProvider.isLoadedTransactions(
-        retriever: dealerId ??
-            "1234", // TODO: change 1234 to admin when admin api is ready
-      ))
-          ? _buildTransactionList(transactionsProvider.transactions)
-          : FutureBuilder(
-              future: (dealerId == null)
-                  // TODO: call admin api here when ready
-                  ? transactionsProvider.getDealerTransaction(
-                      "1234",
-                    )
-                  : transactionsProvider.getDealerTransaction(dealerId),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.active:
-                  case ConnectionState.waiting:
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: const Color(0xff03dac6),
-                      ),
-                    );
-                  case ConnectionState.done:
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text(
-                          "An error has occurred!",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      );
-                    }
-                    return _buildTransactionList(
-                      transactionsProvider.transactions,
-                    );
-                }
-              },
-            ),
+      body: Consumer<TransactionsProvider>(
+        builder: (context, transactionsProvider, __) {
+          switch (transactionsProvider.loadStatus) {
+            case LoadStatus.loading:
+              return Center(
+                child: CircularProgressIndicator(
+                  color: const Color(0xff03dac6),
+                ),
+              );
+            case LoadStatus.error:
+              return Center(
+                child: Text(
+                  "An error has occurred!",
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
+            default:
+              return _buildTransactionList(
+                transactionsProvider.transactions,
+              );
+          }
+        },
+      ),
     );
   }
 }
