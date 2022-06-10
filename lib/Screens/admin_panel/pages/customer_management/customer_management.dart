@@ -1,11 +1,9 @@
-import 'dart:convert';
-
-import 'package:cvault/models/profile_models/profile.dart';
+import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/Screens/admin_panel/pages/customer_management/customer_tile.dart';
-import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_tile.dart';
+import 'package:cvault/providers/customer_provider.dart';
 
 import 'package:flutter/material.dart';
-import "package:http/http.dart" as http;
+import 'package:provider/provider.dart';
 
 class CustomerManagementPage extends StatefulWidget {
   const CustomerManagementPage({Key? key}) : super(key: key);
@@ -15,28 +13,21 @@ class CustomerManagementPage extends StatefulWidget {
 }
 
 class _CustomerManagementPageState extends State<CustomerManagementPage> {
-  Map<String, dynamic> data = {};
-  List<Profile> customer = [];
-  apiCall() async {
-    final response = await http.get(
-      Uri.parse(
-        "https://cvault-backend.herokuapp.com/customer/get-customer",
-      ),
-    );
-    data = jsonDecode(response.body);
-  }
+  // Map<String, dynamic> data = {};
 
-  Widget _buildListView() {
+  Widget _buildListView(List<Customer> customers) {
     return ListView.builder(
-      itemCount: customer.length,
+      itemCount: customers.length,
       itemBuilder: (BuildContext context, int index) {
-        return DealerTile(dealer: customer![index]);
+        return CustomerTile(customer: customers[index]);
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final customerProvider = Provider.of<CustomerProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -60,9 +51,10 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
               height: 20,
             ),
             Flexible(
-              child: (customer.isEmpty)
-                  ? FutureBuilder(
-                      future: apiCall(),
+              child: (customerProvider.isLoadedCustomers)
+                  ? _buildListView(customerProvider.customers)
+                  : FutureBuilder(
+                      future: customerProvider.fetchAndSetCustomers(),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
@@ -73,27 +65,12 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                             );
                           case ConnectionState.done:
                             if (snapshot.hasError) {
-                              Text("Try again");
+                              return Text("Try again");
                             }
-                            List<ProfileState> temp = [];
-                            data["data"].forEach(
-                              (element) => temp.add(
-                                ProfileInitial().copyWith(
-                                  firstName: element["firstName"] +
-                                      element[" middleName"] +
-                                      element[" lastName"],
-                                  email: element["email"],
-                                  phone: element["phone"],
-                                  code: element["customerId"],
-                                ),
-                              ),
-                            );
-                            customer = temp;
-                            return _buildListView();
+                            return _buildListView(customerProvider.customers);
                         }
                       },
-                    )
-                  : _buildListView(),
+                    ),
             ),
             SizedBox(
               height: 10,
