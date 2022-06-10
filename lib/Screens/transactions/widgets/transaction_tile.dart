@@ -10,23 +10,22 @@ class TransactionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       decoration: BoxDecoration(
         color: Colors.grey[850],
         borderRadius: BorderRadius.circular(20),
       ),
       child: ExpansionTile(
-        trailing: SizedBox.shrink(),
         title: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       transaction.customer.firstName,
@@ -40,7 +39,7 @@ class TransactionTile extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      "₹" + transaction.price.toString(),
+                      "₹" + transaction.price.toStringAsFixed(2),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,

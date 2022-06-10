@@ -13,17 +13,13 @@ import 'package:flutter/material.dart';
 
 class HomeStateNotifier extends ChangeNotifier {
   HomeStateNotifier([FirebaseAuth? firebaseAuthMock]) : super() {
-    final authInstance =firebaseAuthMock?? FirebaseAuth.instance;
-   
-      authInstance
-          .authStateChanges()
-          .asBroadcastStream()
-          .listen((event) {
-        if (event != null) {
-          getCryptoDataFromAPIs();
-        }
-      });
-    
+    final authInstance = firebaseAuthMock ?? FirebaseAuth.instance;
+
+    authInstance.authStateChanges().asBroadcastStream().listen((event) {
+      if (event != null) {
+        getCryptoDataFromAPIs();
+      }
+    });
   }
 
   Future<void> getCryptoDataFromAPIs() async {
@@ -233,6 +229,7 @@ class HomeStateNotifier extends ChangeNotifier {
         if (indexWhere != -1) {
           currencies[indexWhere] = currencies[indexWhere].copyWith(
             wazirxKey: key,
+            sellPrice: double.parse(cryptoData['sell']),
             wazirxPrice: double.parse(cryptoData['buy']),
           );
         } else {
@@ -242,6 +239,7 @@ class HomeStateNotifier extends ChangeNotifier {
             name: cryptoData['name'],
             wazirxPrice: double.parse(cryptoData['buy']),
             krakenPrice: 0.0,
+            sellPrice: double.parse(cryptoData['sell']),
           ));
         }
       }
