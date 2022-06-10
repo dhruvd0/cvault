@@ -11,7 +11,7 @@ class MarginSelector extends StatelessWidget {
       padding: const EdgeInsets.only(right: 10, left: 10, top: 20, bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.white),
+        border: Border.all(color: Color.fromARGB(255, 165, 231, 243)),
       ),
       child: Column(
         children: [
@@ -22,7 +22,7 @@ class MarginSelector extends StatelessWidget {
                 'Default margin:',
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.white,
                 ),
               ),
@@ -31,7 +31,7 @@ class MarginSelector extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 16,
                 ),
               ),
             ],
@@ -42,7 +42,7 @@ class MarginSelector extends StatelessWidget {
                 'Currently applied to:',
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.white,
                 ),
               ),
@@ -51,7 +51,7 @@ class MarginSelector extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: Colors.white,
-                  fontSize: 19,
+                  fontSize: 16,
                 ),
               ),
             ],

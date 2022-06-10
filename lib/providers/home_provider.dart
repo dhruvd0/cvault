@@ -229,6 +229,7 @@ class HomeStateNotifier extends ChangeNotifier {
         if (indexWhere != -1) {
           currencies[indexWhere] = currencies[indexWhere].copyWith(
             wazirxKey: key,
+            sellPrice: double.parse(cryptoData['sell']),
             wazirxPrice: double.parse(cryptoData['buy']),
           );
         } else {
@@ -238,6 +239,7 @@ class HomeStateNotifier extends ChangeNotifier {
             name: cryptoData['name'],
             wazirxPrice: double.parse(cryptoData['buy']),
             krakenPrice: 0.0,
+            sellPrice: double.parse(cryptoData['sell']),
           ));
         }
       }
