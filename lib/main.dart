@@ -77,7 +77,6 @@ class CVaultApp extends StatefulWidget {
 class _CVaultAppState extends State<CVaultApp> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();

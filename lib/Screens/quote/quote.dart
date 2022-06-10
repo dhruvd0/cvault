@@ -138,7 +138,8 @@ class _QuoteState extends State<Quote> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Settings()),
+                                  builder: (context) => Settings(),
+                                ),
                               );
                             },
                             child: Consumer<HomeStateNotifier>(
@@ -213,7 +214,9 @@ class _QuoteState extends State<Quote> {
                               Text(
                                 "Buy-Sell",
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
                               ),
                               Switch(
                                 activeColor: Colors.white,

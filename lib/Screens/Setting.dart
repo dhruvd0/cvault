@@ -29,12 +29,6 @@ class _SettingsState extends State<Settings> {
   String? crypto = "Select currency";
   bool toggle = false;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   DropdownMenuItem<String> buildCurrencyList(String item) {
     var provider = Provider.of<HomeStateNotifier>(context, listen: false);
     final state = provider.state;

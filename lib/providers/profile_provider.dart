@@ -20,7 +20,7 @@ enum LoadStatus {
 class ProfileChangeNotifier extends LoadStatusNotifier {
   Profile profile = ProfileInitial();
 
-  FirebaseAuth authInstance = FirebaseAuth.instance;
+  late FirebaseAuth authInstance;
   ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
     authInstance = mockAuth ?? FirebaseAuth.instance;
     authInstance.authStateChanges().asBroadcastStream().listen((event) async {
@@ -107,9 +107,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
             ? (editProfile as Dealer).copyWith(referralCode: data)
             : (editProfile as Customer).copyWith(referralCode: data);
         break;
-      case ProfileFields.phone:
-        // TODO: Handle this case.
-        break;
+      default:
     }
     emit(editProfile);
   }
