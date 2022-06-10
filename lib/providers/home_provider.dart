@@ -68,23 +68,28 @@ class HomeStateNotifier extends ChangeNotifier {
         Map<String, dynamic> baseData = jsonDecode(event);
         if (baseData.containsKey('data') && baseData['data'] is List) {
           var cryptoData = baseData['data'];
-          for (var crypto in cryptoData.toList()) {
-            var key = crypto['s'];
-            if (cryptoKeys(state.isUSD ? 'usdt' : 'inr').contains(key)) {
-              var price = crypto['a'];
-              final cryptoCurrencies = state.cryptoCurrencies.toList();
-              int index = cryptoCurrencies
-                  .indexWhere((element) => element.wazirxKey == key);
-              if (index != -1) {
-                cryptoCurrencies[index] = cryptoCurrencies[index]
-                    .copyWith(wazirxPrice: double.parse(price));
-                emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
-              }
-            }
-          }
+          _parseAndEmitWazirXTickerData(cryptoData);
         }
+        fetchCurrencyDataFromKraken();
       }
     });
+  }
+
+  void _parseAndEmitWazirXTickerData(cryptoData) {
+    for (var crypto in cryptoData.toList()) {
+      var key = crypto['s'];
+      if (cryptoKeys(state.isUSD ? 'usdt' : 'inr').contains(key)) {
+        var price = crypto['a'];
+        final cryptoCurrencies = state.cryptoCurrencies.toList();
+        int index =
+            cryptoCurrencies.indexWhere((element) => element.wazirxKey == key);
+        if (index != -1) {
+          cryptoCurrencies[index] = cryptoCurrencies[index]
+              .copyWith(wazirxPrice: double.parse(price));
+          emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
+        }
+      }
+    }
   }
 
   Future<void> logout(BuildContext context) async {

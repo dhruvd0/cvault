@@ -305,7 +305,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                           const Text('AD'),
                                           Center(
                                             child: Image.asset(
-                                                "assets/test_ad.gif"),
+                                              "assets/test_ad.gif",
+                                            ),
                                           ),
                                           const Text('AD'),
                                         ],

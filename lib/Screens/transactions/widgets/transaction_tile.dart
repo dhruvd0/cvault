@@ -10,7 +10,7 @@ class TransactionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Colors.grey[850],
@@ -39,7 +39,8 @@ class TransactionTile extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      "₹" + transaction.price.toStringAsFixed(2),
+                      (transaction.currency == 'usdt' ? '\$' : '₹') +
+                          transaction.price.toStringAsFixed(2),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -81,34 +82,37 @@ class TransactionTile extends StatelessWidget {
           ],
         ),
         children: [
-          Row(
-            children: [
-              Expanded(child: Container()),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(child: Container()),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: const Text('Accept'),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: const Text('Accept'),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.red,
+                const SizedBox(
+                  width: 10,
                 ),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: const Text(
-                  'Reject',
-                  style: TextStyle(color: Colors.white),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.red,
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: const Text(
+                    'Reject',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

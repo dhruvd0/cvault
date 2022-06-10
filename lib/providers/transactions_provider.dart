@@ -40,39 +40,50 @@ class TransactionsProvider extends LoadStatusNotifier {
     String dealerId, {
     bool getAllTransactions = false,
   }) async {
-    try {
-      loadStatus = LoadStatus.loading;
+    loadStatus = LoadStatus.loading;
+    notifyListeners();
+    final response = getAllTransactions
+        ? await http.get(
+            Uri.parse(
+              "$backendBaseUrl/transaction/getAllTransaction",
+            ),
+          )
+        : await http.post(
+            Uri.parse(
+              "$backendBaseUrl/transaction/get-transaction",
+            ),
+            body: jsonEncode(
+              {
+                "dealerId": dealerId,
+              },
+            ),
+          );
+
+    if (response.statusCode == 200) {
+      List<Transaction> transactions = [];
+
+      _parseTransactionsFromJsonData(response, transactions);
+      _transactions = transactions;
+      _transactions = _transactions.reversed.toList();
+      loadStatus = LoadStatus.done;
       notifyListeners();
-      final response = await http.post(
-        Uri.parse(
-          "$backendBaseUrl/transaction/get-transaction",
-        ),
-        body: jsonEncode(
-          {
-            "dealerId": dealerId,
-          },
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        List<Transaction> transactions = [];
-
-        final List<dynamic> data = jsonDecode(response.body);
-        data.forEach(
-          (tr) {
-            transactions.add(Transaction.fromJson(tr));
-          },
-        );
-
-        _transactions = transactions;
-        loadStatus = LoadStatus.done;
-        notifyListeners();
-      } else {
-        throw Exception(response.statusCode);
-      }
-    } catch (error) {
-      rethrow;
+    } else {
+      throw Exception(response.statusCode);
     }
+
+    notifyListeners();
+  }
+
+  void _parseTransactionsFromJsonData(
+    http.Response response,
+    List<Transaction> transactions,
+  ) {
+    final List<dynamic> data = jsonDecode(response.body);
+    data.forEach(
+      (tr) {
+        transactions.add(Transaction.fromJson(tr));
+      },
+    );
   }
 
   Future<void> changeTransactionStatus(int index, String status) async {
