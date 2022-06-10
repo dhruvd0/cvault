@@ -1,35 +1,48 @@
 import 'dart:convert';
 
 import 'package:cvault/constants/strings.dart';
+import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/transaction.dart';
-import 'package:flutter/foundation.dart';
+import 'package:cvault/providers/common/load_status_notifier.dart';
+import 'package:cvault/providers/profile_provider.dart';
 
 import 'package:http/http.dart' as http;
 
-class TransactionsProvider extends ChangeNotifier {
+class TransactionsProvider extends LoadStatusNotifier {
+  ProfileChangeNotifier profileChangeNotifier;
   List<Transaction> _transactions = [];
-  String? _loadedTransactions;
+
+  TransactionsProvider(this.profileChangeNotifier) {
+    profileChangeNotifier.addListener(() {
+      if (profileChangeNotifier.loadStatus == LoadStatus.done) {
+        if (profileChangeNotifier.profile.userType == UserTypes.admin) {
+          getAllTransactions();
+        } else {
+          getDealerTransaction(profileChangeNotifier.profile.uid);
+        }
+      } else {
+        _transactions = [];
+        notifyListeners();
+      }
+    });
+  }
 
   List<Transaction> get transactions {
     return [..._transactions];
   }
 
-  bool isLoadedTransactions({required String retriever}) {
-    if (_loadedTransactions == null) {
-      return false;
-    }
-
-    return _loadedTransactions == retriever;
-  }
-
   Future<void> getAllTransactions() async {
-    // TODO: API not available to get all transactions for Admin
+    await getDealerTransaction('', getAllTransactions: true);
   }
 
   // To get transactions for a dealer
-  // ignore: long-method
-  Future<void> getDealerTransaction(String dealerId) async {
+  Future<void> getDealerTransaction(
+    String dealerId, {
+    bool getAllTransactions = false,
+  }) async {
     try {
+      loadStatus = LoadStatus.loading;
+      notifyListeners();
       final response = await http.post(
         Uri.parse(
           "$backendBaseUrl/transaction/get-transaction",
@@ -40,8 +53,6 @@ class TransactionsProvider extends ChangeNotifier {
           },
         ),
       );
-
-      print(response.body);
 
       if (response.statusCode == 200) {
         List<Transaction> transactions = [];
@@ -54,14 +65,12 @@ class TransactionsProvider extends ChangeNotifier {
         );
 
         _transactions = transactions;
-        _loadedTransactions = dealerId;
+        loadStatus = LoadStatus.done;
         notifyListeners();
       } else {
         throw Exception(response.statusCode);
       }
-    } catch (error, stacktrace) {
-      print(error);
-      print(stacktrace);
+    } catch (error) {
       rethrow;
     }
   }
@@ -84,46 +93,7 @@ class TransactionsProvider extends ChangeNotifier {
       } else {
         throw Exception(response.statusCode);
       }
-    } catch (error, stacktrace) {
-      print(error);
-      print(stacktrace);
-      rethrow;
-    }
-  }
-
-  // ignore: long-parameter-list
-  Future<void> createTransaction(
-    String trType,
-    String cryptoType,
-    double price,
-    String currency,
-    int quantity,
-    String rcPhone,
-    String sdId,
-  ) async {
-    try {
-      final response = await http.post(
-        Uri.parse("$backendBaseUrl/transaction/post-transaction"),
-        body: jsonEncode({
-          "transactionType": "abc",
-          "cryptoType": "bitcoin",
-          "price": 500,
-          "costPrice": 700,
-          "currency": "inr",
-          "quantity": 5,
-          "receiversPhone": "1234567890",
-          "sendersID": "1234",
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        // TODO: error in api, save in all transactions as new transaction here
-      } else {
-        throw Exception(response.statusCode);
-      }
-    } catch (error, stacktrace) {
-      print(error);
-      print(stacktrace);
+    } catch (error) {
       rethrow;
     }
   }

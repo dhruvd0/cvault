@@ -45,7 +45,7 @@ void main() {
       );
 
       await quoteProvider.sendQuote();
-      final transactionsProvider = TransactionsProvider();
+      final transactionsProvider = TransactionsProvider(quoteProvider.profileChangeNotifier);
       await transactionsProvider
           .getDealerTransaction(mockAuth.currentUser!.uid);
       expect(

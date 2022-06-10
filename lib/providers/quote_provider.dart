@@ -3,27 +3,27 @@ import 'dart:convert';
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/models/transaction.dart';
+import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 
-class QuoteProvider extends ChangeNotifier {
+class QuoteProvider extends LoadStatusNotifier {
   Transaction transaction =
       Transaction.fromJson({TransactionProps.transactionType.name: 'buy'});
   final HomeStateNotifier _homeStateNotifier;
-  final ProfileChangeNotifier _profileChangeNotifier;
-  QuoteProvider(this._homeStateNotifier, this._profileChangeNotifier) {
+  final ProfileChangeNotifier profileChangeNotifier;
+  QuoteProvider(this._homeStateNotifier, this.profileChangeNotifier) {
     _homeStateNotifier.addListener(() {
       updateWithHomeNotifierState();
     });
-    _profileChangeNotifier.addListener(() {
+    profileChangeNotifier.addListener(() {
       updateWithProfileProviderState();
     });
   }
   void updateWithProfileProviderState() {
-    Profile profile = _profileChangeNotifier.profile;
+    Profile profile = profileChangeNotifier.profile;
 
     if (profile.uid.isNotEmpty) {
       transaction = transaction.copyWith(sender: profile);
@@ -49,17 +49,11 @@ class QuoteProvider extends ChangeNotifier {
   ///  [false] for 400, Bad Request(Customer not found)
   ///  and null for failure
   Future<bool?> sendQuote() async {
-    String sendersID = _profileChangeNotifier.authInstance.currentUser.uid;
-    Map<String, dynamic> quoteData = {
-      "transactionType": transaction.transactionType,
-      "cryptoType": transaction.cryptoType,
-      "price": transaction.price,
-      "costPrice": transaction.costPrice,
-      "currency": transaction.currency,
-      "quantity": transaction.quantity,
-      "receiversPhone": transaction.customer.phone,
-      "sendersID": sendersID,
-    };
+    String sendersID = profileChangeNotifier.authInstance.currentUser!.uid;
+    Map<String, dynamic> quoteData = _quoteDataFromTransactions(sendersID);
+
+    loadStatus = LoadStatus.loading;
+    notifyListeners();
 
     final response = await post(
       Uri.parse(
@@ -70,13 +64,36 @@ class QuoteProvider extends ChangeNotifier {
     );
 
     if (response.statusCode == 201) {
+      transaction = Transaction.fromJson(
+        {TransactionProps.transactionType.name: 'buy'},
+      );
+      loadStatus = LoadStatus.done;
+      notifyListeners();
+
       return true;
     } else if (response.statusCode == 400) {
+      loadStatus = LoadStatus.done;
+      notifyListeners();
+
       return false;
+    } else {
+      loadStatus = LoadStatus.error;
+      notifyListeners();
+      throw Exception('post-transaction:' + response.statusCode.toString());
     }
-    else{
-       throw Exception('post-transaction:' + response.statusCode.toString());
-    }
+  }
+
+  Map<String, dynamic> _quoteDataFromTransactions(String sendersID) {
+    return {
+      "transactionType": transaction.transactionType,
+      "cryptoType": transaction.cryptoType,
+      "price": transaction.price,
+      "costPrice": transaction.costPrice,
+      "currency": transaction.currency,
+      "quantity": transaction.quantity,
+      "receiversPhone": transaction.customer.phone,
+      "sendersID": sendersID,
+    };
   }
 
   void changeTransactionField(TransactionProps field, dynamic data) {

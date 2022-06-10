@@ -71,7 +71,7 @@ class HomeStateNotifier extends ChangeNotifier {
           for (var crypto in cryptoData.toList()) {
             var key = crypto['s'];
             if (cryptoKeys(state.isUSD ? 'usdt' : 'inr').contains(key)) {
-              var price = crypto['b'];
+              var price = crypto['a'];
               final cryptoCurrencies = state.cryptoCurrencies.toList();
               int index = cryptoCurrencies
                   .indexWhere((element) => element.wazirxKey == key);

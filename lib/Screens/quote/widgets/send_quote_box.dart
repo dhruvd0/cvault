@@ -1,6 +1,8 @@
+import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/models/transaction.dart';
 import 'package:cvault/providers/home_provider.dart';
+import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,26 +52,46 @@ class SendQuoteBox extends StatelessWidget {
               const SizedBox(
                 height: 25,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.45,
-                child: ElevatedButton(
-                  onPressed: () async {
-                   await quoteProvider.sendQuote();
-                   
-                  },
-                  child: const Text(
-                    "Send Quote",
-                    style: TextStyle(
-                      fontSize: 18,
+              quoteProvider.loadStatus == LoadStatus.loading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: ThemeColors.lightGreenAccentColor,
+                      ),
+                    )
+                  : SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final success = await quoteProvider.sendQuote();
+                          var snackBarText = '';
+
+                          if (success == null) {
+                            snackBarText = "Something Went Wrong";
+                          } else if (success) {
+                            snackBarText = 'Quote Sent';
+                          } else {
+                            snackBarText = 'This User does not exist';
+                          }
+                          var snackBar = SnackBar(
+                            content: Text(
+                              snackBarText,
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        },
+                        child: const Text(
+                          "Send Quote",
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.black,
+                          elevation: 10,
+                          shape: const StadiumBorder(),
+                        ),
+                      ),
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    elevation: 10,
-                    shape: const StadiumBorder(),
-                  ),
-                ),
-              ),
               const SizedBox(height: 10),
               const Text(
                 "To",

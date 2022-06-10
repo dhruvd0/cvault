@@ -4,9 +4,9 @@ import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/models/profile_models/profile.dart';
+import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,22 +17,38 @@ enum LoadStatus {
   error,
 }
 
-class ProfileChangeNotifier extends ChangeNotifier {
+class ProfileChangeNotifier extends LoadStatusNotifier {
   Profile profile = ProfileInitial();
-  LoadStatus loadStatus = LoadStatus.initial;
-   var authInstance ;
+
+  FirebaseAuth authInstance = FirebaseAuth.instance;
   ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
-  authInstance = mockAuth ?? FirebaseAuth.instance;
+    authInstance = mockAuth ?? FirebaseAuth.instance;
     authInstance.authStateChanges().asBroadcastStream().listen((event) async {
       if (event != null) {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
-        if (userType != null && userType.isNotEmpty) {
-          changeUserType(mockAuth != null ? 'admin' : userType, event.uid);
-        }
+        await checkAndChangeUserType(event, userType, mockAuth);
       }
     });
   }
+
+  Future<void> checkAndChangeUserType(
+    User event, [
+    String? userType,
+    FirebaseAuth? mockAuth,
+  ]) async {
+    if (event.phoneNumber == '+91111111111') {
+      (await SharedPreferences.getInstance()).setString(
+        SharedPreferencesKeys.userTypeKey,
+        UserTypes.admin,
+      );
+      userType = UserTypes.admin;
+    }
+    if (userType != null && userType.isNotEmpty) {
+      changeUserType(mockAuth != null ? 'admin' : userType, event.uid);
+    }
+  }
+
   void emit(Profile newState) {
     profile = newState;
     notifyListeners();
@@ -104,43 +120,51 @@ class ProfileChangeNotifier extends ChangeNotifier {
 
   // ignore: long-method
   Future<void> fetchProfile() async {
-    if (profile.userType == 'admin') {
-      return;
-    }
     var cachedProfile = await _fetchProfileFromCache();
+
     if (cachedProfile != null) {
       emit(cachedProfile);
+      loadStatus = LoadStatus.done;
+      notifyListeners();
 
       return;
     }
 
-    String path = profile.userType == UserTypes.dealer
-        ? 'dealer/getDealer'
-        : 'customer/getCustomer';
+    String path = profile.userType == UserTypes.customer
+        ? 'customer/getCustomer'
+        : 'dealer/getDealer';
 
     var uri = "https://cvault-backend.herokuapp.com/$path";
     loadStatus = LoadStatus.loading;
     notifyListeners();
+    var userType = profile.userType;
+    userType = userType == 'admin' ? 'dealer' : userType;
     final response = await http.post(
       Uri.parse(
         uri,
       ),
       body: jsonEncode(
-        {'${profile.userType}Id':authInstance.currentUser.uid},
+        {'${userType}Id': authInstance.currentUser!.uid},
       ),
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['${profile.userType}Data'];
-      var user = profile.userType == 'dealer'
-          ? Dealer.fromJson('dealer', data)
+      var data = jsonDecode(response.body)['${userType}Data'];
+      var user = profile.userType == 'dealer' || profile.userType == 'admin'
+          ? Dealer.fromJson(profile.userType, data)
           : Customer.fromJson(data);
       emit(user);
+      loadStatus = LoadStatus.done;
+
+      notifyListeners();
+      _saveProfileToCache();
     } else if (response.statusCode == 400) {
-      var user = profile.userType == 'dealer'
-          ? Dealer.fromJson('dealer', {})
+      var user = profile.userType == 'dealer' || profile.userType == 'admin'
+          ? Dealer.fromJson(profile.userType, {})
           : Customer.fromJson({});
       emit(user);
+      loadStatus = LoadStatus.done;
+      notifyListeners();
     } else {
       loadStatus = LoadStatus.error;
       notifyListeners();
@@ -153,7 +177,7 @@ class ProfileChangeNotifier extends ChangeNotifier {
   Future<Profile?> _fetchProfileFromCache() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey(UserTypes.admin)) {
-      String dealerJson = await prefs.getString(UserTypes.dealer) ?? '';
+      String dealerJson = await prefs.getString(UserTypes.admin) ?? '';
 
       return Dealer.fromJson('admin', jsonDecode(dealerJson));
     }

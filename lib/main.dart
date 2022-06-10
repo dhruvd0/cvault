@@ -16,43 +16,53 @@ import 'package:cvault/providers/transactions_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          lazy: false,
-          create: (context) => HomeStateNotifier(),
-        ),
-        ChangeNotifierProvider(
-          lazy: false,
-          create: (context) => ProfileChangeNotifier(),
-        ),
-        ChangeNotifierProvider(
-          lazy: false,
-          create: (context) => QuoteProvider(
-            context.read<HomeStateNotifier>(),
-            context.read<ProfileChangeNotifier>(),
-          ),
-        ),
-        ChangeNotifierProvider.value(value: DealersProvider()),
-        ChangeNotifierProvider.value(value: TransactionsProvider()),
-        ChangeNotifierProvider.value(value: ExchangeProvider()),
-        ChangeNotifierProvider.value(value: CustomerProvider()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: CVaultApp(),
-      ),
+      providers: _providers,
+      child: MaterialApp(home: CVaultApp()),
     ),
   );
+}
+
+List<SingleChildWidget> get _providers {
+  return [
+    ChangeNotifierProvider(
+      lazy: false,
+      create: (context) => HomeStateNotifier(),
+    ),
+    ChangeNotifierProvider(
+      lazy: false,
+      create: (context) => ProfileChangeNotifier(),
+    ),
+    ChangeNotifierProvider(
+      lazy: false,
+      create: (context) => QuoteProvider(
+        context.read<HomeStateNotifier>(),
+        context.read<ProfileChangeNotifier>(),
+      ),
+    ),
+    ChangeNotifierProvider.value(value: DealersProvider()),
+    ChangeNotifierProvider(
+      lazy: false,
+      create: (context) => TransactionsProvider(
+        context.read<ProfileChangeNotifier>(),
+      ),
+    ),
+    ChangeNotifierProvider.value(value: ExchangeProvider()),
+    ChangeNotifierProvider.value(value: CustomerProvider()),
+  ];
 }
 
 class CVaultApp extends StatefulWidget {
@@ -69,13 +79,15 @@ class _CVaultAppState extends State<CVaultApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         var notifier =
             Provider.of<ProfileChangeNotifier>(context, listen: false);
+        await notifier
+            .checkAndChangeUserType(FirebaseAuth.instance.currentUser!);
         await notifier.fetchProfile();
         widget = (notifier.profile.firstName.isNotEmpty ||
                 userType == UserTypes.admin)

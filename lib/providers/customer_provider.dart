@@ -51,9 +51,7 @@ class CustomerProvider extends ChangeNotifier {
       } else {
         throw Exception(response.statusCode);
       }
-    } catch (error, stacktrace) {
-      print(error);
-      print(stacktrace);
+    } catch (error) {
       rethrow;
     }
   }

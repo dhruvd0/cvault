@@ -62,7 +62,6 @@ class Transaction extends Equatable {
     });
   }
 
-
   factory Transaction.fromJson(
     Map<String, dynamic> map, {
     String receiver = 'transaction',
