@@ -24,7 +24,7 @@ class SendQuoteBox extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Colors.grey,
+            color: Color.fromARGB(255, 165, 231, 243),
           ),
         ),
         child: Consumer<HomeStateNotifier>(
@@ -105,7 +105,7 @@ class SendQuoteBox extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(
-                      color: Colors.grey,
+                      color: Color.fromARGB(255, 165, 231, 243),
                       width: 1,
                     ),
                   ),

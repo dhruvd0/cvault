@@ -136,8 +136,8 @@ class HomeStateNotifier extends ChangeNotifier {
 //kraken
   /// Maps crypto name of wazirx api to kraken api
   Map<String, String> keyPairFromWazirxToKraken = {
-    'btcinr': 'TBTCUSD',
-    'btcusdt': 'TBTCUSD',
+    'btcinr': 'BTCUSD',
+    'btcusdt': 'BTCUSD',
     'solinr': 'SOLUSD',
     'solusdt': 'SOLUSD',
     'ethinr': 'ETHUSD',

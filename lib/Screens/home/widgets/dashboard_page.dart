@@ -286,7 +286,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                     .toStringAsFixed(2),
                                                 style: const TextStyle(
                                                   fontFamily: 'Poppins',
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   color: Colors.white,
                                                 ),
                                               ),

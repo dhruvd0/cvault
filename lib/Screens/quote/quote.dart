@@ -178,13 +178,14 @@ class _QuoteState extends State<Quote> {
                         children: [
                           Column(
                             mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "Cost Price",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 15,
+                                  fontSize: 20,
+                                  color: Colors.white,
                                 ),
                               ),
                               SizedBox(
@@ -200,9 +201,12 @@ class _QuoteState extends State<Quote> {
                                               : (state.isUSD
                                                   ? '\$${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}'
                                                   : sell
-                                                      ? '₹${homeStateNotifier.currentCryptoCurrency().wazirxPrice.toStringAsFixed(2)}'
-                                                      : "₹${homeStateNotifier.currentCryptoCurrency().sellPrice.toStringAsFixed(2)}"),
-                                          style: TextStyle(color: Colors.white),
+                                                      ? '₹${homeStateNotifier.currentCryptoCurrency().sellPrice.toStringAsFixed(2)}'
+                                                      : "₹${homeStateNotifier.currentCryptoCurrency().wazirxPrice.toStringAsFixed(2)}"),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 28,
+                                          ),
                                         ),
                                 ),
                               ),
@@ -215,7 +219,7 @@ class _QuoteState extends State<Quote> {
                                 "Buy-Sell",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18,
+                                  fontSize: 20,
                                 ),
                               ),
                               Switch(
@@ -236,7 +240,7 @@ class _QuoteState extends State<Quote> {
                         ],
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -266,7 +270,8 @@ class _QuoteState extends State<Quote> {
                                       color: Colors.transparent,
                                       border: Border.all(
                                         width: 1.5,
-                                        color: Colors.white30,
+                                        color:
+                                            Color.fromARGB(255, 165, 231, 243),
                                       ),
                                       borderRadius: BorderRadius.circular(15),
                                     ),
