@@ -177,7 +177,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   Future<Profile?> _fetchProfileFromCache() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey(UserTypes.admin)) {
-      String dealerJson = await prefs.getString(UserTypes.dealer) ?? '';
+      String dealerJson = await prefs.getString(UserTypes.admin) ?? '';
 
       return Dealer.fromJson('admin', jsonDecode(dealerJson));
     }

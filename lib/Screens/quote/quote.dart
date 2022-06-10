@@ -2,7 +2,9 @@ import 'package:cvault/Screens/Setting.dart';
 import 'package:cvault/Screens/quote/widgets/buy_sell_toggle.dart';
 import 'package:cvault/Screens/quote/widgets/quantity.dart';
 import 'package:cvault/Screens/quote/widgets/send_quote_box.dart';
+import 'package:cvault/constants/theme.dart';
 import 'package:cvault/providers/home_provider.dart';
+import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/widgets/usd_inr_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +48,13 @@ class _QuoteState extends State<Quote> {
       body: Consumer<HomeStateNotifier>(
         builder: (context, homeStateNotifier, _) {
           final state = homeStateNotifier.state;
+          if (state.loadStatus == LoadStatus.loading) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: ThemeColors.lightGreenAccentColor,
+              ),
+            );
+          }
 
           return SingleChildScrollView(
             child: Container(

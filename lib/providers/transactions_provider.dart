@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cvault/constants/strings.dart';
+import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/profile_provider.dart';
@@ -14,7 +15,11 @@ class TransactionsProvider extends LoadStatusNotifier {
   TransactionsProvider(this.profileChangeNotifier) {
     profileChangeNotifier.addListener(() {
       if (profileChangeNotifier.loadStatus == LoadStatus.done) {
-        getDealerTransaction(profileChangeNotifier.profile.uid);
+        if (profileChangeNotifier.profile.userType == UserTypes.admin) {
+          getAllTransactions();
+        } else {
+          getDealerTransaction(profileChangeNotifier.profile.uid);
+        }
       } else {
         _transactions = [];
         notifyListeners();
@@ -27,12 +32,14 @@ class TransactionsProvider extends LoadStatusNotifier {
   }
 
   Future<void> getAllTransactions() async {
-    // TODO: API not available to get all transactions for Admin
+    await getDealerTransaction('', getAllTransactions: true);
   }
 
   // To get transactions for a dealer
-  // ignore: long-method
-  Future<void> getDealerTransaction(String dealerId) async {
+  Future<void> getDealerTransaction(
+    String dealerId, {
+    bool getAllTransactions = false,
+  }) async {
     try {
       loadStatus = LoadStatus.loading;
       notifyListeners();
@@ -46,8 +53,6 @@ class TransactionsProvider extends LoadStatusNotifier {
           },
         ),
       );
-
-      print(response.body);
 
       if (response.statusCode == 200) {
         List<Transaction> transactions = [];
@@ -65,9 +70,7 @@ class TransactionsProvider extends LoadStatusNotifier {
       } else {
         throw Exception(response.statusCode);
       }
-    } catch (error, stacktrace) {
-      print(error);
-      print(stacktrace);
+    } catch (error) {
       rethrow;
     }
   }
@@ -90,9 +93,7 @@ class TransactionsProvider extends LoadStatusNotifier {
       } else {
         throw Exception(response.statusCode);
       }
-    } catch (error, stacktrace) {
-      print(error);
-      print(stacktrace);
+    } catch (error) {
       rethrow;
     }
   }
