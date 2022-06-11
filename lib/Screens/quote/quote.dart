@@ -63,6 +63,7 @@ class _QuoteState extends State<Quote> {
                   child: CircularProgressIndicator(),
                 )
               : SingleChildScrollView(
+                key: UniqueKey(),
                   child: Container(
                     margin: const EdgeInsets.all(20),
                     color: Colors.transparent,

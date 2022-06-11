@@ -94,6 +94,7 @@ class HomeStateNotifier extends ChangeNotifier {
             sellPrice: double.parse(sellPrice),
           );
           emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
+          notifyListeners();
         }
       }
     }
