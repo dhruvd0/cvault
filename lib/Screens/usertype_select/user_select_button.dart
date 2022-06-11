@@ -13,9 +13,13 @@ class UserTypeButton extends StatelessWidget {
       onTap: () async {
         (await SharedPreferences.getInstance())
             .setString(SharedPreferencesKeys.userTypeKey, userType);
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return const LogInScreen();
-        }));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return const LogInScreen();
+            },
+          ),
+        );
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -23,7 +27,7 @@ class UserTypeButton extends StatelessWidget {
           Text(
             userType,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w400,

@@ -5,7 +5,7 @@
 import 'package:cvault/models/profile_models/profile.dart';
 
 class Dealer extends Profile {
-  Dealer({
+  const Dealer({
     required this.dealerId,
     required this.active,
     required this.transactions,
@@ -52,7 +52,7 @@ class Dealer extends Profile {
       );
 
   static Dealer mock() {
-    return Dealer.fromJson('dealer', {
+    return Dealer.fromJson('dealer', const {
       "_id": "6295d8859efa452712a145b8",
       "dealerId": "4321",
       "name": "Test dealer",
@@ -63,6 +63,7 @@ class Dealer extends Profile {
     });
   }
 
+  @override
   Map<String, dynamic> toJson() => {
         "dealerId": dealerId,
         "firstName": firstName,

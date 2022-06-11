@@ -11,14 +11,14 @@ class MarginSelector extends StatelessWidget {
       padding: const EdgeInsets.only(right: 10, left: 10, top: 20, bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Color.fromARGB(255, 165, 231, 243)),
+        border: Border.all(color: const Color.fromARGB(255, 165, 231, 243)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               Text(
                 'Default margin:',
                 style: TextStyle(
@@ -41,7 +41,7 @@ class MarginSelector extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Column(
-                children: [
+                children: const [
                   Text(
                     'x.xx ',
                     style: TextStyle(

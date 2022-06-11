@@ -34,14 +34,14 @@ class _CustomerTileState extends State<CustomerTile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Customer: " + widget.customer.firstName,
+                    "Customer: ${widget.customer.firstName}",
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.chat,
                     color: ThemeColors.lightGreenAccentColor,
                     size: 30,
@@ -52,7 +52,7 @@ class _CustomerTileState extends State<CustomerTile> {
                 height: 10,
               ),
               Text(
-                "Email: " + widget.customer.email,
+                "Email: ${widget.customer.email}",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
@@ -66,7 +66,7 @@ class _CustomerTileState extends State<CustomerTile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Mobile: " + widget.customer.phone,
+                    "Mobile: ${widget.customer.phone}",
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -74,14 +74,15 @@ class _CustomerTileState extends State<CustomerTile> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: ThemeColors.lightGreenAccentColor,
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Change Dealer',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -95,7 +96,7 @@ class _CustomerTileState extends State<CustomerTile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Dealer : \n" + widget.customer.uid,
+                    "Dealer : \n${widget.customer.uid}",
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14,

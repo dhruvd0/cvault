@@ -16,9 +16,11 @@ class ExchangeProvider extends ChangeNotifier {
 
   Future<void> fetchExchangeRate() async {
     try {
-      final response = await http.get(Uri.parse(
-        "https://openexchangerates.org/api/latest.json?app_id=9a521d92799d41be86ea3f8a571567a4",
-      ));
+      final response = await http.get(
+        Uri.parse(
+          "https://openexchangerates.org/api/latest.json?app_id=9a521d92799d41be86ea3f8a571567a4",
+        ),
+      );
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);

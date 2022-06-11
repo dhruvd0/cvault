@@ -31,14 +31,14 @@ class Quantity extends StatelessWidget {
                 color: Colors.transparent,
                 border: Border.all(
                   width: 1.5,
-                  color: Color.fromARGB(255, 165, 231, 243),
+                  color: const Color.fromARGB(255, 165, 231, 243),
                 ),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Center(
                 child: TextFormField(
                   initialValue: quoteProvider.transaction.quantity.toString(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                   ),

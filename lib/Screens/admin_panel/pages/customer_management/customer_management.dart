@@ -43,11 +43,11 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
       ),
       backgroundColor: const Color(0xff1E2224),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Flexible(
@@ -60,22 +60,22 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                           case ConnectionState.none:
                           case ConnectionState.active:
                           case ConnectionState.waiting:
-                            return Center(
+                            return const Center(
                               child: CircularProgressIndicator(),
                             );
                           case ConnectionState.done:
                             if (snapshot.hasError) {
-                              return Text("Try again");
+                              return const Text("Try again");
                             }
                             return _buildListView(customerProvider.customers);
                         }
                       },
                     ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -86,7 +86,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                 onPressed: () async {
                   /// TODO: toggle all api
                 },
-                label: Text(
+                label: const Text(
                   'Toggle All',
                   style: TextStyle(
                     fontSize: 18,
@@ -94,7 +94,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SizedBox(
@@ -106,7 +106,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                 onPressed: () async {
                   /// TODO: implement revert all to admin
                 },
-                label: Text(
+                label: const Text(
                   'Revert All To Admin',
                   style: TextStyle(
                     fontSize: 18,
@@ -114,7 +114,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           ],

@@ -40,43 +40,46 @@ class _AdvertismentState extends State<Advertisment> {
     return Scaffold(
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
-        title: Text("Advertisment"),
+        title: const Text("Advertisment"),
         centerTitle: true,
         backgroundColor: Colors.transparent,
       ),
       body: Container(
         color: Colors.transparent,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.white),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: TextFormField(
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.white),
+                borderRadius: BorderRadius.circular(20),
               ),
-              autovalidateMode: AutovalidateMode.always,
-              textAlign: TextAlign.center,
-              inputFormatters: [],
-              onChanged: (string) {
-                setState(() {
-                  postAdd(string);
-                });
-              },
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'paste you link',
-                hintStyle: TextStyle(
-                  color: Colors.white54,
+              child: TextFormField(
+                style: const TextStyle(
+                  color: Colors.white,
                   fontSize: 18,
-                  fontWeight: FontWeight.w600,
+                ),
+                autovalidateMode: AutovalidateMode.always,
+                textAlign: TextAlign.center,
+                inputFormatters: const [],
+                onChanged: (string) {
+                  setState(() {
+                    postAdd(string);
+                  });
+                },
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'paste you link',
+                  hintStyle: TextStyle(
+                    color: Colors.white54,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }

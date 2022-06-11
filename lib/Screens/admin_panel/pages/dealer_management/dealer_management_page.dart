@@ -36,11 +36,11 @@ class DealerManagementPage extends StatelessWidget {
       ),
       backgroundColor: const Color(0xff1E2224),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -52,7 +52,7 @@ class DealerManagementPage extends StatelessWidget {
                 onPressed: () async {
                   /// TODO: Invite Dealer
                 },
-                label: Text(
+                label: const Text(
                   'Invite Dealer',
                   style: TextStyle(
                     fontSize: 18,
@@ -60,7 +60,7 @@ class DealerManagementPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Flexible(
@@ -73,14 +73,14 @@ class DealerManagementPage extends StatelessWidget {
                           case ConnectionState.none:
                           case ConnectionState.active:
                           case ConnectionState.waiting:
-                            return Center(
+                            return const Center(
                               child: CircularProgressIndicator(
-                                color: const Color(0xff03dac6),
+                                color: Color(0xff03dac6),
                               ),
                             );
                           case ConnectionState.done:
                             if (snapshot.hasError) {
-                              return Center(
+                              return const Center(
                                 child: Text(
                                   "An error has occurred!",
                                   style: TextStyle(color: Colors.white),
@@ -93,7 +93,7 @@ class DealerManagementPage extends StatelessWidget {
                       },
                     ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -104,7 +104,7 @@ class DealerManagementPage extends StatelessWidget {
                 onPressed: () async {
                   /// TODO: Toggle all
                 },
-                label: Text(
+                label: const Text(
                   'Toggle All',
                   style: TextStyle(
                     fontSize: 18,
@@ -112,7 +112,7 @@ class DealerManagementPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           ],

@@ -27,7 +27,7 @@ class DealersProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('dealer/changeActive:' + response.statusCode.toString());
+      throw Exception('dealer/changeActive:${response.statusCode}');
     }
   }
 
@@ -41,13 +41,11 @@ class DealersProvider extends ChangeNotifier {
         List<Dealer> dealers = [];
 
         final List<dynamic> data = jsonDecode(response.body);
-        data.forEach(
-          (dt) {
-            dealers.add(
-              Dealer.fromJson('dealer', dt),
-            );
-          },
-        );
+        for (var dt in data) {
+          dealers.add(
+            Dealer.fromJson('dealer', dt),
+          );
+        }
 
         _dealers = dealers;
         notifyListeners();

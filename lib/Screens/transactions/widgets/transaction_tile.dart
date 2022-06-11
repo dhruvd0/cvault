@@ -10,7 +10,7 @@ class TransactionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Colors.grey[850],
@@ -53,7 +53,7 @@ class TransactionTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "Quote " + transaction.status,
+                      "Quote ${transaction.status}",
                       style: const TextStyle(
                         color: Colors.green,
                         fontSize: 12,
@@ -76,7 +76,7 @@ class TransactionTile extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
           ],

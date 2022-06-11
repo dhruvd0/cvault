@@ -18,14 +18,14 @@ class CustomerList extends StatelessWidget {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          const Text(
             "Customer List",
             style: TextStyle(
               fontSize: 20,
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ListView.builder(
             shrinkWrap: true,
             itemCount: 2,
@@ -49,43 +49,43 @@ class CustomerList extends StatelessWidget {
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             Text(
                               "Customer: Test Name",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            const SizedBox(
+                            SizedBox(
                               height: 10,
                             ),
                             Text(
                               "Email: test@gmail.com",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            const SizedBox(
+                            SizedBox(
                               height: 10,
                             ),
                             Text(
                               "Mobile: +919111111111",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            const SizedBox(
+                            SizedBox(
                               height: 10,
                             ),
                             Text(
                               "Dealer: DA Affiliate",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -97,7 +97,7 @@ class CustomerList extends StatelessWidget {
                     ),
                     Column(
                       children: [
-                        Icon(
+                        const Icon(
                           FontAwesomeIcons.solidMessage,
                           color: ThemeColors.lightGreenAccentColor,
                           size: 30,
@@ -106,15 +106,17 @@ class CustomerList extends StatelessWidget {
                           height: 10,
                         ),
                         Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 10,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: ThemeColors.lightGreenAccentColor,
                             ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Change Dealer',
                             style: TextStyle(color: Colors.white),
                           ),

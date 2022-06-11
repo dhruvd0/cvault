@@ -24,7 +24,7 @@ class SendQuoteBox extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: Color.fromARGB(255, 165, 231, 243),
+            color: const Color.fromARGB(255, 165, 231, 243),
           ),
         ),
         child: Consumer<HomeStateNotifier>(
@@ -35,7 +35,7 @@ class SendQuoteBox extends StatelessWidget {
                   ? Text(
                       (homeNotifier.state.isUSD ? '\$' : '₹') +
                           quoteProvider.transaction.price.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
@@ -43,7 +43,7 @@ class SendQuoteBox extends StatelessWidget {
                     )
                   : Text(
                       "${quoteProvider.transaction.cryptoType.toUpperCase()} ${quoteProvider.transaction.quantity}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
@@ -53,7 +53,7 @@ class SendQuoteBox extends StatelessWidget {
                 height: 25,
               ),
               quoteProvider.loadStatus == LoadStatus.loading
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(
                         color: ThemeColors.lightGreenAccentColor,
                       ),
@@ -79,16 +79,16 @@ class SendQuoteBox extends StatelessWidget {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.black,
+                          elevation: 10,
+                          shape: const StadiumBorder(),
+                        ),
                         child: const Text(
                           "Send Quote",
                           style: TextStyle(
                             fontSize: 18,
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
-                          elevation: 10,
-                          shape: const StadiumBorder(),
                         ),
                       ),
                     ),
@@ -105,11 +105,11 @@ class SendQuoteBox extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(
-                      color: Color.fromARGB(255, 165, 231, 243),
+                      color: const Color.fromARGB(255, 165, 231, 243),
                       width: 1,
                     ),
                   ),
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   child: TextFormField(
                     style: const TextStyle(
                       color: Colors.white,
@@ -118,7 +118,7 @@ class SendQuoteBox extends StatelessWidget {
                     autovalidateMode: AutovalidateMode.always,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.phone,
-                    inputFormatters: [],
+                    inputFormatters: const [],
                     onChanged: (string) {
                       quoteProvider.changeTransactionField(
                         TransactionProps.customer,

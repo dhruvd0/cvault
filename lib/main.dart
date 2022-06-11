@@ -31,7 +31,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: _providers,
-      child: MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: CVaultApp(),
       ),
@@ -82,7 +82,7 @@ class _CVaultAppState extends State<CVaultApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      Widget widget = UserTypeSelectPage();
+      Widget widget = const UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
@@ -93,7 +93,7 @@ class _CVaultAppState extends State<CVaultApp> {
         await notifier.fetchProfile();
         widget = (notifier.profile.firstName.isNotEmpty ||
                 userType == UserTypes.admin)
-            ? HomePage()
+            ? const HomePage()
             : ProfilePage(mode: ProfilePageMode.registration);
       }
       if (mounted) {
@@ -112,7 +112,7 @@ class _CVaultAppState extends State<CVaultApp> {
     return Container(
       child: Container(
         color: ThemeColors.backgroundColor,
-        child: Center(
+        child: const Center(
           child: CircularProgressIndicator(),
         ),
       ),

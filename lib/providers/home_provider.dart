@@ -4,14 +4,16 @@ import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/models/crypto_currency.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:flutter/material.dart';
 
+/// Handles state for [DashboardPage]
 class HomeStateNotifier extends ChangeNotifier {
+  ///
   HomeStateNotifier([FirebaseAuth? firebaseAuthMock]) : super() {
     final authInstance = firebaseAuthMock ?? FirebaseAuth.instance;
 
@@ -60,10 +62,12 @@ class HomeStateNotifier extends ChangeNotifier {
 
     wazirXChannel?.stream.asBroadcastStream().listen((event) {
       if (event != null && event.contains('connected')) {
-        wazirXChannel?.sink.add(jsonEncode({
-          "event": "subscribe",
-          "streams": ["!ticker@arr"],
-        }));
+        wazirXChannel?.sink.add(
+          jsonEncode({
+            "event": "subscribe",
+            "streams": ["!ticker@arr"],
+          }),
+        );
       } else {
         Map<String, dynamic> baseData = jsonDecode(event);
         if (baseData.containsKey('data') && baseData['data'] is List) {
@@ -105,10 +109,12 @@ class HomeStateNotifier extends ChangeNotifier {
   Future<void> changeCryptoKey(String key) async {
     var cryptoKeys = HomeStateNotifier.cryptoKeys(state.isUSD ? 'usdt' : 'inr');
     assert(cryptoKeys.contains(key));
-    emit(state.copyWith(
-      selectedCurrencyKey: key,
-      loadStatus: LoadStatus.loading,
-    ));
+    emit(
+      state.copyWith(
+        selectedCurrencyKey: key,
+        loadStatus: LoadStatus.loading,
+      ),
+    );
 
     await getCryptoDataFromAPIs();
   }
@@ -156,9 +162,11 @@ class HomeStateNotifier extends ChangeNotifier {
   Future<void> fetchCurrencyDataFromKraken() async {
     String wazirXKey = state.selectedCurrencyKey;
     String krakenKey = keyPairFromWazirxToKraken[wazirXKey]!;
-    final response = await get(Uri.parse(
-      "https://api.kraken.com/0/public/Ticker?pair=$krakenKey",
-    ));
+    final response = await get(
+      Uri.parse(
+        "https://api.kraken.com/0/public/Ticker?pair=$krakenKey",
+      ),
+    );
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
       var resultKey = body['result'].keys.first;
@@ -241,14 +249,16 @@ class HomeStateNotifier extends ChangeNotifier {
             wazirxPrice: double.parse(cryptoData['buy']),
           );
         } else {
-          currencies.add(CryptoCurrency(
-            wazirxKey: key,
-            krakenKey: keyPairFromWazirxToKraken[key]!,
-            name: cryptoData['name'],
-            wazirxPrice: double.parse(cryptoData['buy']),
-            krakenPrice: 0.0,
-            sellPrice: double.parse(cryptoData['sell']),
-          ));
+          currencies.add(
+            CryptoCurrency(
+              wazirxKey: key,
+              krakenKey: keyPairFromWazirxToKraken[key]!,
+              name: cryptoData['name'],
+              wazirxPrice: double.parse(cryptoData['buy']),
+              krakenPrice: 0.0,
+              sellPrice: double.parse(cryptoData['sell']),
+            ),
+          );
         }
       }
     }

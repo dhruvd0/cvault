@@ -79,11 +79,9 @@ class TransactionsProvider extends LoadStatusNotifier {
     List<Transaction> transactions,
   ) {
     final List<dynamic> data = jsonDecode(response.body);
-    data.forEach(
-      (tr) {
-        transactions.add(Transaction.fromJson(tr));
-      },
-    );
+    for (var tr in data) {
+      transactions.add(Transaction.fromJson(tr));
+    }
   }
 
   Future<void> changeTransactionStatus(int index, String status) async {
