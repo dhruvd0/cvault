@@ -57,6 +57,7 @@ class USDToINRToggle extends StatelessWidget {
     );
   }
 }
+
 /// Toggle between global and local API ticker
 class GLOBALToLOCALToggle extends StatelessWidget {
   ///

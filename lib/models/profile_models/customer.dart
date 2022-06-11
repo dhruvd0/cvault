@@ -5,6 +5,7 @@ import 'package:cvault/models/profile_models/profile.dart';
 class Customer extends Profile {
   ///
   final String customerId;
+
   ///
   const Customer({
     required this.customerId,
@@ -25,6 +26,7 @@ class Customer extends Profile {
           phone: phone,
           lastName: lastName,
         );
+
   ///
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
         uid: json['customerId'] ?? '',
@@ -46,6 +48,7 @@ class Customer extends Profile {
         "phone": phone,
         "email": email,
       };
+
   ///
   Customer copyWith({
     String? customerId,
@@ -69,6 +72,7 @@ class Customer extends Profile {
       phone: phone ?? this.phone,
     );
   }
+
   ///
   static Customer mock() {
     return Customer.fromJson(const {

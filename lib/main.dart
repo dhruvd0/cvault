@@ -62,7 +62,6 @@ List<SingleChildWidget> get _providers {
         context.read<ProfileChangeNotifier>(),
       ),
     ),
-   
     ChangeNotifierProvider.value(value: CustomerProvider()),
   ];
 }

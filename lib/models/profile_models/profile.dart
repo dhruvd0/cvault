@@ -5,8 +5,6 @@ import 'package:equatable/equatable.dart';
 
 /// Parent class for [Dealer] and [Customer] classes
 abstract class Profile extends Equatable {
-  
-
   ///
   final String firstName;
 
@@ -26,10 +24,13 @@ abstract class Profile extends Equatable {
   ///
   /// [Dealer] object can have userType as "dealer" or "admin"
   final String userType;
+
   ///
   final String referralCode;
+
   /// Phone should always have the country code as a prefix-'+91'
   final String phone;
+
   ///
   const Profile({
     required this.firstName,
@@ -54,32 +55,41 @@ abstract class Profile extends Equatable {
       phone,
     ];
   }
+
   ///
   factory Profile.fromMap(Map<String, dynamic> map) {
     return map.containsKey('dealerId')
         ? Dealer.fromJson('dealer', map)
         : Customer.fromJson(map);
   }
+
   ///
   Map<String, dynamic> toJson() {
     throw UnimplementedError('Use either Dealer or Customer .toJson');
   }
 }
+
 ///
 enum ProfileFields {
   ///
   firstName,
+
   ///
   middleName,
+
   ///
   lastName,
+
   ///
   email,
+
   ///
   phone,
+
   ///
   referralCode,
 }
+
 ///
 class ProfileInitial extends Profile {
   ///

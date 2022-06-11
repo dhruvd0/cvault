@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-
+///
 class CryptoCurrency extends Equatable {
   /// The code name of the currency only for wazirx api
   ///
@@ -16,13 +16,14 @@ class CryptoCurrency extends Equatable {
   /// Price retrieved from wazirx api
   final double wazirxPrice;
 
-//sell price
+  /// sell price
   final double sellPrice;
 
   /// Price retrieved from kraken api
   final double krakenPrice;
-
+  ///
   final String name;
+  ///
   const CryptoCurrency({
     required this.wazirxKey,
     required this.krakenKey,
@@ -31,7 +32,7 @@ class CryptoCurrency extends Equatable {
     required this.name,
     required this.sellPrice,
   });
-
+  ///
   CryptoCurrency copyWith({
     String? wazirxKey,
     String? krakenKey,
@@ -49,7 +50,7 @@ class CryptoCurrency extends Equatable {
       sellPrice: sellPrice ?? this.sellPrice,
     );
   }
-
+  ///
   Map<String, dynamic> toMap() {
     return {
       'wazirxKey': wazirxKey,
@@ -60,6 +61,7 @@ class CryptoCurrency extends Equatable {
       'sellPrice': sellPrice,
     };
   }
+  ///
 
   factory CryptoCurrency.fromMap(Map<String, dynamic> map) {
     return CryptoCurrency(
@@ -71,7 +73,7 @@ class CryptoCurrency extends Equatable {
       sellPrice: map['sellprice']?.toDouble() ?? 0.0,
     );
   }
-
+  ///
   String toJson() => json.encode(toMap());
 
   @override

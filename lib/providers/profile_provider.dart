@@ -10,17 +10,30 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+///
 enum LoadStatus {
+  ///
   initial,
+
+  ///
   loading,
+
+  ///
   done,
+
+  ///
   error,
 }
 
+/// bloc to fetch profile, register profile, change user Type, and handle form for [Profile] page
 class ProfileChangeNotifier extends LoadStatusNotifier {
+  ///
   Profile profile = const ProfileInitial();
 
+  ///
   late FirebaseAuth authInstance;
+
+  ///
   ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
     authInstance = mockAuth ?? FirebaseAuth.instance;
     authInstance.authStateChanges().asBroadcastStream().listen((event) async {
@@ -32,6 +45,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     });
   }
 
+  /// Checks if the user is admin
   Future<void> checkAndChangeUserType(
     User event, [
     String? userType,
@@ -49,11 +63,15 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     }
   }
 
+  /// Utility to
   void emit(Profile newState) {
     profile = newState;
     notifyListeners();
   }
 
+  /// Changes user type, and the type of [profile], either a [Dealer] or a [Customer]
+  ///
+  /// A [Dealer] can also be an admin with [Dealer.userTpe] as "admin"
   void changeUserType(String newType, String uid) {
     switch (newType) {
       case UserTypes.admin:
@@ -81,6 +99,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     }
   }
 
+  /// Changes specific props of [profile]
   void changeProfileField(dynamic data, ProfileFields field) {
     switch (field) {
       case ProfileFields.firstName:
@@ -116,10 +135,14 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     notifyListeners();
   }
 
+  ///
   void reset() {
     emit(const ProfileInitial());
   }
 
+  /// Fetches and updates profile
+  ///
+  /// Checks profile data in shared preferences first
   Future<void> fetchProfile() async {
     loadStatus = LoadStatus.loading;
     notifyListeners();
@@ -131,16 +154,13 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       notifyListeners();
 
       return;
-    } else {}
+    }
 
-    String path = profile.userType == UserTypes.customer
-        ? 'customer/getCustomer'
-        : 'dealer/getDealer';
+    var uri =
+        "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.customer ? 'customer/getCustomer' : 'dealer/getDealer'}";
 
-    var uri = "https://cvault-backend.herokuapp.com/$path";
+    var userType = profile.userType == 'admin' ? 'dealer' : profile.userType;
 
-    var userType = profile.userType;
-    userType = userType == 'admin' ? 'dealer' : userType;
     final response = await http.post(
       Uri.parse(
         uri,
@@ -153,17 +173,19 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     if (response.statusCode == 200) {
       _parseAndEmitProfile(response, userType);
     } else if (response.statusCode == 400) {
-      var user = profile.userType == 'dealer' || profile.userType == 'admin'
-          ? Dealer.fromJson(profile.userType, const {})
-          : Customer.fromJson(const {});
-      emit(user);
-      loadStatus = LoadStatus.done;
-      notifyListeners();
+      _parseUnregisteredProfile();
     } else {
       loadStatus = LoadStatus.error;
       notifyListeners();
-      throw Exception(path + response.statusCode.toString());
+      throw Exception(response.statusCode.toString());
     }
+  }
+
+  void _parseUnregisteredProfile() {
+    var user = profile.userType == 'dealer' || profile.userType == 'admin'
+        ? Dealer.fromJson(profile.userType, const {})
+        : Customer.fromJson(const {});
+    emit(user);
     loadStatus = LoadStatus.done;
     notifyListeners();
   }
@@ -205,14 +227,13 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     await prefs.setString(profile.userType, jsonEncode(profile.toJson()));
   }
 
+  /// Registers a new customer or a new dealer, and fetches a profile if successfully created.
   Future<void> createNewProfile() async {
-    String path = profile.userType == UserTypes.dealer
-        ? 'dealer/createDealer'
-        : 'customer/create-customer';
     Map<String, dynamic> data = profile.toJson();
     data['phone'] = FirebaseAuth.instance.currentUser!.phoneNumber;
     data['${profile.userType}Id'] = FirebaseAuth.instance.currentUser!.uid;
-    var uri = "https://cvault-backend.herokuapp.com/$path";
+    var uri =
+        "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.dealer ? 'dealer/createDealer' : 'customer/create-customer'}";
     loadStatus = LoadStatus.loading;
     notifyListeners();
     final response = await http.post(
@@ -234,7 +255,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       loadStatus = LoadStatus.done;
     } else {
       loadStatus = LoadStatus.error;
-      notifyListeners();
+
       throw Exception('$uri ${response.statusCode}');
     }
     notifyListeners();
