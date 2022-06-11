@@ -3,6 +3,7 @@
 //     final postAdverModel = postAdverModelFromJson(jsonString);
 
 import 'dart:convert';
+/// @suraj96506 add document comments for this
 
 class PostAdverModel {
   PostAdverModel({

@@ -1,6 +1,5 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/customer_provider.dart';
-import 'package:cvault/providers/exchange_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
@@ -63,7 +62,7 @@ List<SingleChildWidget> get _providers {
         context.read<ProfileChangeNotifier>(),
       ),
     ),
-    ChangeNotifierProvider.value(value: ExchangeProvider()),
+   
     ChangeNotifierProvider.value(value: CustomerProvider()),
   ];
 }

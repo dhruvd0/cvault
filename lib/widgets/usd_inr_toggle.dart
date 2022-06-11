@@ -4,7 +4,9 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// [Switch] widget to toggle between usd and inr version of a crypto currency
 class USDToINRToggle extends StatelessWidget {
+  ///
   const USDToINRToggle({
     Key? key,
   }) : super(key: key);
@@ -55,8 +57,9 @@ class USDToINRToggle extends StatelessWidget {
     );
   }
 }
-
+/// Toggle between global and local API ticker
 class GLOBALToLOCALToggle extends StatelessWidget {
+  ///
   const GLOBALToLOCALToggle({
     Key? key,
   }) : super(key: key);
