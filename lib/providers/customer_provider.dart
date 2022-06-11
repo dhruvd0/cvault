@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cvault/models/customerAdd.dart';
+import 'package:cvault/models/customer_add.dart';
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;

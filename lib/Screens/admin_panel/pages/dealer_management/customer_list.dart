@@ -2,9 +2,9 @@ import 'package:cvault/constants/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// This page will show customers of a specific dealer
-
+/// This page will show customers of a specific dealer
 class CustomerList extends StatelessWidget {
+  ///
   const CustomerList({Key? key}) : super(key: key);
 
   @override

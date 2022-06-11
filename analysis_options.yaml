@@ -16,6 +16,7 @@ analyzer:
   errors:
     missing_required_param: error
     todo: ignore
+    depend_on_referenced_packages: ignore
 
 
 dart_code_metrics:
