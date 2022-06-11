@@ -31,6 +31,7 @@ class _AdvertismentState extends State<Advertisment> {
 
     var jsonResponse = json.decode(response.body);
     postAdverModel = PostAdverModel.fromJson(jsonResponse);
+
     return postAdverModel;
   }
 

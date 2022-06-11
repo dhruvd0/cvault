@@ -37,10 +37,16 @@ class USDToINRToggle extends StatelessWidget {
               inactiveTrackColor: Colors.black,
               value: !homeStateNotifier.state.isUSD,
               onChanged: (value) {
-                Provider.of<HomeStateNotifier>(
-                  context,
-                  listen: false,
-                ).toggleIsUSD(!value);
+                if (homeStateNotifier.state.cryptoCurrencies.isNotEmpty) {
+                  try {
+                    Provider.of<HomeStateNotifier>(
+                      context,
+                      listen: false,
+                    ).toggleIsUSD(!value);
+                  } on StateError {
+                    // TODO
+                  }
+                }
               },
             ),
           ],

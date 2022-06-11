@@ -1,10 +1,12 @@
 import 'package:cvault/Screens/Setting.dart';
+import 'package:cvault/Screens/quote/widgets/buy_sell_toggle.dart';
 import 'package:cvault/Screens/quote/widgets/quantity.dart';
 import 'package:cvault/Screens/quote/widgets/send_quote_box.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
+import 'package:cvault/providers/quote_provider.dart';
 import 'package:cvault/widgets/usd_inr_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +22,7 @@ class Quote extends StatefulWidget {
 
 class _QuoteState extends State<Quote> {
   bool price = true;
-  bool sell = false;
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -190,49 +192,32 @@ class _QuoteState extends State<Quote> {
                               SizedBox(
                                 height: 15,
                               ),
-                              Flexible(
-                                child: Center(
-                                  child: homeStateNotifier.state is HomeInitial
-                                      ? const Text("Loading")
-                                      : Text(
-                                          state.cryptoCurrencies.isEmpty
-                                              ? ''
-                                              : (state.isUSD
-                                                  ? '\$${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}'
-                                                  : sell
-                                                      ? '₹${homeStateNotifier.currentCryptoCurrency().wazirxPrice.toStringAsFixed(2)}'
-                                                      : "₹${homeStateNotifier.currentCryptoCurrency().sellPrice.toStringAsFixed(2)}"),
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          // BuySellToggle(),
-                          Column(
-                            children: [
-                              Text(
-                                "Buy-Sell",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              Switch(
-                                activeColor: Colors.white,
-                                activeTrackColor: Colors.lightGreen,
-                                inactiveThumbColor: Colors.grey,
-                                inactiveTrackColor: Colors.black,
-                                value: sell,
-                                onChanged: (value) {
-                                  setState(() {
-                                    sell ? false : true;
-                                    sell = value;
-                                  });
+                              Consumer<QuoteProvider>(
+                                builder: (context, quoteProvider, __) {
+                                  return Flexible(
+                                    child: Center(
+                                      child:
+                                          homeStateNotifier.state is HomeInitial
+                                              ? const Text("Loading")
+                                              : Text(
+                                                  state.cryptoCurrencies.isEmpty
+                                                      ? ''
+                                                      : (homeStateNotifier
+                                                                  .state.isUSD
+                                                              ? '\$'
+                                                              : '₹') +
+                                                          '${quoteProvider.transaction.costPrice.toStringAsFixed(2)}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                    ),
+                                  );
                                 },
                               ),
                             ],
                           ),
+                          BuySellToggle(),
                         ],
                       ),
                       const SizedBox(
