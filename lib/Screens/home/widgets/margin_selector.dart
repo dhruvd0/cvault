@@ -13,11 +13,12 @@ class MarginSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(25),
         border: Border.all(color: Color.fromARGB(255, 165, 231, 243)),
       ),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text(
                 'Default margin:',
                 style: TextStyle(
@@ -27,18 +28,6 @@ class MarginSelector extends StatelessWidget {
                 ),
               ),
               Text(
-                'x.xx ',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: const [
-              Text(
                 'Currently applied to:',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -46,13 +35,30 @@ class MarginSelector extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Text(
-                'Global Price',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    'x.xx ',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    'Global Price',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -52,7 +52,10 @@ class AdminPanelGrid extends StatelessWidget {
                         ),
                       ],
                       borderRadius: BorderRadius.circular(15),
-                      border: Border.all(width: 1.5, color: Colors.white54),
+                      border: Border.all(
+                        width: 1.5,
+                        color: Color.fromARGB(255, 165, 231, 243),
+                      ),
                     ),
                     child: Image.asset(
                       "assets/handshake(1).png",
@@ -97,7 +100,10 @@ class AdminPanelGrid extends StatelessWidget {
                         ),
                       ],
                       borderRadius: BorderRadius.circular(15),
-                      border: Border.all(width: 1.5, color: Colors.white54),
+                      border: Border.all(
+                        width: 1.5,
+                        color: Color.fromARGB(255, 165, 231, 243),
+                      ),
                     ),
                     child: Image.asset("assets/user.png", color: Colors.grey),
                   ),
@@ -149,7 +155,7 @@ class AdminPanelGrid extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
                         width: 1.5,
-                        color: Colors.white54,
+                        color: Color.fromARGB(255, 165, 231, 243),
                       ),
                     ),
                     child: Image.asset(
@@ -197,7 +203,7 @@ class AdminPanelGrid extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
                         width: 1.5,
-                        color: Colors.white54,
+                        color: Color.fromARGB(255, 165, 231, 243),
                       ),
                     ),
                     child: Image.asset(

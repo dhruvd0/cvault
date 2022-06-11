@@ -29,7 +29,10 @@ class Quantity extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.transparent,
-                border: Border.all(width: 1.5, color: Colors.white30),
+                border: Border.all(
+                  width: 1.5,
+                  color: Color.fromARGB(255, 165, 231, 243),
+                ),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Center(

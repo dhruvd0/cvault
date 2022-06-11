@@ -31,7 +31,10 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: _providers,
-      child: MaterialApp(home: CVaultApp()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: CVaultApp(),
+      ),
     ),
   );
 }
@@ -78,7 +81,7 @@ class _CVaultAppState extends State<CVaultApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Widget widget = UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
         String? userType = (await SharedPreferences.getInstance())

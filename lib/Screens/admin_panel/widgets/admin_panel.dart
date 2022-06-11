@@ -95,7 +95,7 @@ class _AdminPanelState extends State<AdminPanel> {
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
                               width: 1.5,
-                              color: Colors.white54,
+                              color: Color.fromARGB(255, 165, 231, 243),
                             ),
                           ),
                           child: Image.asset(
