@@ -39,8 +39,12 @@ class QuoteProvider extends LoadStatusNotifier {
     transaction =
         transaction.copyWith(currency: homeState.isUSD ? 'usdt' : 'inr');
     if (homeState.cryptoCurrencies.isNotEmpty) {
-      var crypto = _homeStateNotifier.currentCryptoCurrency();
-      transaction = transaction.copyWith(costPrice: crypto.wazirxPrice);
+      try {
+        var crypto = _homeStateNotifier.currentCryptoCurrency();
+        transaction = transaction.copyWith(costPrice: crypto.wazirxPrice);
+      } on StateError {
+        // TODO
+      }
     }
     notifyListeners();
   }
@@ -102,7 +106,7 @@ class QuoteProvider extends LoadStatusNotifier {
         transaction = transaction.copyWith(customer: data);
         break;
       case TransactionProps.transactionType:
-        transaction = transaction.copyWith(transactionType: data);
+        _changeTransactionType(data);
         break;
 
       case TransactionProps.price:
@@ -122,5 +126,18 @@ class QuoteProvider extends LoadStatusNotifier {
     }
 
     notifyListeners();
+  }
+
+  void _changeTransactionType(data) {
+    transaction = transaction.copyWith(transactionType: data);
+    if (data == 'buy') {
+      transaction = transaction.copyWith(
+        costPrice: _homeStateNotifier.currentCryptoCurrency().wazirxPrice,
+      );
+    } else if (data == 'sell') {
+      transaction = transaction.copyWith(
+        costPrice: _homeStateNotifier.currentCryptoCurrency().sellPrice,
+      );
+    }
   }
 }

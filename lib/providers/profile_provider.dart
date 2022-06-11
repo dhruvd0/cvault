@@ -75,49 +75,48 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     }
   }
 
-  // ignore: long-method
   void changeProfileField(dynamic data, ProfileFields field) {
-    var editProfile =
-        profile.userType == 'dealer' ? profile as Dealer : profile as Customer;
     switch (field) {
       case ProfileFields.firstName:
-        editProfile = editProfile.userType == 'dealer'
-            ? (editProfile as Dealer).copyWith(firstName: data)
-            : (editProfile as Customer).copyWith(firstName: data);
+        profile = profile.userType == 'dealer'
+            ? (profile as Dealer).copyWith(firstName: data)
+            : (profile as Customer).copyWith(firstName: data);
 
         break;
       case ProfileFields.middleName:
-        editProfile = editProfile.userType == 'dealer'
-            ? (editProfile as Dealer).copyWith(middleName: data)
-            : (editProfile as Customer).copyWith(middleName: data);
+        profile = profile.userType == 'dealer'
+            ? (profile as Dealer).copyWith(middleName: data)
+            : (profile as Customer).copyWith(middleName: data);
         break;
       case ProfileFields.lastName:
-        editProfile = editProfile.userType == 'dealer'
-            ? (editProfile as Dealer).copyWith(lastName: data)
-            : (editProfile as Customer).copyWith(lastName: data);
+        profile = profile.userType == 'dealer'
+            ? (profile as Dealer).copyWith(lastName: data)
+            : (profile as Customer).copyWith(lastName: data);
         break;
       case ProfileFields.email:
-        editProfile = editProfile.userType == 'dealer'
-            ? (editProfile as Dealer).copyWith(email: data)
-            : (editProfile as Customer).copyWith(email: data);
+        profile = profile.userType == 'dealer'
+            ? (profile as Dealer).copyWith(email: data)
+            : (profile as Customer).copyWith(email: data);
         break;
 
       case ProfileFields.referralCode:
-        editProfile = editProfile.userType == 'dealer'
-            ? (editProfile as Dealer).copyWith(referralCode: data)
-            : (editProfile as Customer).copyWith(referralCode: data);
+        profile = profile.userType == 'dealer'
+            ? (profile as Dealer).copyWith(referralCode: data)
+            : (profile as Customer).copyWith(referralCode: data);
         break;
       default:
     }
-    emit(editProfile);
+
+    notifyListeners();
   }
 
   void reset() {
     emit(ProfileInitial());
   }
 
-  // ignore: long-method
   Future<void> fetchProfile() async {
+    loadStatus = LoadStatus.loading;
+    notifyListeners();
     var cachedProfile = await _fetchProfileFromCache();
 
     if (cachedProfile != null) {
@@ -126,15 +125,14 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       notifyListeners();
 
       return;
-    }
+    } else {}
 
     String path = profile.userType == UserTypes.customer
         ? 'customer/getCustomer'
         : 'dealer/getDealer';
 
     var uri = "https://cvault-backend.herokuapp.com/$path";
-    loadStatus = LoadStatus.loading;
-    notifyListeners();
+
     var userType = profile.userType;
     userType = userType == 'admin' ? 'dealer' : userType;
     final response = await http.post(
@@ -147,15 +145,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       headers: {"Content-Type": "application/json"},
     );
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['${userType}Data'];
-      var user = profile.userType == 'dealer' || profile.userType == 'admin'
-          ? Dealer.fromJson(profile.userType, data)
-          : Customer.fromJson(data);
-      emit(user);
-      loadStatus = LoadStatus.done;
-
-      notifyListeners();
-      _saveProfileToCache();
+      _parseAndEmitProfile(response, userType);
     } else if (response.statusCode == 400) {
       var user = profile.userType == 'dealer' || profile.userType == 'admin'
           ? Dealer.fromJson(profile.userType, {})
@@ -170,6 +160,18 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     }
     loadStatus = LoadStatus.done;
     notifyListeners();
+  }
+
+  void _parseAndEmitProfile(http.Response response, String userType) {
+    var data = jsonDecode(response.body)['${userType}Data'];
+    var user = profile.userType == 'dealer' || profile.userType == 'admin'
+        ? Dealer.fromJson(profile.userType, data)
+        : Customer.fromJson(data);
+    emit(user);
+    loadStatus = LoadStatus.done;
+
+    notifyListeners();
+    _saveProfileToCache();
   }
 
   Future<Profile?> _fetchProfileFromCache() async {

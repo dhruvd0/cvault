@@ -79,13 +79,16 @@ class HomeStateNotifier extends ChangeNotifier {
     for (var crypto in cryptoData.toList()) {
       var key = crypto['s'];
       if (cryptoKeys(state.isUSD ? 'usdt' : 'inr').contains(key)) {
-        var price = crypto['a'];
+        var sellPrice = crypto['a'];
+        var buyPrice = crypto['b'];
         final cryptoCurrencies = state.cryptoCurrencies.toList();
         int index =
             cryptoCurrencies.indexWhere((element) => element.wazirxKey == key);
         if (index != -1) {
-          cryptoCurrencies[index] = cryptoCurrencies[index]
-              .copyWith(wazirxPrice: double.parse(price));
+          cryptoCurrencies[index] = cryptoCurrencies[index].copyWith(
+            wazirxPrice: double.parse(buyPrice),
+            sellPrice: double.parse(sellPrice),
+          );
           emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
         }
       }
@@ -203,7 +206,7 @@ class HomeStateNotifier extends ChangeNotifier {
 
   CryptoCurrency currentCryptoCurrency() {
     assert(state.cryptoCurrencies.isNotEmpty);
-    // ignore: newline-before-return
+
     return state.cryptoCurrencies.firstWhere(
       (element) => element.wazirxKey == state.selectedCurrencyKey,
     );

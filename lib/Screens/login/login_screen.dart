@@ -304,7 +304,7 @@ class _LogInScreenState extends State<LogInScreen> {
     }
   }
 
-  // ignore: long-method
+  /// Fetches data and navigates user to the next screen after logging in
   Future<void> _postLoginSubRoutine() async {
     const snackBar = SnackBar(content: Text("Login Success"));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -312,17 +312,7 @@ class _LogInScreenState extends State<LogInScreen> {
     prefs.setBool('login', true);
     var notifier = Provider.of<ProfileChangeNotifier>(context, listen: false);
     if (phone == "+911111111111") {
-      await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
-      notifier.changeUserType(
-        UserTypes.admin,
-        FirebaseAuth.instance.currentUser!.uid,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (builder) => const HomePage()),
-      );
-
-      return;
+      await _postLoginRoutineForAdmin(prefs, notifier);
     }
 
     await notifier.fetchProfile();
@@ -343,5 +333,22 @@ class _LogInScreenState extends State<LogInScreen> {
         ),
       );
     }
+  }
+
+  Future<void> _postLoginRoutineForAdmin(
+    SharedPreferences prefs,
+    ProfileChangeNotifier notifier,
+  ) async {
+    await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
+    notifier.changeUserType(
+      UserTypes.admin,
+      FirebaseAuth.instance.currentUser!.uid,
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (builder) => const HomePage()),
+    );
+
+    return;
   }
 }

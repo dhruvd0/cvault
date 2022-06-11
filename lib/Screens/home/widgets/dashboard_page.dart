@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:cvault/models/profile_models/getAdvertisemodel.dart';
-import 'package:cvault/providers/getadd.dart';
 import 'package:http/http.dart' as http;
 import 'package:cvault/Screens/Setting.dart';
 import 'package:cvault/providers/home_provider.dart';
