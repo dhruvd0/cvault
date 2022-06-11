@@ -40,9 +40,12 @@ dart_code_metrics:
 linter:
   
   rules:
+       
     
     
-    use_build_context_synchronously: ignore
-  
+     - require_trailing_commas
+     - public_member_api_docs
+     - slash_for_doc_comments
+     - sort_child_properties_last
   
 

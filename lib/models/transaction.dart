@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 
 class Transaction extends Equatable {
-  Transaction({
+  const Transaction({
     required this.id,
     required this.sender,
     required this.customer,

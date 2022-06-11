@@ -39,13 +39,13 @@ class TransactionsPage extends StatelessWidget {
         builder: (context, transactionsProvider, __) {
           switch (transactionsProvider.loadStatus) {
             case LoadStatus.loading:
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(
-                  color: const Color(0xff03dac6),
+                  color: Color(0xff03dac6),
                 ),
               );
             case LoadStatus.error:
-              return Center(
+              return const Center(
                 child: Text(
                   "An error has occurred!",
                   style: TextStyle(color: Colors.white),

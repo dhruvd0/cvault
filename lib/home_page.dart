@@ -65,11 +65,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: NavigationBarTheme(
           data: NavigationBarThemeData(
             indicatorColor: const Color.fromARGB(255, 165, 231, 243),
-            labelTextStyle: MaterialStateProperty.all(const TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            )),
+            labelTextStyle: MaterialStateProperty.all(
+              const TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
           child: NavigationBar(
             height: 80,
@@ -83,7 +85,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             },
             destinations: userType == UserTypes.customer
                 ? [
-                    NavigationDestination(
+                    const NavigationDestination(
                       selectedIcon: Icon(
                         Icons.home_filled,
                         color: Colors.black,
@@ -94,7 +96,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                       label: "Home",
                     ),
-                    NavigationDestination(
+                    const NavigationDestination(
                       selectedIcon: Icon(
                         Icons.paid_outlined,
                         color: Colors.black,
@@ -105,7 +107,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                       label: "Quote",
                     ),
-                    NavigationDestination(
+                    const NavigationDestination(
                       selectedIcon: Icon(
                         Icons.person,
                         color: Colors.black,
@@ -118,7 +120,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   ]
                 : [
-                    NavigationDestination(
+                    const NavigationDestination(
                       selectedIcon: Icon(
                         Icons.home_filled,
                         color: Colors.black,
@@ -129,7 +131,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                       label: "Home",
                     ),
-                    NavigationDestination(
+                    const NavigationDestination(
                       selectedIcon: Icon(
                         Icons.paid_outlined,
                         color: Colors.black,
@@ -140,7 +142,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                       label: "Quote",
                     ),
-                    NavigationDestination(
+                    const NavigationDestination(
                       selectedIcon: Icon(
                         Icons.admin_panel_settings_outlined,
                         color: Colors.black,
@@ -151,7 +153,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                       label: "Admin Panel",
                     ),
-                    NavigationDestination(
+                    const NavigationDestination(
                       selectedIcon: Icon(
                         Icons.person,
                         color: Colors.black,

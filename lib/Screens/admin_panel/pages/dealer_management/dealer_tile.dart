@@ -38,7 +38,7 @@ class _DealerTileState extends State<DealerTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Name: " + widget.dealer.firstName,
+                  "Name: ${widget.dealer.firstName}",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -49,7 +49,7 @@ class _DealerTileState extends State<DealerTile> {
                   height: 10,
                 ),
                 Text(
-                  "Email: " + widget.dealer.email,
+                  "Email: ${widget.dealer.email}",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -60,7 +60,7 @@ class _DealerTileState extends State<DealerTile> {
                   height: 10,
                 ),
                 Text(
-                  "Mobile: " + widget.dealer.phone,
+                  "Mobile: ${widget.dealer.phone}",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -71,7 +71,7 @@ class _DealerTileState extends State<DealerTile> {
                   height: 10,
                 ),
                 Text(
-                  "ID: " + widget.dealer.dealerId,
+                  "ID: ${widget.dealer.dealerId}",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -86,10 +86,10 @@ class _DealerTileState extends State<DealerTile> {
               GestureDetector(
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => CustomerList(),
+                    builder: (context) => const CustomerList(),
                   ),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.person,
                   color: ThemeColors.lightGreenAccentColor,
                   size: 30,
@@ -103,11 +103,11 @@ class _DealerTileState extends State<DealerTile> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Reporting(),
+                      builder: (context) => const Reporting(),
                     ),
                   );
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.document_scanner,
                   color: ThemeColors.lightGreenAccentColor,
                   size: 30,

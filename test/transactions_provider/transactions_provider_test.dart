@@ -8,7 +8,7 @@ void main() {
   group('Transactions provider Tests:', () {
     test('Test to fetch all transactions', () async {
       final transactionsProvider = TransactionsProvider(
-        (await ProfileChangeNotifier(mockAuth)
+        (ProfileChangeNotifier(mockAuth)
           ..fetchProfile()),
       );
 

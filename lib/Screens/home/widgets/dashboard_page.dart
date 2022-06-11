@@ -31,9 +31,11 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   getadds() async {
-    res = await http.get(Uri.parse(
-      "https://cvault-backend.herokuapp.com/advertisment/get-link",
-    ));
+    res = await http.get(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/advertisment/get-link",
+      ),
+    );
     add = jsonDecode(res.body);
     print(add[0]['link']);
 
@@ -58,7 +60,7 @@ class _DashboardPageState extends State<DashboardPage> {
           builder: (context, profileNotifier, _) {
             var userType = profileNotifier.profile.userType;
             if (userType.isEmpty) {
-              return Text('');
+              return const Text('');
             }
 
             return Text(
@@ -96,16 +98,18 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
         actions: [
-          Builder(builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-              icon: const Icon(Icons.menu),
-              color: Colors.white,
-              iconSize: 30,
-            );
-          }),
+          Builder(
+            builder: (context) {
+              return IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+                icon: const Icon(Icons.menu),
+                color: Colors.white,
+                iconSize: 30,
+              );
+            },
+          ),
         ],
       ),
       body: Consumer<ProfileChangeNotifier>(
@@ -117,7 +121,7 @@ class _DashboardPageState extends State<DashboardPage> {
               final state = homeStateNotifier.state;
 
               return state.loadStatus == LoadStatus.loading
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(),
                     )
                   : Padding(
@@ -127,7 +131,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: Colors.black,
                           border: Border.all(
                             width: 0.5,
-                            color: Color.fromARGB(255, 165, 231, 243),
+                            color: const Color.fromARGB(255, 165, 231, 243),
                           ),
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -186,7 +190,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     ),
                                   ],
                                 ),
-                                USDToINRToggle(),
+                                const USDToINRToggle(),
                               ],
                             ),
                             const SizedBox(
@@ -249,10 +253,13 @@ class _DashboardPageState extends State<DashboardPage> {
                                                 ? ''
                                                 : (state.isUSD ? '\$' : '₹') +
                                                     state.cryptoCurrencies
-                                                        .firstWhere((element) =>
-                                                            element.wazirxKey ==
-                                                            state
-                                                                .selectedCurrencyKey)
+                                                        .firstWhere(
+                                                          (element) =>
+                                                              element
+                                                                  .wazirxKey ==
+                                                              state
+                                                                  .selectedCurrencyKey,
+                                                        )
                                                         .krakenPrice
                                                         .toStringAsFixed(2),
                                             textAlign: TextAlign.start,
@@ -316,6 +323,11 @@ class _DashboardPageState extends State<DashboardPage> {
                                         ),
                                         width:
                                             MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          color: Colors.white,
+                                        ),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
@@ -332,11 +344,6 @@ class _DashboardPageState extends State<DashboardPage> {
                                             ),
                                             const Text('AD'),
                                           ],
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          color: Colors.white,
                                         ),
                                       ),
                                     ),

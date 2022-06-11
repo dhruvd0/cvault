@@ -18,7 +18,7 @@ enum LoadStatus {
 }
 
 class ProfileChangeNotifier extends LoadStatusNotifier {
-  Profile profile = ProfileInitial();
+  Profile profile = const ProfileInitial();
 
   late FirebaseAuth authInstance;
   ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
@@ -57,18 +57,24 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   void changeUserType(String newType, String uid) {
     switch (newType) {
       case UserTypes.admin:
-        emit(Dealer.fromJson('admin', {'dealerId': uid})
-          ..copyWith(userType: UserTypes.admin));
+        emit(
+          Dealer.fromJson('admin', {'dealerId': uid})
+            ..copyWith(userType: UserTypes.admin),
+        );
         assert(profile.userType == 'admin');
         break;
 
       case UserTypes.dealer:
-        emit(Dealer.fromJson('dealer', {'dealerId': uid})
-          ..copyWith(userType: UserTypes.dealer));
+        emit(
+          Dealer.fromJson('dealer', {'dealerId': uid})
+            ..copyWith(userType: UserTypes.dealer),
+        );
         break;
       case UserTypes.customer:
-        emit(Customer.fromJson({'customerId': uid})
-          ..copyWith(userType: UserTypes.customer));
+        emit(
+          Customer.fromJson({'customerId': uid})
+            ..copyWith(userType: UserTypes.customer),
+        );
         break;
 
       default:
@@ -111,7 +117,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   }
 
   void reset() {
-    emit(ProfileInitial());
+    emit(const ProfileInitial());
   }
 
   Future<void> fetchProfile() async {
@@ -148,8 +154,8 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       _parseAndEmitProfile(response, userType);
     } else if (response.statusCode == 400) {
       var user = profile.userType == 'dealer' || profile.userType == 'admin'
-          ? Dealer.fromJson(profile.userType, {})
-          : Customer.fromJson({});
+          ? Dealer.fromJson(profile.userType, const {})
+          : Customer.fromJson(const {});
       emit(user);
       loadStatus = LoadStatus.done;
       notifyListeners();
@@ -177,16 +183,16 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   Future<Profile?> _fetchProfileFromCache() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey(UserTypes.admin)) {
-      String dealerJson = await prefs.getString(UserTypes.admin) ?? '';
+      String dealerJson = prefs.getString(UserTypes.admin) ?? '';
 
       return Dealer.fromJson('admin', jsonDecode(dealerJson));
     }
     if (prefs.containsKey(UserTypes.dealer)) {
-      String dealerJson = await prefs.getString(UserTypes.dealer) ?? '';
+      String dealerJson = prefs.getString(UserTypes.dealer) ?? '';
 
       return Dealer.fromJson('dealer', jsonDecode(dealerJson));
     } else if (prefs.containsKey(UserTypes.customer)) {
-      String customerJson = await prefs.getString(UserTypes.customer) ?? '';
+      String customerJson = prefs.getString(UserTypes.customer) ?? '';
 
       return Customer.fromJson(jsonDecode(customerJson));
     }
@@ -220,9 +226,11 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body)[
           profile.userType == UserTypes.dealer ? 'InsertDealer' : 'data'];
-      emit(profile.userType == UserTypes.dealer
-          ? Dealer.fromJson('dealer', json)
-          : Customer.fromJson(json));
+      emit(
+        profile.userType == UserTypes.dealer
+            ? Dealer.fromJson('dealer', json)
+            : Customer.fromJson(json),
+      );
       loadStatus = LoadStatus.done;
     } else {
       loadStatus = LoadStatus.error;

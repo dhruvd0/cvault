@@ -12,19 +12,19 @@ class UserTypeSelectPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          leading: SizedBox(),
+          leading: const SizedBox(),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
         backgroundColor: ThemeColors.backgroundColor,
         body: Container(
           height: MediaQuery.of(context).size.height,
-          margin: EdgeInsets.only(left: 20),
+          margin: const EdgeInsets.only(left: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Spacer(),
+              const Spacer(),
               Text(
                 "Welcome To CVault!",
                 style: GoogleFonts.lato(
@@ -40,7 +40,7 @@ class UserTypeSelectPage extends StatelessWidget {
                 height: 15,
               ),
               Container(
-                margin: EdgeInsets.only(left: 5),
+                margin: const EdgeInsets.only(left: 5),
                 child: Text(
                   "Get started with selecting your user type",
                   style: GoogleFonts.lato(
@@ -57,9 +57,9 @@ class UserTypeSelectPage extends StatelessWidget {
                 height: 40,
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
-                  children: [
+                  children: const [
                     Expanded(
                       child: UserTypeButton(
                         userType: UserTypes.dealer,

@@ -71,7 +71,7 @@ class _SettingsState extends State<Settings> {
           final state = homeStateNotifier.state;
 // ignore: newline-before-return
           return state.loadStatus == LoadStatus.loading
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : SingleChildScrollView(
@@ -85,7 +85,10 @@ class _SettingsState extends State<Settings> {
 
                         return Container(
                           margin: const EdgeInsets.only(
-                              left: 20, right: 20, top: 25),
+                            left: 20,
+                            right: 20,
+                            top: 25,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -122,7 +125,7 @@ class _SettingsState extends State<Settings> {
                                                           .state
                                                           .cryptoCurrencies
                                                           .isEmpty
-                                                      ? SizedBox()
+                                                      ? const SizedBox()
                                                       : SizedBox(
                                                           width: 120,
                                                           child:
@@ -135,9 +138,10 @@ class _SettingsState extends State<Settings> {
                                                                 style:
                                                                     TextStyle(
                                                                   fontSize: 14,
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .hintColor,
+                                                                  color:
+                                                                      Theme.of(
+                                                                    context,
+                                                                  ).hintColor,
                                                                 ),
                                                               ),
                                                               items: HomeStateNotifier
@@ -149,7 +153,8 @@ class _SettingsState extends State<Settings> {
                                                                     : 'inr',
                                                               )
                                                                   .map(
-                                                                      buildCurrencyList)
+                                                                    buildCurrencyList,
+                                                                  )
                                                                   .toList(),
                                                               value: homeNotifier
                                                                   .state
@@ -170,7 +175,7 @@ class _SettingsState extends State<Settings> {
                                                                 }
                                                               },
                                                               dropdownDecoration:
-                                                                  BoxDecoration(
+                                                                  const BoxDecoration(
                                                                 color: Colors
                                                                     .black,
                                                               ),
@@ -202,8 +207,12 @@ class _SettingsState extends State<Settings> {
                                             color: Colors.transparent,
                                             border: Border.all(
                                               width: 1.5,
-                                              color: Color.fromARGB(
-                                                  255, 165, 231, 243),
+                                              color: const Color.fromARGB(
+                                                255,
+                                                165,
+                                                231,
+                                                243,
+                                              ),
                                             ),
                                             borderRadius:
                                                 BorderRadius.circular(15),
@@ -212,7 +221,7 @@ class _SettingsState extends State<Settings> {
                                             child: Text(
                                               homeStateNotifier.state.difference
                                                   .toStringAsFixed(2),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -309,7 +318,7 @@ class _SettingsState extends State<Settings> {
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
           width: 1.5,
-          color: Color.fromARGB(255, 165, 231, 243),
+          color: const Color.fromARGB(255, 165, 231, 243),
         ),
       ),
       child: Row(
@@ -320,7 +329,7 @@ class _SettingsState extends State<Settings> {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           Column(
-            children: [
+            children: const [
               GLOBALToLOCALToggle(),
             ],
           ),
@@ -358,7 +367,7 @@ class _SettingsState extends State<Settings> {
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
               width: 1.5,
-              color: Color.fromARGB(255, 165, 231, 243),
+              color: const Color.fromARGB(255, 165, 231, 243),
             ),
           ),
           child: _globalTickerDropdown(),
@@ -372,7 +381,7 @@ class _SettingsState extends State<Settings> {
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
               width: 1.5,
-              color: Color.fromARGB(255, 165, 231, 243),
+              color: const Color.fromARGB(255, 165, 231, 243),
             ),
           ),
           child: _localTickerDropdown(),
@@ -396,7 +405,7 @@ class _SettingsState extends State<Settings> {
       items: wazir.map(buildMenuTickerItems).toList(),
       value: Wazir,
       onChanged: (value) => setState(() {
-        this.Wazir = value;
+        Wazir = value;
       }),
     );
   }
@@ -416,7 +425,7 @@ class _SettingsState extends State<Settings> {
       items: kraken.map(buildMenuTickerItemskraken).toList(),
       value: Kraken,
       onChanged: (value) => setState(() {
-        this.Kraken = value;
+        Kraken = value;
       }),
     );
   }

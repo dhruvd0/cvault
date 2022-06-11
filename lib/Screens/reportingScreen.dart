@@ -11,7 +11,7 @@ class Reporting extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         backgroundColor: Colors.transparent,
-        title: Text(
+        title: const Text(
           "Reporting",
           style: TextStyle(
             fontSize: 20,

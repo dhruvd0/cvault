@@ -25,10 +25,12 @@ class ProfilePage extends StatelessWidget {
           leading: Container(),
           centerTitle: true,
           title: Title(
-            child: Text(mode == ProfilePageMode.registration
-                ? 'Register'
-                : 'Manage Profile'),
             color: Colors.white,
+            child: Text(
+              mode == ProfilePageMode.registration
+                  ? 'Register'
+                  : 'Manage Profile',
+            ),
           ),
           backgroundColor: const Color(0xff202427),
         ),
@@ -232,7 +234,7 @@ class ProfilePage extends StatelessWidget {
                         ],
                       )
                     : Container(),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Padding(
@@ -264,7 +266,7 @@ class ProfilePage extends StatelessWidget {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => HomePage(),
+                                    builder: (context) => const HomePage(),
                                   ),
                                 );
                               }
@@ -275,14 +277,14 @@ class ProfilePage extends StatelessWidget {
                           label: Consumer<ProfileChangeNotifier>(
                             builder: ((context, notifier, child) =>
                                 notifier.loadStatus == LoadStatus.loading
-                                    ? CircularProgressIndicator(
+                                    ? const CircularProgressIndicator(
                                         color: Colors.black,
                                       )
                                     : Text(
                                         mode == ProfilePageMode.registration
                                             ? "Submit"
                                             : "Edit",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 18,
                                         ),
                                       )),

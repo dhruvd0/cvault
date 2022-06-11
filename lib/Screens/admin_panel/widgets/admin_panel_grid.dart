@@ -22,7 +22,7 @@ class AdminPanelGrid extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DealerManagementPage(),
+                    builder: (context) => const DealerManagementPage(),
                   ),
                 );
               },
@@ -54,7 +54,7 @@ class AdminPanelGrid extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
                         width: 1.5,
-                        color: Color.fromARGB(255, 165, 231, 243),
+                        color: const Color.fromARGB(255, 165, 231, 243),
                       ),
                     ),
                     child: Image.asset(
@@ -70,7 +70,7 @@ class AdminPanelGrid extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CustomerManagementPage(),
+                    builder: (context) => const CustomerManagementPage(),
                   ),
                 );
               },
@@ -102,7 +102,7 @@ class AdminPanelGrid extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
                         width: 1.5,
-                        color: Color.fromARGB(255, 165, 231, 243),
+                        color: const Color.fromARGB(255, 165, 231, 243),
                       ),
                     ),
                     child: Image.asset("assets/user.png", color: Colors.grey),
@@ -123,7 +123,7 @@ class AdminPanelGrid extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Advertisment(),
+                    builder: (context) => const Advertisment(),
                   ),
                 );
               },
@@ -155,7 +155,7 @@ class AdminPanelGrid extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
                         width: 1.5,
-                        color: Color.fromARGB(255, 165, 231, 243),
+                        color: const Color.fromARGB(255, 165, 231, 243),
                       ),
                     ),
                     child: Image.asset(
@@ -171,7 +171,7 @@ class AdminPanelGrid extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Reporting(),
+                    builder: (context) => const Reporting(),
                   ),
                 );
               },
@@ -203,7 +203,7 @@ class AdminPanelGrid extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
                         width: 1.5,
-                        color: Color.fromARGB(255, 165, 231, 243),
+                        color: const Color.fromARGB(255, 165, 231, 243),
                       ),
                     ),
                     child: Image.asset(

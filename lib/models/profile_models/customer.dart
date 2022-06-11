@@ -3,7 +3,7 @@ import 'package:cvault/models/profile_models/profile.dart';
 
 class Customer extends Profile {
   final String customerId;
-  Customer({
+  const Customer({
     required this.customerId,
     required String firstName,
     required String middleName,
@@ -34,6 +34,7 @@ class Customer extends Profile {
         phone: json["phone"] ?? '',
       );
 
+  @override
   Map<String, dynamic> toJson() => {
         "customerId": customerId,
         "firstName": firstName,
@@ -67,7 +68,7 @@ class Customer extends Profile {
   }
 
   static Customer mock() {
-    return Customer.fromJson({
+    return Customer.fromJson(const {
       "_id": "6295d8859efa452712a145b8",
       "customerId": "4321",
       "name": "Test dealer",

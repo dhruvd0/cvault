@@ -31,16 +31,18 @@ class ProfileHeader extends StatelessWidget {
             // color: Color(0xff1E2022),
             borderRadius: BorderRadius.circular(40),
           ),
-          child: CircleAvatar(child: Consumer<ProfileChangeNotifier>(
-            builder: (context, profileNotifier, _) {
-              var state = profileNotifier.profile;
-              if (state.firstName.isEmpty) {
-                return const Text('AB');
-              }
+          child: CircleAvatar(
+            child: Consumer<ProfileChangeNotifier>(
+              builder: (context, profileNotifier, _) {
+                var state = profileNotifier.profile;
+                if (state.firstName.isEmpty) {
+                  return const Text('AB');
+                }
 
-              return Text(state.firstName[0]);
-            },
-          )),
+                return Text(state.firstName[0]);
+              },
+            ),
+          ),
         ),
         Consumer<ProfileChangeNotifier>(
           builder: (context, profileNotifier, _) {
@@ -52,11 +54,7 @@ class ProfileHeader extends StatelessWidget {
                 Text(
                   state.firstName.isEmpty
                       ? 'Name'
-                      : state.firstName +
-                          ' ' +
-                          state.middleName +
-                          ' ' +
-                          state.lastName,
+                      : '${state.firstName} ${state.middleName} ${state.lastName}',
                   style: const TextStyle(color: Colors.white, fontSize: 25),
                 ),
                 const SizedBox(
