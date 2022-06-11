@@ -86,6 +86,9 @@ class _CVaultAppState extends State<CVaultApp> {
       if (FirebaseAuth.instance.currentUser != null) {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
+        if (!mounted) {
+          return;
+        }
         var notifier =
             Provider.of<ProfileChangeNotifier>(context, listen: false);
         await notifier
@@ -110,11 +113,9 @@ class _CVaultAppState extends State<CVaultApp> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Container(
-        color: ThemeColors.backgroundColor,
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
+      color: ThemeColors.backgroundColor,
+      child: const Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }

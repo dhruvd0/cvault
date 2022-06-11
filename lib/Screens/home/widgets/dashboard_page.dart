@@ -125,6 +125,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: CircularProgressIndicator(),
                     )
                   : Padding(
+                      key: UniqueKey(),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
                         decoration: BoxDecoration(
@@ -252,14 +253,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                             state.cryptoCurrencies.isEmpty
                                                 ? ''
                                                 : (state.isUSD ? '\$' : '₹') +
-                                                    state.cryptoCurrencies
-                                                        .firstWhere(
-                                                          (element) =>
-                                                              element
-                                                                  .wazirxKey ==
-                                                              state
-                                                                  .selectedCurrencyKey,
-                                                        )
+                                                    homeStateNotifier
+                                                        .currentCryptoCurrency()
                                                         .krakenPrice
                                                         .toStringAsFixed(2),
                                             textAlign: TextAlign.start,

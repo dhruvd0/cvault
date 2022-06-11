@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cvault/models/profile_models/getAdvertisemodel.dart';
+import 'package:cvault/models/profile_models/get_advertisement_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
