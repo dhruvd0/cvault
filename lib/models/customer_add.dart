@@ -4,6 +4,9 @@ import 'dart:developer';
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:http/http.dart' as http;
 
+@Deprecated('Use ProfileProvider().createProfile()')
+
+///
 Future register(Customer data) async {
   http.Response? response;
   try {

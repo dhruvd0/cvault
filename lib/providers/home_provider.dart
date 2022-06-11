@@ -24,6 +24,9 @@ class HomeStateNotifier extends ChangeNotifier {
     });
   }
 
+  /// Fetches crypto data from wazirx, kraken
+  ///
+  /// Also starts a websocket listener for wazirX api
   Future<void> getCryptoDataFromAPIs() async {
     emit(state.copyWith(loadStatus: LoadStatus.loading));
 
@@ -46,7 +49,10 @@ class HomeStateNotifier extends ChangeNotifier {
         'shib',
       ].map((e) => e + currency).toList();
 
+  ///
   HomeState state = HomeInitial();
+
+  /// Websocket to listen : wss://stream.wazirx.com/stream
   IOWebSocketChannel? wazirXChannel;
 
   /// Changes state and notifies listeners
@@ -55,6 +61,9 @@ class HomeStateNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Listens and updates for changes from 'wss://stream.wazirx.com/stream'
+  ///
+  ///
   void startWazirXCryptoTicker() {
     wazirXChannel = IOWebSocketChannel.connect(
       Uri.parse('wss://stream.wazirx.com/stream'),
@@ -100,6 +109,7 @@ class HomeStateNotifier extends ChangeNotifier {
     }
   }
 
+  ///
   Future<void> logout(BuildContext context) async {
     emit(HomeInitial());
     Provider.of<ProfileChangeNotifier>(context, listen: false).reset();
@@ -107,6 +117,7 @@ class HomeStateNotifier extends ChangeNotifier {
     await FirebaseAuth.instance.signOut();
   }
 
+  /// Change the current selected cryptocurrency
   Future<void> changeCryptoKey(String key) async {
     var cryptoKeys = HomeStateNotifier.cryptoKeys(state.isUSD ? 'usdt' : 'inr');
     assert(cryptoKeys.contains(key));
@@ -120,6 +131,7 @@ class HomeStateNotifier extends ChangeNotifier {
     await getCryptoDataFromAPIs();
   }
 
+  /// Fetches and updates cryptocurrencies from api.wazirx
   Future<void> fetchCurrencyDataFromWazirX() async {
     final Response response =
         await get(Uri.parse("https://api.wazirx.com/api/v2/tickers"));
@@ -143,6 +155,25 @@ class HomeStateNotifier extends ChangeNotifier {
     }
   }
 
+  /// Gets the usd to inr exchange rate, for example: 77.01
+  Future<double> fetchExchangeRate() async {
+    final response = await get(
+      Uri.parse(
+        "https://openexchangerates.org/api/latest.json?app_id=9a521d92799d41be86ea3f8a571567a4",
+      ),
+    );
+    late double usdToInrRate;
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      usdToInrRate = responseBody["rates"]["INR"];
+      notifyListeners();
+    } else {
+      throw Exception(response.statusCode);
+    }
+
+    return usdToInrRate;
+  }
+
 //kraken
   /// Maps crypto name of wazirx api to kraken api
   Map<String, String> keyPairFromWazirxToKraken = {
@@ -160,6 +191,7 @@ class HomeStateNotifier extends ChangeNotifier {
     'shibusdt': 'SHIBUSD',
   };
 
+  ///
   Future<void> fetchCurrencyDataFromKraken() async {
     String wazirXKey = state.selectedCurrencyKey;
     String krakenKey = keyPairFromWazirxToKraken[wazirXKey]!;
@@ -213,6 +245,7 @@ class HomeStateNotifier extends ChangeNotifier {
     return currencies;
   }
 
+  /// Returns the current cryptocurrency selected by the user
   CryptoCurrency currentCryptoCurrency() {
     assert(state.cryptoCurrencies.isNotEmpty);
 
@@ -221,11 +254,11 @@ class HomeStateNotifier extends ChangeNotifier {
     );
   }
 
-//kraken
-  Future<void> toggleIsUSD(bool value) async {
-    emit(state.copyWith(isUSD: value, loadStatus: LoadStatus.loading));
+  /// Changes USD to INR, or vice-versa
+  Future<void> toggleIsUSD(bool isUsd) async {
+    emit(state.copyWith(isUSD: isUsd, loadStatus: LoadStatus.loading));
 
-    assert(state.isUSD == value);
+    assert(state.isUSD == isUsd);
     String newKey = state.isUSD
         ? state.selectedCurrencyKey.replaceAll('inr', 'usdt')
         : state.selectedCurrencyKey.replaceAll('usdt', 'inr');

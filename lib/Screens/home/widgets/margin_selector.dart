@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-
+/// Widget to select the margin percentage
+/// 
 class MarginSelector extends StatelessWidget {
+  ///
   const MarginSelector({
     Key? key,
   }) : super(key: key);

@@ -1,8 +1,12 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 
+/// Customer Model
 class Customer extends Profile {
+  ///
   final String customerId;
+
+  ///
   const Customer({
     required this.customerId,
     required String firstName,
@@ -23,6 +27,7 @@ class Customer extends Profile {
           lastName: lastName,
         );
 
+  ///
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
         uid: json['customerId'] ?? '',
         customerId: json["customerId"] ?? '',
@@ -44,6 +49,7 @@ class Customer extends Profile {
         "email": email,
       };
 
+  ///
   Customer copyWith({
     String? customerId,
     String? firstName,
@@ -67,6 +73,7 @@ class Customer extends Profile {
     );
   }
 
+  ///
   static Customer mock() {
     return Customer.fromJson(const {
       "_id": "6295d8859efa452712a145b8",

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/models/profile_models/profile.dart';
-import 'package:cvault/models/transaction.dart';
+import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';

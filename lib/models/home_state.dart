@@ -4,7 +4,9 @@ import 'package:cvault/Screens/home/models/crypto_currency.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
+/// State Handled by [HomeStateNotifier], used by [Dashboard]
 class HomeState extends Equatable {
+  ///
   const HomeState({
     required this.cryptoCurrencies,
     required this.isUSD,
@@ -13,10 +15,19 @@ class HomeState extends Equatable {
     required this.difference,
   });
 
+  ///
   final List<CryptoCurrency> cryptoCurrencies;
+
+  ///
   final bool isUSD;
+
+  /// The current selected
   final String selectedCurrencyKey;
+
+  ///
   final LoadStatus loadStatus;
+
+  ///
   final double difference;
 
   @override
@@ -30,6 +41,7 @@ class HomeState extends Equatable {
     ];
   }
 
+  ///
   HomeState copyWith({
     List<CryptoCurrency>? cryptoCurrencies,
     bool? isUSD,
@@ -52,7 +64,9 @@ class HomeState extends Equatable {
   }
 }
 
+///
 class HomeInitial extends HomeState {
+  ///
   HomeInitial()
       : super(
           cryptoCurrencies: [],
@@ -63,7 +77,9 @@ class HomeInitial extends HomeState {
         );
 }
 
+///
 class HomeData extends HomeState {
+  ///
   const HomeData({
     required List<CryptoCurrency> cryptoCurrencies,
     required String selectedCurrencyKey,

@@ -9,8 +9,9 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+/// Settings page
 class Settings extends StatefulWidget {
+  ///
   const Settings({Key? key}) : super(key: key);
 
   @override
@@ -24,8 +25,8 @@ class _SettingsState extends State<Settings> {
   final kraken = [
     'Kraken',
   ];
-  String? Wazir;
-  String? Kraken;
+  String? wazirxApiName;
+  String? krakenApiName;
 
   String? crypto = "Select currency";
   bool toggle = false;
@@ -93,7 +94,7 @@ class _SettingsState extends State<Settings> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               userType == UserTypes.admin
-                                  ? TickerSelectors()
+                                  ? tickerSelectors()
                                   : Container(),
                               const SizedBox(height: 25),
                               Row(
@@ -236,7 +237,7 @@ class _SettingsState extends State<Settings> {
                                 height: 25,
                               ),
                               userType == UserTypes.admin
-                                  ? ApplyMarginToggle()
+                                  ? applyMarginToggle()
                                   : Container(),
                               const SizedBox(
                                 height: 100,
@@ -310,7 +311,7 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Container ApplyMarginToggle() {
+  Container applyMarginToggle() {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -338,7 +339,7 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Column TickerSelectors() {
+  Column tickerSelectors() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -403,9 +404,9 @@ class _SettingsState extends State<Settings> {
       isExpanded: true,
       dropdownColor: Colors.black,
       items: wazir.map(buildMenuTickerItems).toList(),
-      value: Wazir,
+      value: wazirxApiName,
       onChanged: (value) => setState(() {
-        Wazir = value;
+        wazirxApiName = value;
       }),
     );
   }
@@ -423,9 +424,9 @@ class _SettingsState extends State<Settings> {
       isExpanded: true,
       dropdownColor: Colors.black,
       items: kraken.map(buildMenuTickerItemskraken).toList(),
-      value: Kraken,
+      value: krakenApiName,
       onChanged: (value) => setState(() {
-        Kraken = value;
+        krakenApiName = value;
       }),
     );
   }

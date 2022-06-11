@@ -2,9 +2,11 @@ import 'package:cvault/Screens/login/login_screen.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+///
 class UserTypeButton extends StatelessWidget {
+  ///
   const UserTypeButton({Key? key, required this.userType}) : super(key: key);
+  ///
   final String userType;
 
   @override

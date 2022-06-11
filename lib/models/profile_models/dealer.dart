@@ -4,7 +4,9 @@
 
 import 'package:cvault/models/profile_models/profile.dart';
 
+///
 class Dealer extends Profile {
+  ///
   const Dealer({
     required this.dealerId,
     required this.active,
@@ -28,11 +30,16 @@ class Dealer extends Profile {
           lastName: lastName,
         );
 
+  ///
   final String dealerId;
 
+  ///
   final bool active;
+
+  /// List of transactions, with [Transaction.sender.uid] as [dealerId]
   final List<String> transactions;
 
+  ///
   factory Dealer.fromJson(String userType, Map<String, dynamic> json) => Dealer(
         uid: json["dealerId"] ?? '',
         dealerId: json["dealerId"] ?? '',
@@ -51,6 +58,7 @@ class Dealer extends Profile {
               ),
       );
 
+  ///
   static Dealer mock() {
     return Dealer.fromJson('dealer', const {
       "_id": "6295d8859efa452712a145b8",
@@ -74,6 +82,7 @@ class Dealer extends Profile {
         'referralCode': referralCode,
       };
 
+  ///
   Dealer copyWith({
     String? dealerId,
     bool? active,

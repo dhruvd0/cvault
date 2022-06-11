@@ -4,9 +4,10 @@ import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/transaction.dart';
-
+import '../../../models/transaction/transaction.dart';
+/// ListView to see all transactions
 class TransactionsPage extends StatelessWidget {
+  ///
   const TransactionsPage({Key? key}) : super(key: key);
 
   Widget _buildTransactionList(List<Transaction> transactions) {

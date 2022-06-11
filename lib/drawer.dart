@@ -1,10 +1,12 @@
-import 'package:cvault/Screens/Setting.dart';
+import 'package:cvault/Screens/settting.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///
 class MyDrawer extends StatefulWidget {
+  ///
   const MyDrawer({Key? key}) : super(key: key);
 
   @override

@@ -4,7 +4,9 @@ import 'package:equatable/equatable.dart';
 
 import 'package:cvault/models/profile_models/profile.dart';
 
+/// Transaction Model
 class Transaction extends Equatable {
+  ///
   const Transaction({
     required this.id,
     required this.sender,
@@ -18,50 +20,7 @@ class Transaction extends Equatable {
     required this.status,
   });
 
-  final String id;
-  final Profile sender;
-  final Profile customer;
-  final String transactionType;
-  final String currency;
-  final String cryptoType;
-  final double price;
-  final double costPrice;
-  final double quantity;
-  final String status;
-
-  factory Transaction.fromRawJson(String str) =>
-      Transaction.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "sender": sender,
-        "customer": customer,
-        "transactionType": transactionType,
-        "currency": currency,
-        "cryptoType": cryptoType,
-        "price": price,
-        "costPrice": costPrice,
-        "quantity": quantity,
-        "status": status,
-      };
-
-  static Transaction mock() {
-    return Transaction.fromJson(const {
-      'userName': 'Test Name',
-      'price': 2300000000.1,
-      'status': 'Received',
-      '_id': "1",
-      'currency': 'INR',
-      'sender': '',
-      'customer': '',
-      'transactionType': 'buy',
-      'cryptoType': 'btcinr',
-      'quantity': 1,
-    });
-  }
-
+  ///
   factory Transaction.fromJson(
     Map<String, dynamic> map, {
     String receiver = 'transaction',
@@ -80,6 +39,40 @@ class Transaction extends Equatable {
     );
   }
 
+  ///
+  factory Transaction.fromRawJson(String str) =>
+      Transaction.fromJson(json.decode(str));
+
+  /// Price of 1 crypto currency
+  final double costPrice;
+
+  /// Crypto key name, example: "btcinr"
+  final String cryptoType;
+
+  /// Can be either 'usdt' or 'inr
+  final String currency;
+
+  ///
+  final Profile customer;
+
+  ///
+  final String id;
+
+  /// The total price of the transaction, usually [costPrice]*[quantity]
+  final double price;
+
+  /// The total quantity of the transaction
+  final double quantity;
+
+  /// Sender
+  final Profile sender;
+
+  /// Status can be "Accepted","Declined","Cancelled"
+  final String status;
+
+  /// can be "buy" or "sell"
+  final String transactionType;
+
   @override
   List<Object> get props {
     return [
@@ -96,6 +89,40 @@ class Transaction extends Equatable {
     ];
   }
 
+  ///
+  String toRawJson() => json.encode(toJson());
+
+  ///
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "sender": sender,
+        "customer": customer,
+        "transactionType": transactionType,
+        "currency": currency,
+        "cryptoType": cryptoType,
+        "price": price,
+        "costPrice": costPrice,
+        "quantity": quantity,
+        "status": status,
+      };
+
+  ///
+  static Transaction mock() {
+    return Transaction.fromJson(const {
+      'userName': 'Test Name',
+      'price': 2300000000.1,
+      'status': 'Received',
+      '_id': "1",
+      'currency': 'INR',
+      'sender': '',
+      'customer': '',
+      'transactionType': 'buy',
+      'cryptoType': 'btcinr',
+      'quantity': 1,
+    });
+  }
+
+  ///
   Transaction copyWith({
     String? id,
     Profile? sender,
@@ -123,15 +150,35 @@ class Transaction extends Equatable {
   }
 }
 
+///
 enum TransactionProps {
+  ///
   id,
+
+  ///
   sender,
+
+  ///
   customer,
+
+  ///
   transactionType,
+
+  ///
   currency,
+
+  ///
   cryptoType,
+
+  ///
   price,
+
+  ///
   costPrice,
+
+  ///
   quantity,
+
+  ///
   status,
 }

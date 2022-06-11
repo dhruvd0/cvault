@@ -1,19 +1,21 @@
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/profile_models/profile.dart';
-import 'package:cvault/models/transaction.dart';
+import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// Has phone number text field, send quote button
 class SendQuoteBox extends StatelessWidget {
+  ///
   const SendQuoteBox({
     Key? key,
-    required this.price,
+    required this.isPriceSelected,
   }) : super(key: key);
-
-  final bool price;
+/// If [true] then switch to Price mode else Quantity Mode
+  final bool isPriceSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class SendQuoteBox extends StatelessWidget {
           builder: (_, homeNotifier, __) => Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              price
+              isPriceSelected
                   ? Text(
                       (homeNotifier.state.isUSD ? '\$' : '₹') +
                           quoteProvider.transaction.price.toString(),
@@ -77,6 +79,7 @@ class SendQuoteBox extends StatelessWidget {
                               snackBarText,
                             ),
                           );
+
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         },
                         style: ElevatedButton.styleFrom(
