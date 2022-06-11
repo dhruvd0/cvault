@@ -14,7 +14,9 @@ import 'package:provider/provider.dart';
 
 import '../../../drawer.dart';
 
+/// Page to view crypto tickers, user details and Ads
 class DashboardPage extends StatefulWidget {
+  ///
   const DashboardPage({Key? key}) : super(key: key);
 
   @override

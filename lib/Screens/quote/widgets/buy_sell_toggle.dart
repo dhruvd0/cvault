@@ -1,4 +1,4 @@
-import 'package:cvault/models/transaction.dart';
+import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/quote_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

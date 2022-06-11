@@ -1,35 +1,25 @@
 import 'dart:convert';
 
-import 'package:cvault/models/customer_add.dart';
 import 'package:cvault/models/profile_models/customer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:http/http.dart' as http;
 
-class CustomerProvider extends ChangeNotifier {
-  bool loading = false;
+/// 
+class CustomerProvider extends LoadStatusNotifier {
+  /// @suraj96506 document this
   bool isBack = false;
 
   List<Customer> _customers = [];
-
+  ///
   bool get isLoadedCustomers {
     return _customers.isNotEmpty;
   }
-
+  ///
   List<Customer> get customers {
     return [..._customers];
   }
-
-  Future<void> postData(Customer body) async {
-    loading = true;
-    notifyListeners();
-    http.Response response = (await register(body))!;
-    if (response.statusCode == 200) {
-      isBack = true;
-    }
-    loading = false;
-    notifyListeners();
-  }
-
+ 
+  /// Fetches all customers
   Future<void> fetchAndSetCustomers() async {
     try {
       final response = await http.get(

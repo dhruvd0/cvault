@@ -68,7 +68,9 @@ List<SingleChildWidget> get _providers {
   ];
 }
 
+/// Entry point for cvault app
 class CVaultApp extends StatefulWidget {
+  ///
   const CVaultApp({
     Key? key,
   }) : super(key: key);

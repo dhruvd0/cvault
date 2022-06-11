@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cvault/constants/strings.dart';
 import 'package:cvault/constants/user_types.dart';
-import 'package:cvault/models/transaction.dart';
+import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/profile_provider.dart';
 

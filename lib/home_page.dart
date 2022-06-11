@@ -10,7 +10,11 @@ import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Base Page For cvault, opens after logging in
+///
+/// Has a navigation bar, uses [_HomePageState.index] to change the current page for home
 class HomePage extends StatefulWidget {
+  ///
   const HomePage({Key? key}) : super(key: key);
 
   @override

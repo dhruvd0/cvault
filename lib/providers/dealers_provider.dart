@@ -4,7 +4,9 @@ import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
-
+/// Notifier to fetch dealers or fetch all dealers
+/// 
+/// Also used to change the active status of a particular dealer
 class DealersProvider extends ChangeNotifier {
   List<Dealer> _dealers = [];
 

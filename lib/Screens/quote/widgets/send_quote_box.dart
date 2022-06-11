@@ -1,6 +1,6 @@
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/profile_models/profile.dart';
-import 'package:cvault/models/transaction.dart';
+import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
@@ -77,6 +77,7 @@ class SendQuoteBox extends StatelessWidget {
                               snackBarText,
                             ),
                           );
+
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         },
                         style: ElevatedButton.styleFrom(
