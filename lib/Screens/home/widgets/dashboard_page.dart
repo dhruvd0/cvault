@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
-import 'package:cvault/Screens/Setting.dart';
+import 'package:cvault/Screens/settting.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/widgets/margin_selector.dart';
@@ -23,7 +24,11 @@ class DashboardPage extends StatefulWidget {
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
-var res, add;
+/// @suraj96506 document this
+late http.Response res;
+
+///
+dynamic add;
 
 class _DashboardPageState extends State<DashboardPage> {
   @override
@@ -38,10 +43,11 @@ class _DashboardPageState extends State<DashboardPage> {
         "https://cvault-backend.herokuapp.com/advertisment/get-link",
       ),
     );
-    add = jsonDecode(res.body);
-    print(add[0]['link']);
 
-    setState(() {});
+    setState(() {
+      add = jsonDecode(res.body);
+      log(add[0]['link'].toString());
+    });
   }
 
   @override

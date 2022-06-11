@@ -1,4 +1,4 @@
-import 'package:cvault/Screens/Setting.dart';
+import 'package:cvault/Screens/settting.dart';
 import 'package:cvault/Screens/quote/widgets/buy_sell_toggle.dart';
 import 'package:cvault/Screens/quote/widgets/quantity.dart';
 import 'package:cvault/Screens/quote/widgets/send_quote_box.dart';
@@ -280,7 +280,7 @@ class _QuoteState extends State<Quote> {
                         const SizedBox(
                           height: 15,
                         ),
-                        SendQuoteBox(price: price),
+                        SendQuoteBox(isPriceSelected: price),
                       ],
                     ),
                   ),
