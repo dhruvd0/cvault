@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
@@ -22,29 +23,28 @@ class CustomerProvider extends LoadStatusNotifier {
   }
 
   /// Fetches all customers
-  Future<void> fetchAndSetCustomers() async {
-    try {
-      final response = await http.get(
-        Uri.parse(
-          "https://cvault-backend.herokuapp.com/dealer/getDealerCustomer",
+  Future<void> fetchAndSetCustomers(String token) async {
+    final response = await http.get(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/dealer/getDealerCustomer",
+      ),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      List<Customer> temp = [];
+      data.forEach(
+        (element) => temp.add(
+          Customer.fromJson(element),
         ),
       );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        List<Customer> temp = [];
-        data["data"].forEach(
-          (element) => temp.add(
-            Customer.fromJson(element),
-          ),
-        );
-        _customers = temp;
-        notifyListeners();
-      } else {
-        throw Exception(response.statusCode);
-      }
-    } catch (error) {
-      rethrow;
+      _customers = temp;
+      notifyListeners();
+    } else {
+      throw Exception(response.statusCode);
     }
   }
 }
