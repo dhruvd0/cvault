@@ -1,6 +1,7 @@
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/Screens/admin_panel/pages/customer_management/customer_tile.dart';
 import 'package:cvault/providers/customer_provider.dart';
+import 'package:cvault/providers/profile_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,12 +27,13 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
 
   @override
   Widget build(BuildContext context) {
+    final jswtokcen = Provider.of<ProfileChangeNotifier>(context).jwtToken;
     final customerProvider = Provider.of<CustomerProvider>(context);
     void _onRefresh() async {
       // monitor network fetch
       await Future.delayed(const Duration(milliseconds: 1000));
       Provider.of<CustomerProvider>(context, listen: false)
-          .fetchAndSetCustomers();
+          .fetchAndSetCustomers(jswtokcen);
       // if failed,use refreshFailed()
     }
 
@@ -69,7 +71,8 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                   child: (customerProvider.isLoadedCustomers)
                       ? _buildListView(customerProvider.customers)
                       : FutureBuilder(
-                          future: customerProvider.fetchAndSetCustomers(),
+                          future:
+                              customerProvider.fetchAndSetCustomers(jswtokcen),
                           builder: (context, snapshot) {
                             switch (snapshot.connectionState) {
                               case ConnectionState.none:
