@@ -229,7 +229,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                           ProfileTextField(
                             hintText: 'Referral Code',
-                            fieldName: ProfileFields.referralCode,
+                            fieldName: ProfileFields.referalCode,
                           ),
                         ],
                       )

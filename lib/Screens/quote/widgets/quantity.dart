@@ -84,6 +84,7 @@ class Margin extends StatelessWidget {
     return Consumer<ProfileChangeNotifier>(
       builder: (_, profileNotifier, k) {
         var userType = profileNotifier.profile.userType;
+        
         return Consumer<QuoteProvider>(
           builder: (_, quoteProvider, __) => userType == UserTypes.admin
               ? Column(

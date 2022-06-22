@@ -64,9 +64,8 @@ class MarginSelector extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                quoteProvider.transaction.margin.toString() +
-                                    "%",
-                                style: TextStyle(
+                                "${quoteProvider.transaction.margin}%",
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 18,

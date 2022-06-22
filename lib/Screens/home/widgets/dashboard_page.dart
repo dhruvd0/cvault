@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:cvault/models/transaction/transaction.dart';
-import 'package:cvault/providers/transactions_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:cvault/Screens/settting.dart';
 import 'package:cvault/providers/home_provider.dart';
@@ -298,10 +296,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  homeStateNotifier
-                                                          .state.difference
-                                                          .toStringAsFixed(2) +
-                                                      "%",
+                                                  "${homeStateNotifier.state.difference.toStringAsFixed(2)}%",
                                                   style: const TextStyle(
                                                     fontFamily: 'Poppins',
                                                     fontSize: 16,
@@ -349,7 +344,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
                                             const Text('AD'),
-                                            Container(
+                                            SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *

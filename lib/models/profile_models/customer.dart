@@ -14,11 +14,11 @@ class Customer extends Profile {
     required String lastName,
     required String email,
     required String uid,
-    required String referralCode,
+    required String referalCode,
     required String phone,
   }) : super(
           middleName: middleName,
-          referralCode: referralCode,
+          referalCode: referalCode,
           email: email,
           userType: UserTypes.customer,
           firstName: firstName,
@@ -35,7 +35,7 @@ class Customer extends Profile {
         middleName: json["middleName"] ?? '',
         lastName: json["lastName"] ?? '',
         email: json["email"] ?? '',
-        referralCode: '',
+        referalCode: '',
         phone: json["phone"] ?? '',
       );
 
@@ -58,7 +58,7 @@ class Customer extends Profile {
     String? email,
     String? uid,
     String? userType,
-    String? referralCode,
+    String? referalCode,
     String? phone,
   }) {
     return Customer(
@@ -68,7 +68,7 @@ class Customer extends Profile {
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       uid: uid ?? this.uid,
-      referralCode: referralCode ?? this.referralCode,
+      referalCode: referalCode ?? this.referalCode,
       phone: phone ?? this.phone,
     );
   }

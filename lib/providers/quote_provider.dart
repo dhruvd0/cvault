@@ -12,11 +12,10 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:http/http.dart';
 
 class QuoteProvider extends LoadStatusNotifier {
-  // ignore: public_member_api_docs
   Transaction transaction =
       Transaction.fromJson({TransactionProps.transactionType.name: 'buy'});
   final HomeStateNotifier _homeStateNotifier;
-  // ignore: public_member_api_docs
+
   final ProfileChangeNotifier profileChangeNotifier;
   QuoteProvider(this._homeStateNotifier, this.profileChangeNotifier) {
     _homeStateNotifier.addListener(() {
@@ -67,22 +66,20 @@ class QuoteProvider extends LoadStatusNotifier {
     loadStatus = LoadStatus.loading;
 
     notifyListeners();
-    
-    assert(profileChangeNotifier.jwtToken.isNotEmpty);
-    Map<String, String>? header = {
-      "Content-Type": "application/json",
-      "Authorization": 'Bearer ${profileChangeNotifier.jwtToken}',
-    };
 
     final response = await post(
       Uri.parse(
         "https://cvault-backend.herokuapp.com/transaction/post-transaction",
       ),
-      headers: header,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer ${profileChangeNotifier.jwtToken}',
+      },
       body: jsonEncode(quoteData),
     );
 
     if (response.statusCode == 201) {
+      var body = jsonDecode(response.body);
       transaction = Transaction.fromJson(
         {TransactionProps.transactionType.name: 'buy'},
       );
@@ -112,7 +109,6 @@ class QuoteProvider extends LoadStatusNotifier {
       "quantity": transaction.quantity,
       "receiversPhone": transaction.customer.phone,
       "sendersID": sendersID,
-      "sender type": profileChangeNotifier.profile.userType,
     };
   }
 
@@ -150,12 +146,10 @@ class QuoteProvider extends LoadStatusNotifier {
       transaction = transaction.copyWith(
         costPrice: _homeStateNotifier.currentCryptoCurrency().wazirxPrice,
       );
-      print(transaction);
     } else if (data == 'sell') {
       transaction = transaction.copyWith(
         costPrice: _homeStateNotifier.currentCryptoCurrency().sellPrice,
       );
-      print(transaction);
     }
   }
 }

@@ -302,11 +302,13 @@ class HomeStateNotifier extends ChangeNotifier {
 
   void _calculateDifference() {
     var crypto = currentCryptoCurrency();
-    emit(state.copyWith(
-      difference: 100 *
-          ((crypto.wazirxPrice - crypto.krakenPrice) / crypto.krakenPrice),
-    ));
+    emit(
+      state.copyWith(
+        difference: 100 *
+            ((crypto.wazirxPrice - crypto.krakenPrice) / crypto.krakenPrice),
+      ),
+    );
   }
 }
 // 100 * ((crypto.wazirxPrice – crypto.krakenPrice) / crypto.krakenPrice)
-// 100 * ((2533118-2415313.58)/2415313.58) 
+// 100 * ((2533118-2415313.58)/2415313.58)

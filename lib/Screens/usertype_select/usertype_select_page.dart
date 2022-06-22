@@ -3,7 +3,8 @@ import 'package:cvault/constants/theme.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-/// Launch Page for user to select "Dealer" or "Customer" 
+
+/// Launch Page for user to select "Dealer" or "Customer"
 class UserTypeSelectPage extends StatelessWidget {
   ///
   const UserTypeSelectPage({Key? key}) : super(key: key);

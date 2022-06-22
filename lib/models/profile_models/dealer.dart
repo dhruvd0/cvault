@@ -17,11 +17,11 @@ class Dealer extends Profile {
     required String lastName,
     required String email,
     required String uid,
-    required String referralCode,
+    required String referalCode,
     required String phone,
   }) : super(
           middleName: middleName,
-          referralCode: referralCode,
+          referalCode: referalCode,
           email: email,
           userType: userType,
           firstName: firstName,
@@ -40,9 +40,10 @@ class Dealer extends Profile {
   final List<String> transactions;
 
   ///
-  factory Dealer.fromJson(String userType, Map<String, dynamic> json) => Dealer(
-        uid: json["dealerId"] ?? '',
-        dealerId: json["dealerId"] ?? '',
+  factory Dealer.fromJson(String userType, Map<String, dynamic> json) {
+    return Dealer(
+        uid: json["UID"] ?? '',
+        dealerId: json["UID"] ?? '',
         firstName: json["firstName"] ?? '',
         lastName: json['lastName'] ?? '',
         middleName: json['middleName'] ?? '',
@@ -50,13 +51,14 @@ class Dealer extends Profile {
         phone: json["phone"] ?? '',
         email: json["email"] ?? '',
         active: json["active"] ?? false,
-        referralCode: '',
+        referalCode: json['referalCode']??'',
         transactions: json['transactions'] == null
             ? []
             : List<String>.from(
                 json["transactions"].map((x) => x.toString()),
               ),
       );
+  }
 
   ///
   static Dealer mock() {
@@ -79,7 +81,7 @@ class Dealer extends Profile {
         "lastName": lastName,
         "phone": phone,
         "email": email,
-        'referralCode': referralCode,
+        'referalCode': referalCode,
       };
 
   ///
@@ -93,7 +95,7 @@ class Dealer extends Profile {
     String? email,
     String? uid,
     String? userType,
-    String? referralCode,
+    String? referalCode,
     String? phone,
   }) {
     return Dealer(
@@ -106,7 +108,7 @@ class Dealer extends Profile {
       email: email ?? this.email,
       userType: userType ?? this.userType,
       uid: uid ?? this.uid,
-      referralCode: referralCode ?? this.referralCode,
+      referalCode: referalCode ?? this.referalCode,
       phone: phone ?? this.phone,
     );
   }

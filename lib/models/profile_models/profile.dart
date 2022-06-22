@@ -26,7 +26,7 @@ abstract class Profile extends Equatable {
   final String userType;
 
   ///
-  final String referralCode;
+  final String referalCode;
 
   /// Phone should always have the country code as a prefix-'+91'
   final String phone;
@@ -39,7 +39,7 @@ abstract class Profile extends Equatable {
     required this.email,
     required this.uid,
     required this.userType,
-    required this.referralCode,
+    required this.referalCode,
     required this.phone,
   });
   @override
@@ -51,15 +51,16 @@ abstract class Profile extends Equatable {
       email,
       uid,
       userType,
-      referralCode,
+      referalCode,
       phone,
     ];
   }
 
   ///
   factory Profile.fromMap(Map<String, dynamic> map) {
-    return map.containsKey('dealerId')
-        ? Dealer.fromJson('dealer', map)
+    var userType = map['userType'];
+    return userType == UserTypes.dealer || userType == UserTypes.admin
+        ? Dealer.fromJson(userType, map)
         : Customer.fromJson(map);
   }
 
@@ -87,7 +88,7 @@ enum ProfileFields {
   phone,
 
   ///
-  referralCode,
+  referalCode,
 }
 
 ///
@@ -99,7 +100,7 @@ class ProfileInitial extends Profile {
           email: '',
           middleName: '',
           lastName: '',
-          referralCode: '',
+          referalCode: '',
           userType: '',
           uid: '',
           phone: '',

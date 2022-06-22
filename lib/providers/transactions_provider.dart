@@ -5,7 +5,6 @@ import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/profile_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -44,34 +43,26 @@ class TransactionsProvider extends LoadStatusNotifier {
     loadStatus = LoadStatus.loading;
     notifyListeners();
     if (profileChangeNotifier.jwtToken.isEmpty) {
-      await profileChangeNotifier.login(profileChangeNotifier.authInstance.currentUser!.uid);
+      await profileChangeNotifier
+          .login(profileChangeNotifier.authInstance.currentUser!.uid);
     }
     Map<String, String>? header = {
       "Content-Type": "application/json",
       "Authorization": 'Bearer ${profileChangeNotifier.jwtToken}',
     };
 
-    final response = getAllTransactions
-        ? await http.get(
-            Uri.parse(
-              "$backendBaseUrl/transaction/getAllTransaction",
-            ),
-            headers: header,
-          )
-        : await http.get(
-            Uri.parse(
-              "$backendBaseUrl/transaction/get-transaction",
-            ),
-          
-            headers: header,
-          );
+    final response = await http.get(
+      Uri.parse(
+        "$backendBaseUrl/transaction/${getAllTransactions ? 'getAllTransaction' : 'get-transaction'}",
+      ),
+      headers: header,
+    );
 
     if (response.statusCode == 200) {
-      List<Transaction> transactions = [];
+      _transactions = _parseTransactionsFromJsonData(
+        response,
+      ).reversed.toList();
 
-      _parseTransactionsFromJsonData(response, transactions);
-      _transactions = transactions;
-      _transactions = _transactions.reversed.toList();
       loadStatus = LoadStatus.done;
       notifyListeners();
     } else {
@@ -81,15 +72,17 @@ class TransactionsProvider extends LoadStatusNotifier {
     notifyListeners();
   }
 
-  void _parseTransactionsFromJsonData(
+  List<Transaction> _parseTransactionsFromJsonData(
     http.Response response,
-    List<Transaction> transactions,
   ) {
+    List<Transaction> transactions = [];
     var body = jsonDecode(response.body);
-    final List<dynamic> data = body['fetchTrans'];
+    final List<dynamic> data =body is Map? body['fetchTrans']:body;
     for (var tr in data) {
       transactions.add(Transaction.fromJson(tr));
     }
+
+    return transactions;
   }
 
   Future<void> changeTransactionStatus(int index, String status) async {

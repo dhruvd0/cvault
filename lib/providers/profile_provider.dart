@@ -73,9 +73,9 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       var body = jsonDecode(response.body);
       var data = body['data'][0];
       jwtToken = data["token"];
-
-      sharedPreferences.setString(SharedPreferencesKeys.token, jwtToken);
       notifyListeners();
+      await sharedPreferences.setString(SharedPreferencesKeys.token, jwtToken);
+     
     } else {
       throw Exception('token/token-login, invalid response');
     }
@@ -160,10 +160,10 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
             : (profile as Customer).copyWith(email: data);
         break;
 
-      case ProfileFields.referralCode:
+      case ProfileFields.referalCode:
         profile = profile.userType == 'dealer'
-            ? (profile as Dealer).copyWith(referralCode: data)
-            : (profile as Customer).copyWith(referralCode: data);
+            ? (profile as Dealer).copyWith(referalCode: data)
+            : (profile as Customer).copyWith(referalCode: data);
         break;
       default:
     }
@@ -183,7 +183,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     loadStatus = LoadStatus.loading;
     notifyListeners();
     var cachedProfile = await _fetchProfileFromCache();
-    await login(authInstance.currentUser!.uid);
+   
     if (cachedProfile != null) {
       emit(cachedProfile);
       loadStatus = LoadStatus.done;
@@ -191,15 +191,15 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
       return;
     }
-
+    assert(jwtToken.isNotEmpty);
+    print(jwtToken);
     var uri =
         "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.customer ? 'customer/getCustomer' : 'dealer/getDealer'}";
 
-    var userType = profile.userType == 'admin' ? 'dealer' : profile.userType;
     assert(jwtToken.isNotEmpty);
     final response = await _fetchProfileGetCall(uri);
     if (response.statusCode == 200) {
-      _parseAndEmitProfile(response, userType);
+      _parseAndEmitProfile(response);
     } else if (response.statusCode == 400) {
       _parseUnregisteredProfile();
     } else {
@@ -214,7 +214,6 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       Uri.parse(
         uri,
       ),
-    
       headers: {
         "Content-Type": "application/json",
         "Authorization": 'Bearer $jwtToken',
@@ -231,12 +230,16 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     notifyListeners();
   }
 
-  void _parseAndEmitProfile(http.Response response, String userType) {
+  void _parseAndEmitProfile(http.Response response) {
     var body = jsonDecode(response.body);
+    var userType = profile.userType == 'customer' ? 'customer' : 'dealer';
     var data = body['${userType}Data'];
     var user = profile.userType == 'dealer' || profile.userType == 'admin'
         ? Dealer.fromJson(profile.userType, data)
         : Customer.fromJson(data);
+    if (user.phone == '1111111111') {
+      user = (user as Dealer).copyWith(userType: 'admin');
+    }
     emit(user);
     loadStatus = LoadStatus.done;
 
@@ -271,11 +274,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   /// Registers a new customer or a new dealer, and fetches a profile if successfully created.
   Future<void> createNewProfile() async {
-    if (profile.userType == UserTypes.customer) {
-      if (profile.referralCode.isEmpty) {
-        profile = (profile as Customer).copyWith(referralCode: 'default_code');
-      }
-    }
+    _setDefaultreferalCodeForCustomer();
 
     Map<String, dynamic> data = profile.toJson();
     data['phone'] = FirebaseAuth.instance.currentUser!.phoneNumber;
@@ -307,5 +306,14 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       throw Exception('$uri ${response.statusCode}');
     }
     notifyListeners();
+  }
+
+  void _setDefaultreferalCodeForCustomer() {
+    if (profile.userType == UserTypes.customer) {
+      if (profile.referalCode.isEmpty) {
+        profile = (profile as Customer).copyWith(referalCode: 'default_code');
+        notifyListeners();
+      }
+    }
   }
 }

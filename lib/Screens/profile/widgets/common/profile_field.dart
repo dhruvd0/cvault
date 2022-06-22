@@ -29,8 +29,8 @@ class ProfileTextField extends StatelessWidget {
       case ProfileFields.email:
         return state.email;
 
-      case ProfileFields.referralCode:
-        return state.referralCode;
+      case ProfileFields.referalCode:
+        return state.referalCode;
       case ProfileFields.phone:
         return state.phone;
     }
@@ -51,7 +51,7 @@ class ProfileTextField extends StatelessWidget {
             final state = profileNotifier.profile;
             List<ProfileFields> uncheckedFIelds = [
               ProfileFields.phone,
-              ProfileFields.referralCode,
+              ProfileFields.referalCode,
               ProfileFields.middleName,
             ];
 

@@ -8,6 +8,7 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/mocks.dart';
 
@@ -45,7 +46,8 @@ void main() {
         randomQuantity,
       );
 
-      await quoteProvider.sendQuote();
+      final success = await quoteProvider.sendQuote();
+      expect(success, true);
       final transactionsProvider =
           TransactionsProvider(quoteProvider.profileChangeNotifier);
       await transactionsProvider
@@ -62,15 +64,18 @@ void main() {
 Future<QuoteProvider> _setupQuoteProvider() async {
   HomeStateNotifier homeStateNotifier = HomeStateNotifier(mockAuth);
   ProfileChangeNotifier profileChangeNotifier = ProfileChangeNotifier(mockAuth);
+  await (await SharedPreferences.getInstance()).clear();
   profileChangeNotifier.changeUserType(
-    UserTypes.admin,
-    "g9wTu4GgDwNKBqlHjc24so5z4i73",
+    UserTypes.dealer,
+    "YWOid15gXkO93TIzlAOM3c84ya82",
   );
   await Future.wait([
     homeStateNotifier.getCryptoDataFromAPIs(),
     profileChangeNotifier.fetchProfile(),
   ]);
-
+  expect(profileChangeNotifier.profile.uid, 'YWOid15gXkO93TIzlAOM3c84ya82');
+  expect(profileChangeNotifier.profile.phone, isNotEmpty);
+  expect(profileChangeNotifier.profile.userType, UserTypes.dealer);
   final quoteProvider = QuoteProvider(
     homeStateNotifier,
     profileChangeNotifier,
