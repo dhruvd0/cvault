@@ -60,6 +60,9 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     }
     final response = await http.post(
       Uri.parse("https://cvault-backend.herokuapp.com/token/token-login"),
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: jsonEncode(
         {
           "UID": uid,
@@ -68,9 +71,10 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     );
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
-      jwtToken = body['token'];
+      var data = body['data'][0];
+      jwtToken = data["token"];
 
-      sharedPreferences.setString(SharedPreferencesKeys.token, body['token']);
+      sharedPreferences.setString(SharedPreferencesKeys.token, jwtToken);
       notifyListeners();
     } else {
       throw Exception('token/token-login, invalid response');
@@ -179,7 +183,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     loadStatus = LoadStatus.loading;
     notifyListeners();
     var cachedProfile = await _fetchProfileFromCache();
-    await login(FirebaseAuth.instance.currentUser!.uid);
+    await login(authInstance.currentUser!.uid);
     if (cachedProfile != null) {
       emit(cachedProfile);
       loadStatus = LoadStatus.done;
@@ -193,7 +197,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
     var userType = profile.userType == 'admin' ? 'dealer' : profile.userType;
     assert(jwtToken.isNotEmpty);
-    final response = await _fetchProfilePostCall(uri, userType);
+    final response = await _fetchProfileGetCall(uri);
     if (response.statusCode == 200) {
       _parseAndEmitProfile(response, userType);
     } else if (response.statusCode == 400) {
@@ -205,14 +209,12 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     }
   }
 
-  Future<http.Response> _fetchProfilePostCall(String uri, String userType) {
-    return http.post(
+  Future<http.Response> _fetchProfileGetCall(String uri) {
+    return http.get(
       Uri.parse(
         uri,
       ),
-      body: jsonEncode(
-        {'${userType}Id': authInstance.currentUser!.uid},
-      ),
+    
       headers: {
         "Content-Type": "application/json",
         "Authorization": 'Bearer $jwtToken',
@@ -230,7 +232,8 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   }
 
   void _parseAndEmitProfile(http.Response response, String userType) {
-    var data = jsonDecode(response.body)['${userType}Data'];
+    var body = jsonDecode(response.body);
+    var data = body['${userType}Data'];
     var user = profile.userType == 'dealer' || profile.userType == 'admin'
         ? Dealer.fromJson(profile.userType, data)
         : Customer.fromJson(data);
@@ -268,6 +271,12 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   /// Registers a new customer or a new dealer, and fetches a profile if successfully created.
   Future<void> createNewProfile() async {
+    if (profile.userType == UserTypes.customer) {
+      if (profile.referralCode.isEmpty) {
+        profile = (profile as Customer).copyWith(referralCode: 'default_code');
+      }
+    }
+
     Map<String, dynamic> data = profile.toJson();
     data['phone'] = FirebaseAuth.instance.currentUser!.phoneNumber;
     data['${profile.userType}Id'] = FirebaseAuth.instance.currentUser!.uid;

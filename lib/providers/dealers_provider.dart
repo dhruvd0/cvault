@@ -27,7 +27,7 @@ class DealersProvider extends ChangeNotifier {
       Uri.parse("https://cvault-backend.herokuapp.com/dealer/changeActive/"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(
-        {'dealerId': dealerId},
+        {'UID': dealerId},
       ),
     );
     if (response.statusCode == 200) {

@@ -44,7 +44,7 @@ class TransactionsProvider extends LoadStatusNotifier {
     loadStatus = LoadStatus.loading;
     notifyListeners();
     if (profileChangeNotifier.jwtToken.isEmpty) {
-      await profileChangeNotifier.login(FirebaseAuth.instance.currentUser!.uid);
+      await profileChangeNotifier.login(profileChangeNotifier.authInstance.currentUser!.uid);
     }
     Map<String, String>? header = {
       "Content-Type": "application/json",
@@ -58,15 +58,11 @@ class TransactionsProvider extends LoadStatusNotifier {
             ),
             headers: header,
           )
-        : await http.post(
+        : await http.get(
             Uri.parse(
               "$backendBaseUrl/transaction/get-transaction",
             ),
-            body: jsonEncode(
-              {
-                "dealerId": dealerId,
-              },
-            ),
+          
             headers: header,
           );
 
@@ -89,7 +85,8 @@ class TransactionsProvider extends LoadStatusNotifier {
     http.Response response,
     List<Transaction> transactions,
   ) {
-    final List<dynamic> data = jsonDecode(response.body);
+    var body = jsonDecode(response.body);
+    final List<dynamic> data = body['fetchTrans'];
     for (var tr in data) {
       transactions.add(Transaction.fromJson(tr));
     }

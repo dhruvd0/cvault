@@ -5,7 +5,7 @@ void main() {
   test('Test to change active status of a dealer', () async {
     final provider = DealersProvider();
 
-    bool success = await provider.changeDealerActiveState('1234');
+    bool success = await provider.changeDealerActiveState('YWOid15gXkO93TIzlAOM3c84ya82');
     expect(success, true);
   });
 }
