@@ -1,3 +1,4 @@
+import 'package:cvault/Screens/quote/widgets/quantity.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/models/transaction/transaction.dart';
@@ -14,7 +15,8 @@ class SendQuoteBox extends StatelessWidget {
     Key? key,
     required this.isPriceSelected,
   }) : super(key: key);
-/// If [true] then switch to Price mode else Quantity Mode
+
+  /// If [true] then switch to Price mode else Quantity Mode
   final bool isPriceSelected;
 
   @override
@@ -126,9 +128,10 @@ class SendQuoteBox extends StatelessWidget {
                       quoteProvider.changeTransactionField(
                         TransactionProps.customer,
                         Profile.fromMap(
-                          {'phone': string, 'customerId': ''},
+                          {'phone': '+91' + string, 'customerId': 'hey'},
                         ),
                       );
+                      print(string);
                     },
                     decoration: const InputDecoration(
                       border: InputBorder.none,

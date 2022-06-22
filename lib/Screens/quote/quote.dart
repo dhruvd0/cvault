@@ -20,13 +20,14 @@ class Quote extends StatefulWidget {
   State<Quote> createState() => _QuoteState();
 }
 
-class _QuoteState extends State<Quote> {
-  bool price = true;
+bool price = true;
 
+class _QuoteState extends State<Quote> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+    // ignore: newline-before-return
     return Scaffold(
       key: scaffoldKey,
       endDrawer: const MyDrawer(),
@@ -47,24 +48,24 @@ class _QuoteState extends State<Quote> {
           ),
         ],
       ),
-      body: Consumer<HomeStateNotifier>(
-        builder: (context, homeStateNotifier, _) {
-          final state = homeStateNotifier.state;
-          if (state.loadStatus == LoadStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: ThemeColors.lightGreenAccentColor,
-              ),
-            );
-          }
+      body: SingleChildScrollView(
+        key: UniqueKey(),
+        child: Consumer<HomeStateNotifier>(
+          builder: (context, homeStateNotifier, _) {
+            final state = homeStateNotifier.state;
+            if (state.loadStatus == LoadStatus.loading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: ThemeColors.lightGreenAccentColor,
+                ),
+              );
+            }
 
-          return state.loadStatus == LoadStatus.loading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : SingleChildScrollView(
-                  key: UniqueKey(),
-                  child: Container(
+            return state.loadStatus == LoadStatus.loading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Container(
                     margin: const EdgeInsets.all(20),
                     color: Colors.transparent,
                     child: Column(
@@ -226,55 +227,9 @@ class _QuoteState extends State<Quote> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              children: [
-                                const Text(
-                                  "Margin (%)",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    /// TODO: change margin
-                                  },
-                                  child: SizedBox(
-                                    height: 50,
-                                    width: 120,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        border: Border.all(
-                                          width: 1.5,
-                                          color: const Color.fromARGB(
-                                            255,
-                                            165,
-                                            231,
-                                            243,
-                                          ),
-                                        ),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          '5.00%',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Quantity(),
+                          children: const [
+                            Margin(),
+                            Quantity(),
                           ],
                         ),
                         const SizedBox(
@@ -283,9 +238,9 @@ class _QuoteState extends State<Quote> {
                         SendQuoteBox(isPriceSelected: price),
                       ],
                     ),
-                  ),
-                );
-        },
+                  );
+          },
+        ),
       ),
     );
   }

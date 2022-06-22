@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'dart:convert';
 
 import 'package:cvault/models/home_state.dart';
@@ -10,9 +12,11 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:http/http.dart';
 
 class QuoteProvider extends LoadStatusNotifier {
+  // ignore: public_member_api_docs
   Transaction transaction =
       Transaction.fromJson({TransactionProps.transactionType.name: 'buy'});
   final HomeStateNotifier _homeStateNotifier;
+  // ignore: public_member_api_docs
   final ProfileChangeNotifier profileChangeNotifier;
   QuoteProvider(this._homeStateNotifier, this.profileChangeNotifier) {
     _homeStateNotifier.addListener(() {
@@ -41,7 +45,11 @@ class QuoteProvider extends LoadStatusNotifier {
     if (homeState.cryptoCurrencies.isNotEmpty) {
       try {
         var crypto = _homeStateNotifier.currentCryptoCurrency();
-        transaction = transaction.copyWith(costPrice: crypto.wazirxPrice);
+        transaction = transaction.copyWith(
+          costPrice: transaction.transactionType == 'sell'
+              ? crypto.sellPrice
+              : crypto.wazirxPrice,
+        );
       } on StateError {
         // TODO
       }
@@ -97,6 +105,7 @@ class QuoteProvider extends LoadStatusNotifier {
       "quantity": transaction.quantity,
       "receiversPhone": transaction.customer.phone,
       "sendersID": sendersID,
+      "sender type": profileChangeNotifier.profile.userType,
     };
   }
 
@@ -134,10 +143,12 @@ class QuoteProvider extends LoadStatusNotifier {
       transaction = transaction.copyWith(
         costPrice: _homeStateNotifier.currentCryptoCurrency().wazirxPrice,
       );
+      print(transaction);
     } else if (data == 'sell') {
       transaction = transaction.copyWith(
         costPrice: _homeStateNotifier.currentCryptoCurrency().sellPrice,
       );
+      print(transaction);
     }
   }
 }

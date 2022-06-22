@@ -18,6 +18,7 @@ class Transaction extends Equatable {
     required this.costPrice,
     required this.quantity,
     required this.status,
+    required this.margin,
   });
 
   ///
@@ -36,6 +37,7 @@ class Transaction extends Equatable {
       costPrice: map['costPrice']?.toDouble() ?? 0.0,
       quantity: map['quantity']?.toDouble() ?? 0,
       status: map['status'] ?? '',
+      margin: map['margin']?.toDouble() ?? 0,
     );
   }
 
@@ -64,6 +66,10 @@ class Transaction extends Equatable {
   /// The total quantity of the transaction
   final double quantity;
 
+//margin
+
+  final double margin;
+
   /// Sender
   final Profile sender;
 
@@ -86,6 +92,7 @@ class Transaction extends Equatable {
       costPrice,
       quantity,
       status,
+      margin,
     ];
   }
 
@@ -104,6 +111,7 @@ class Transaction extends Equatable {
         "costPrice": costPrice,
         "quantity": quantity,
         "status": status,
+        "margin": margin,
       };
 
   ///
@@ -119,6 +127,7 @@ class Transaction extends Equatable {
       'transactionType': 'buy',
       'cryptoType': 'btcinr',
       'quantity': 1,
+      'margin': 5,
     });
   }
 
@@ -134,6 +143,7 @@ class Transaction extends Equatable {
     double? costPrice,
     double? quantity,
     String? status,
+    double? margin,
   }) {
     return Transaction(
       id: id ?? this.id,
@@ -146,6 +156,7 @@ class Transaction extends Equatable {
       costPrice: costPrice ?? this.costPrice,
       quantity: quantity ?? this.quantity,
       status: status ?? this.status,
+      margin: margin ?? this.margin,
     );
   }
 }
@@ -181,4 +192,7 @@ enum TransactionProps {
 
   ///
   status,
+
+  ///
+  margin
 }

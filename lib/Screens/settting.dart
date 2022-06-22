@@ -9,6 +9,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 /// Settings page
 class Settings extends StatefulWidget {
   ///
@@ -218,11 +219,12 @@ class _SettingsState extends State<Settings> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                           ),
-                                          child: Center(
+                                          child: const Center(
                                             child: Text(
-                                              homeStateNotifier.state.difference
-                                                  .toStringAsFixed(2),
-                                              style: const TextStyle(
+                                              "5.00",
+                                              // homeStateNotifier.state.difference
+                                              //     .toStringAsFixed(2),
+                                              style: TextStyle(
                                                 color: Colors.white,
                                               ),
                                             ),

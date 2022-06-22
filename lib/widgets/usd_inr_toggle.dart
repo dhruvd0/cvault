@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 /// [Switch] widget to toggle between usd and inr version of a crypto currency
 class USDToINRToggle extends StatelessWidget {
   ///
+
   const USDToINRToggle({
     Key? key,
   }) : super(key: key);

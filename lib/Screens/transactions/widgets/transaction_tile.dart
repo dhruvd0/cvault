@@ -54,6 +54,7 @@ class TransactionTile extends StatelessWidget {
                   children: [
                     Text(
                       "Quote ${transaction.status}",
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Colors.green,
                         fontSize: 12,
@@ -66,6 +67,7 @@ class TransactionTile extends StatelessWidget {
                     Text(
                       DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY)
                           .format(DateTime.now()),
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,

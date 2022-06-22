@@ -92,8 +92,8 @@ class HomeStateNotifier extends ChangeNotifier {
     for (var crypto in cryptoData.toList()) {
       var key = crypto['s'];
       if (cryptoKeys(state.isUSD ? 'usdt' : 'inr').contains(key)) {
-        var sellPrice = crypto['a'];
-        var buyPrice = crypto['b'];
+        var sellPrice = crypto['b'];
+        var buyPrice = crypto['a'];
         final cryptoCurrencies = state.cryptoCurrencies.toList();
         int index =
             cryptoCurrencies.indexWhere((element) => element.wazirxKey == key);
@@ -302,6 +302,11 @@ class HomeStateNotifier extends ChangeNotifier {
 
   void _calculateDifference() {
     var crypto = currentCryptoCurrency();
-    emit(state.copyWith(difference: crypto.krakenPrice - crypto.wazirxPrice));
+    emit(state.copyWith(
+      difference: 100 *
+          ((crypto.wazirxPrice - crypto.krakenPrice) / crypto.krakenPrice),
+    ));
   }
 }
+// 100 * ((crypto.wazirxPrice – crypto.krakenPrice) / crypto.krakenPrice)
+// 100 * ((2533118-2415313.58)/2415313.58) 

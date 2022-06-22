@@ -167,7 +167,7 @@ class ProfilePage extends StatelessWidget {
                             height: 35,
                           ),
                           Text(
-                            '+91\n\n',
+                            '+91',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -283,7 +283,7 @@ class ProfilePage extends StatelessWidget {
                                     : Text(
                                         mode == ProfilePageMode.registration
                                             ? "Submit"
-                                            : "Edit",
+                                            : "Save",
                                         style: const TextStyle(
                                           fontSize: 18,
                                         ),

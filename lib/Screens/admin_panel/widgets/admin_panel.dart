@@ -6,6 +6,8 @@ import 'package:cvault/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../pages/customer_management/customer_management.dart';
+
 class AdminPanel extends StatefulWidget {
   const AdminPanel({Key? key}) : super(key: key);
 
@@ -109,44 +111,59 @@ class _AdminPanelState extends State<AdminPanel> {
                   SizedBox(height: userType == UserTypes.admin ? 10 : 30),
                   userType == UserTypes.admin
                       ? const AdminPanelGrid()
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const Text(
-                              "Customer\nManagement",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                      : GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CustomerManagementPage(),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            Container(
-                              padding: const EdgeInsets.all(25),
-                              height: 150,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.4),
-                                    blurRadius: 10,
-                                    spreadRadius: 1,
-                                    offset: const Offset(4, 4),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                  width: 1.5,
-                                  color: Colors.white54,
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const Text(
+                                "Customer\nManagement",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              child: Image.asset(
-                                "assets/user.png",
-                                color: Colors.grey,
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.all(25),
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      blurRadius: 10,
+                                      spreadRadius: 1,
+                                      offset: const Offset(4, 4),
+                                    ),
+                                  ],
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    width: 1.5,
+                                    color: const Color.fromARGB(
+                                      255,
+                                      165,
+                                      231,
+                                      243,
+                                    ),
+                                  ),
+                                ),
+                                child: Image.asset(
+                                  "assets/user.png",
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                 ],
               ),
