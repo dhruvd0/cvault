@@ -30,6 +30,7 @@ void main() {
     );
 
     test('Test to send a quote', () async {
+      await (await SharedPreferences.getInstance()).clear();
       QuoteProvider quoteProvider = await _setupQuoteProvider();
 
       quoteProvider.changeTransactionField(
@@ -64,11 +65,12 @@ void main() {
 Future<QuoteProvider> _setupQuoteProvider() async {
   HomeStateNotifier homeStateNotifier = HomeStateNotifier(mockAuth);
   ProfileChangeNotifier profileChangeNotifier = ProfileChangeNotifier(mockAuth);
-  await (await SharedPreferences.getInstance()).clear();
+
   profileChangeNotifier.changeUserType(
     UserTypes.dealer,
     "YWOid15gXkO93TIzlAOM3c84ya82",
   );
+  await profileChangeNotifier.login('YWOid15gXkO93TIzlAOM3c84ya82');
   await Future.wait([
     homeStateNotifier.getCryptoDataFromAPIs(),
     profileChangeNotifier.fetchProfile(),

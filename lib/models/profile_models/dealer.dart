@@ -42,8 +42,8 @@ class Dealer extends Profile {
   ///
   factory Dealer.fromJson(String userType, Map<String, dynamic> json) {
     return Dealer(
-        uid: json["UID"] ?? '',
-        dealerId: json["UID"] ?? '',
+        uid: json["dealerId"] ?? '',
+        dealerId: json["dealerId"] ?? '',
         firstName: json["firstName"] ?? '',
         lastName: json['lastName'] ?? '',
         middleName: json['middleName'] ?? '',

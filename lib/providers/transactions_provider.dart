@@ -43,8 +43,9 @@ class TransactionsProvider extends LoadStatusNotifier {
     loadStatus = LoadStatus.loading;
     notifyListeners();
     if (profileChangeNotifier.jwtToken.isEmpty) {
-      await profileChangeNotifier
-          .login(profileChangeNotifier.authInstance.currentUser!.uid);
+      await profileChangeNotifier.login(
+        profileChangeNotifier.authInstance.currentUser!.uid,
+      );
     }
     Map<String, String>? header = {
       "Content-Type": "application/json",
@@ -77,7 +78,7 @@ class TransactionsProvider extends LoadStatusNotifier {
   ) {
     List<Transaction> transactions = [];
     var body = jsonDecode(response.body);
-    final List<dynamic> data =body is Map? body['fetchTrans']:body;
+    final List<dynamic> data = body is Map ? body['fetchTrans'] : body;
     for (var tr in data) {
       transactions.add(Transaction.fromJson(tr));
     }

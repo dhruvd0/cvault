@@ -7,6 +7,7 @@ import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,7 +43,9 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         await checkAndChangeUserType(event, userType, mockAuth);
-        await login(event.uid);
+        if (Firebase.apps.isNotEmpty) {
+          await login(event.uid);
+        }
       }
     });
   }
@@ -50,14 +53,6 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   /// Get JWT token
   Future<void> login(String uid) async {
     var sharedPreferences = (await SharedPreferences.getInstance());
-    final tokenFromCache =
-        sharedPreferences.getString(SharedPreferencesKeys.token) ?? '';
-    if (tokenFromCache.isNotEmpty) {
-      jwtToken = tokenFromCache;
-      notifyListeners();
-
-      return;
-    }
     final response = await http.post(
       Uri.parse("https://cvault-backend.herokuapp.com/token/token-login"),
       headers: {
@@ -75,7 +70,6 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       jwtToken = data["token"];
       notifyListeners();
       await sharedPreferences.setString(SharedPreferencesKeys.token, jwtToken);
-     
     } else {
       throw Exception('token/token-login, invalid response');
     }
@@ -183,7 +177,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     loadStatus = LoadStatus.loading;
     notifyListeners();
     var cachedProfile = await _fetchProfileFromCache();
-   
+
     if (cachedProfile != null) {
       emit(cachedProfile);
       loadStatus = LoadStatus.done;
@@ -191,6 +185,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
       return;
     }
+
     assert(jwtToken.isNotEmpty);
     print(jwtToken);
     var uri =
