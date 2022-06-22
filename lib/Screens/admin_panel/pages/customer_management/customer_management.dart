@@ -32,7 +32,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
       await Future.delayed(Duration(milliseconds: 1000));
       Provider.of<CustomerProvider>(context, listen: false)
           .fetchAndSetCustomers();
-      print("hey");
+
       // if failed,use refreshFailed()
     }
 

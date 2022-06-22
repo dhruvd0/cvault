@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:cvault/models/profile_models/get_advertisement_model.dart';
+import 'package:cvault/providers/getadd.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Advertisment extends StatefulWidget {
   const Advertisment({Key? key}) : super(key: key);
@@ -18,25 +16,10 @@ class _AdvertismentState extends State<Advertisment> {
     super.initState();
   }
 
-  Future<PostAdverModel> postAdd(String link) async {
-    PostAdverModel? postAdverModel;
-    http.Response response = await http.post(
-      Uri.parse(
-        'https://cvault-backend.herokuapp.com/advertisment/post-link',
-      ),
-      body: {
-        "link": link,
-      },
-    );
-
-    var jsonResponse = json.decode(response.body);
-    postAdverModel = PostAdverModel.fromJson(jsonResponse);
-
-    return postAdverModel;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<advertismentProvider>(context);
+
     return Scaffold(
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
@@ -63,9 +46,7 @@ class _AdvertismentState extends State<Advertisment> {
                 textAlign: TextAlign.center,
                 inputFormatters: const [],
                 onChanged: (string) {
-                  setState(() {
-                    postAdd(string);
-                  });
+                  provider.postAdd(string);
                 },
                 decoration: const InputDecoration(
                   border: InputBorder.none,
