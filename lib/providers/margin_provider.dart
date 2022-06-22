@@ -41,19 +41,19 @@ class MarginsNotifier extends LoadStatusNotifier {
     var uri = Uri.parse(
       "$baseCvaultUrl/${profileChangeNotifier.profile.userType}/get${user}Margin",
     );
+    var header = defaultAuthenticatedHeader(profileChangeNotifier.jwtToken);
     final response = dealerCode != null
         ? await http.post(
             uri,
-            headers: defaultAuthenticatedHeader(profileChangeNotifier.jwtToken),
+            headers: header,
             body: jsonEncode(
               {
-                'referalCode': dealerCode,
+                'referal': dealerCode,
               },
             ),
           )
         : await http.get(
             uri,
-            headers: defaultAuthenticatedHeader(profileChangeNotifier.jwtToken),
           );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
