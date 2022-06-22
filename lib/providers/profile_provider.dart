@@ -168,6 +168,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   ///
   void reset() {
+    jwtToken = '';
     emit(const ProfileInitial());
   }
 
@@ -186,7 +187,9 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
       return;
     }
-
+    if (jwtToken.isEmpty) {
+      await login(authInstance.currentUser!.uid);
+    }
     assert(jwtToken.isNotEmpty);
 
     var uri = "https://cvault-backend.herokuapp.com/${profilePath()}";

@@ -15,7 +15,7 @@ void main() {
       final marginProvider = MarginsNotifier(profileChangeNotifier);
       double randomMargin = Random().nextDouble();
       await marginProvider.setMargin(randomMargin);
-      await marginProvider.getMargin();
+      await marginProvider.getMargin('admin');
       expect(marginProvider.adminMargin, randomMargin);
     });
 
@@ -25,7 +25,7 @@ void main() {
       final marginProvider = MarginsNotifier(profileChangeNotifier);
       double randomMargin = Random().nextDouble();
       await marginProvider.setMargin(randomMargin);
-      await marginProvider.getMargin(dealerCode: 'default_code');
+      await marginProvider.getMargin('dealer',dealerCode: 'default_code');
       expect(marginProvider.dealerMargin, randomMargin);
     });
   });

@@ -10,8 +10,21 @@ class MarginsNotifier extends LoadStatusNotifier {
   double adminMargin = 0;
   double dealerMargin = 0;
   ProfileChangeNotifier profileChangeNotifier;
-  MarginsNotifier(this.profileChangeNotifier);
+  MarginsNotifier(this.profileChangeNotifier) {
+    profileChangeNotifier.addListener(() {
+      if (profileChangeNotifier.loadStatus == LoadStatus.done) {
+        getMargin('admin');
+        getMargin(
+          'dealer',
+          dealerCode: profileChangeNotifier.profile.referalCode,
+        );
+      }
+    });
+  }
 
+  double get margin => profileChangeNotifier.profile.userType == 'admin'
+      ? adminMargin
+      : dealerMargin;
   Future<bool> setMargin(double margin) async {
     var defaultAuthenticatedHeader2 =
         defaultAuthenticatedHeader(profileChangeNotifier.jwtToken);
@@ -35,11 +48,10 @@ class MarginsNotifier extends LoadStatusNotifier {
   }
 
   /// IF dealer code is non null them this gets that dealers margin
-  Future<void> getMargin({String? dealerCode}) async {
-    var user =
-        profileChangeNotifier.profile.userType == 'admin' ? '' : 'Dealer';
+  Future<void> getMargin(String userType, {String? dealerCode}) async {
+    var user = userType == 'admin' ? '' : 'Dealer';
     var uri = Uri.parse(
-      "$baseCvaultUrl/${profileChangeNotifier.profile.userType}/get${user}Margin",
+      "$baseCvaultUrl/${userType}/get${user}Margin",
     );
     var header = defaultAuthenticatedHeader(profileChangeNotifier.jwtToken);
     final response = dealerCode != null
@@ -57,7 +69,7 @@ class MarginsNotifier extends LoadStatusNotifier {
           );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      if (profileChangeNotifier.profile.userType == 'admin') {
+      if (userType == 'admin') {
         adminMargin = data['margin'];
       } else {
         dealerMargin = data['margin'];

@@ -1,5 +1,6 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/customer_provider.dart';
+import 'package:cvault/providers/margin_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
@@ -53,6 +54,10 @@ List<SingleChildWidget> get _providers {
     ChangeNotifierProvider(
       lazy: false,
       create: (context) => ProfileChangeNotifier(),
+    ),
+     ChangeNotifierProvider(
+      lazy: false,
+      create: (context) => MarginsNotifier(context.read<ProfileChangeNotifier>()),
     ),
     ChangeNotifierProvider(
       lazy: false,
