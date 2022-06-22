@@ -17,7 +17,7 @@ void main() {
     test(
       'Test to change quote quantity',
       () async {
-        QuoteProvider quoteProvider = await _setupQuoteProvider();
+        QuoteProvider quoteProvider = await setupQuoteProvider();
 
         expect(quoteProvider.transaction.cryptoType, isNotEmpty);
         quoteProvider.changeTransactionField(TransactionProps.quantity, 12.5);
@@ -31,7 +31,7 @@ void main() {
 
     test('Test to send a quote', () async {
       await (await SharedPreferences.getInstance()).clear();
-      QuoteProvider quoteProvider = await _setupQuoteProvider();
+      QuoteProvider quoteProvider = await setupQuoteProvider();
 
       quoteProvider.changeTransactionField(
         TransactionProps.customer,
@@ -60,30 +60,4 @@ void main() {
       );
     });
   });
-}
-
-Future<QuoteProvider> _setupQuoteProvider() async {
-  HomeStateNotifier homeStateNotifier = HomeStateNotifier(mockAuth);
-  ProfileChangeNotifier profileChangeNotifier = ProfileChangeNotifier(mockAuth);
-
-  profileChangeNotifier.changeUserType(
-    UserTypes.dealer,
-    "YWOid15gXkO93TIzlAOM3c84ya82",
-  );
-  await profileChangeNotifier.login('YWOid15gXkO93TIzlAOM3c84ya82');
-  await Future.wait([
-    homeStateNotifier.getCryptoDataFromAPIs(),
-    profileChangeNotifier.fetchProfile(),
-  ]);
-  expect(profileChangeNotifier.profile.uid, 'YWOid15gXkO93TIzlAOM3c84ya82');
-  expect(profileChangeNotifier.profile.phone, isNotEmpty);
-  expect(profileChangeNotifier.profile.userType, UserTypes.dealer);
-  final quoteProvider = QuoteProvider(
-    homeStateNotifier,
-    profileChangeNotifier,
-  );
-  quoteProvider.updateWithHomeNotifierState();
-  quoteProvider.updateWithProfileProviderState();
-
-  return quoteProvider;
 }

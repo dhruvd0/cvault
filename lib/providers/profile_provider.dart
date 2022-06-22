@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/customer.dart';
@@ -187,9 +188,8 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     }
 
     assert(jwtToken.isNotEmpty);
-    print(jwtToken);
-    var uri =
-        "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.customer ? 'customer/getCustomer' : 'dealer/getDealer'}";
+
+    var uri = "https://cvault-backend.herokuapp.com/${profilePath()}";
 
     assert(jwtToken.isNotEmpty);
     final response = await _fetchProfileGetCall(uri);
@@ -197,11 +197,25 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       _parseAndEmitProfile(response);
     } else if (response.statusCode == 400) {
       _parseUnregisteredProfile();
+      throw Exception('Unregistered');
     } else {
       loadStatus = LoadStatus.error;
       notifyListeners();
       throw Exception(response.statusCode.toString());
     }
+  }
+
+  String profilePath() {
+    switch (profile.userType) {
+      case UserTypes.admin:
+        return 'admin/getAdminData';
+      case UserTypes.customer:
+        return 'customer/getCustomer';
+      case UserTypes.dealer:
+        return 'dealer/getDealer';
+    }
+
+    return '';
   }
 
   Future<http.Response> _fetchProfileGetCall(String uri) {
@@ -227,8 +241,8 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   void _parseAndEmitProfile(http.Response response) {
     var body = jsonDecode(response.body);
-    var userType = profile.userType == 'customer' ? 'customer' : 'dealer';
-    var data = body['${userType}Data'];
+    log(body.toString());
+    var data = body['${profile.userType}Data'];
     var user = profile.userType == 'dealer' || profile.userType == 'admin'
         ? Dealer.fromJson(profile.userType, data)
         : Customer.fromJson(data);
