@@ -32,6 +32,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   ///
   late FirebaseAuth authInstance;
+  String jwtToken = '';
 
   ///
   ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
@@ -41,8 +42,43 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         await checkAndChangeUserType(event, userType, mockAuth);
+        await login(event.uid);
       }
     });
+  }
+
+  /// Get JWT token
+  Future<void> login(String uid) async {
+    var sharedPreferences = (await SharedPreferences.getInstance());
+    final tokenFromCache =
+        sharedPreferences.getString(SharedPreferencesKeys.token) ?? '';
+    if (tokenFromCache.isNotEmpty) {
+      jwtToken = tokenFromCache;
+      notifyListeners();
+
+      return;
+    }
+    final response = await http.post(
+      Uri.parse("https://cvault-backend.herokuapp.com/token/token-login"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(
+        {
+          "UID": uid,
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      var data = body['data'][0];
+      jwtToken = data["token"];
+
+      sharedPreferences.setString(SharedPreferencesKeys.token, jwtToken);
+      notifyListeners();
+    } else {
+      throw Exception('token/token-login, invalid response');
+    }
   }
 
   /// Checks if the user is admin
@@ -147,7 +183,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     loadStatus = LoadStatus.loading;
     notifyListeners();
     var cachedProfile = await _fetchProfileFromCache();
-
+    await login(authInstance.currentUser!.uid);
     if (cachedProfile != null) {
       emit(cachedProfile);
       loadStatus = LoadStatus.done;
@@ -160,16 +196,8 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.customer ? 'customer/getCustomer' : 'dealer/getDealer'}";
 
     var userType = profile.userType == 'admin' ? 'dealer' : profile.userType;
-
-    final response = await http.post(
-      Uri.parse(
-        uri,
-      ),
-      body: jsonEncode(
-        {'${userType}Id': authInstance.currentUser!.uid},
-      ),
-      headers: {"Content-Type": "application/json"},
-    );
+    assert(jwtToken.isNotEmpty);
+    final response = await _fetchProfileGetCall(uri);
     if (response.statusCode == 200) {
       _parseAndEmitProfile(response, userType);
     } else if (response.statusCode == 400) {
@@ -179,6 +207,19 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       notifyListeners();
       throw Exception(response.statusCode.toString());
     }
+  }
+
+  Future<http.Response> _fetchProfileGetCall(String uri) {
+    return http.get(
+      Uri.parse(
+        uri,
+      ),
+    
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer $jwtToken',
+      },
+    );
   }
 
   void _parseUnregisteredProfile() {
@@ -191,7 +232,8 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   }
 
   void _parseAndEmitProfile(http.Response response, String userType) {
-    var data = jsonDecode(response.body)['${userType}Data'];
+    var body = jsonDecode(response.body);
+    var data = body['${userType}Data'];
     var user = profile.userType == 'dealer' || profile.userType == 'admin'
         ? Dealer.fromJson(profile.userType, data)
         : Customer.fromJson(data);
@@ -229,6 +271,12 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   /// Registers a new customer or a new dealer, and fetches a profile if successfully created.
   Future<void> createNewProfile() async {
+    if (profile.userType == UserTypes.customer) {
+      if (profile.referralCode.isEmpty) {
+        profile = (profile as Customer).copyWith(referralCode: 'default_code');
+      }
+    }
+
     Map<String, dynamic> data = profile.toJson();
     data['phone'] = FirebaseAuth.instance.currentUser!.phoneNumber;
     data['${profile.userType}Id'] = FirebaseAuth.instance.currentUser!.uid;

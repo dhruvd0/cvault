@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/home_provider.dart';
@@ -45,7 +46,8 @@ void main() {
       );
 
       await quoteProvider.sendQuote();
-      final transactionsProvider = TransactionsProvider(quoteProvider.profileChangeNotifier);
+      final transactionsProvider =
+          TransactionsProvider(quoteProvider.profileChangeNotifier);
       await transactionsProvider
           .getDealerTransaction(mockAuth.currentUser!.uid);
       expect(
@@ -60,6 +62,10 @@ void main() {
 Future<QuoteProvider> _setupQuoteProvider() async {
   HomeStateNotifier homeStateNotifier = HomeStateNotifier(mockAuth);
   ProfileChangeNotifier profileChangeNotifier = ProfileChangeNotifier(mockAuth);
+  profileChangeNotifier.changeUserType(
+    UserTypes.admin,
+    "g9wTu4GgDwNKBqlHjc24so5z4i73",
+  );
   await Future.wait([
     homeStateNotifier.getCryptoDataFromAPIs(),
     profileChangeNotifier.fetchProfile(),

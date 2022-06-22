@@ -5,11 +5,12 @@ import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/profile_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:http/http.dart' as http;
 
 class TransactionsProvider extends LoadStatusNotifier {
-  ProfileChangeNotifier profileChangeNotifier;
+  final ProfileChangeNotifier profileChangeNotifier;
   List<Transaction> _transactions = [];
 
   TransactionsProvider(this.profileChangeNotifier) {
@@ -42,21 +43,27 @@ class TransactionsProvider extends LoadStatusNotifier {
   }) async {
     loadStatus = LoadStatus.loading;
     notifyListeners();
+    if (profileChangeNotifier.jwtToken.isEmpty) {
+      await profileChangeNotifier.login(profileChangeNotifier.authInstance.currentUser!.uid);
+    }
+    Map<String, String>? header = {
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer ${profileChangeNotifier.jwtToken}',
+    };
+
     final response = getAllTransactions
         ? await http.get(
             Uri.parse(
               "$backendBaseUrl/transaction/getAllTransaction",
             ),
+            headers: header,
           )
-        : await http.post(
+        : await http.get(
             Uri.parse(
               "$backendBaseUrl/transaction/get-transaction",
             ),
-            body: jsonEncode(
-              {
-                "dealerId": dealerId,
-              },
-            ),
+          
+            headers: header,
           );
 
     if (response.statusCode == 200) {
@@ -78,7 +85,8 @@ class TransactionsProvider extends LoadStatusNotifier {
     http.Response response,
     List<Transaction> transactions,
   ) {
-    final List<dynamic> data = jsonDecode(response.body);
+    var body = jsonDecode(response.body);
+    final List<dynamic> data = body['fetchTrans'];
     for (var tr in data) {
       transactions.add(Transaction.fromJson(tr));
     }
