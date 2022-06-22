@@ -1,5 +1,7 @@
-import 'dart:convert';
 import 'dart:developer';
+import 'package:cvault/models/transaction/transaction.dart';
+import 'package:cvault/providers/getadd.dart';
+import 'package:cvault/providers/transactions_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:cvault/Screens/settting.dart';
 import 'package:cvault/providers/home_provider.dart';
@@ -25,35 +27,23 @@ class DashboardPage extends StatefulWidget {
 }
 
 /// @suraj96506 document this
-late http.Response res;
-
-///
-dynamic add;
 
 class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    getadds();
-  }
-
-  getadds() async {
-    res = await http.get(
-      Uri.parse(
-        "https://cvault-backend.herokuapp.com/advertisment/get-link",
-      ),
-    );
-
-    setState(() {
-      add = jsonDecode(res.body);
-      log(add[0]['link'].toString());
+    Future.delayed(Duration.zero).then((value) {
+      final provider =
+          Provider.of<advertismentProvider>(context, listen: false).getadd();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    final provider = Provider.of<advertismentProvider>(context);
 
+    // ignore: newline-before-return
     return Scaffold(
       drawerEnableOpenDragGesture: false,
       key: scaffoldKey,
@@ -321,58 +311,53 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                               userType == UserTypes.admin
                                   ? Container()
-                                  : Visibility(
-                                      visible: add == null ? false : true,
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.50,
-                                        margin: const EdgeInsets.symmetric(
-                                          vertical: 5,
-                                          horizontal: 10,
-                                        ),
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.85,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          color: Colors.white,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            const Text('AD'),
-                                            SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.60,
-                                              child: Center(
-                                                child: add == null
-                                                    ? Image.asset(
-                                                        "assets/test_ad.gif",
-                                                        fit: BoxFit.fitHeight,
-                                                      )
-                                                    : Image.network(
-                                                        add[0]["link"],
-                                                        fit: BoxFit.contain,
-                                                        errorBuilder: (
-                                                          context,
-                                                          exception,
-                                                          stackTrack,
-                                                        ) {
-                                                          return Image.asset(
-                                                            "assets/test_ad.gif",
-                                                          );
-                                                        },
-                                                      ),
-                                              ),
+                                  : Container(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.50,
+                                      margin: const EdgeInsets.symmetric(
+                                        vertical: 5,
+                                        horizontal: 10,
+                                      ),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.85,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          const Text('AD'),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.60,
+                                            child: Center(
+                                              child: provider.listData.isEmpty
+                                                  ? Image.asset(
+                                                      "assets/test_ad.gif",
+                                                      fit: BoxFit.fitHeight,
+                                                    )
+                                                  : Image.network(
+                                                      provider.listData[0].link,
+                                                      fit: BoxFit.contain,
+                                                      errorBuilder: (
+                                                        context,
+                                                        exception,
+                                                        stackTrack,
+                                                      ) {
+                                                        return Image.asset(
+                                                          "assets/test_ad.gif",
+                                                        );
+                                                      },
+                                                    ),
                                             ),
-                                            const Text('AD'),
-                                          ],
-                                        ),
+                                          ),
+                                          const Text('AD'),
+                                        ],
                                       ),
                                     ),
                             ],

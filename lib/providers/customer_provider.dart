@@ -26,7 +26,7 @@ class CustomerProvider extends LoadStatusNotifier {
     try {
       final response = await http.get(
         Uri.parse(
-          "https://cvault-backend.herokuapp.com/customer/getAllCustomer",
+          "https://cvault-backend.herokuapp.com/dealer/getDealerCustomer",
         ),
       );
 

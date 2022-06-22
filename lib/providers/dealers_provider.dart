@@ -63,4 +63,6 @@ class DealersProvider extends ChangeNotifier {
       rethrow;
     }
   }
+
+  //fetchspecific
 }

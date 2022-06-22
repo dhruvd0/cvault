@@ -1,6 +1,6 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/customer_provider.dart';
-import 'package:cvault/providers/margin_provider.dart';
+import 'package:cvault/providers/getadd.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
@@ -20,6 +20,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:device_preview/device_preview.dart';
+
+import 'providers/margin_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,11 +55,16 @@ List<SingleChildWidget> get _providers {
     ),
     ChangeNotifierProvider(
       lazy: false,
+      create: ((context) => advertismentProvider()),
+    ),
+    ChangeNotifierProvider(
+      lazy: false,
       create: (context) => ProfileChangeNotifier(),
     ),
-     ChangeNotifierProvider(
+    ChangeNotifierProvider(
       lazy: false,
-      create: (context) => MarginsNotifier(context.read<ProfileChangeNotifier>()),
+      create: (context) =>
+          MarginsNotifier(context.read<ProfileChangeNotifier>()),
     ),
     ChangeNotifierProvider(
       lazy: false,
