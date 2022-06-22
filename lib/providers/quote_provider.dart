@@ -65,13 +65,20 @@ class QuoteProvider extends LoadStatusNotifier {
     Map<String, dynamic> quoteData = _quoteDataFromTransactions(sendersID);
 
     loadStatus = LoadStatus.loading;
+
     notifyListeners();
+    
+    assert(profileChangeNotifier.jwtToken.isNotEmpty);
+    Map<String, String>? header = {
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer ${profileChangeNotifier.jwtToken}',
+    };
 
     final response = await post(
       Uri.parse(
         "https://cvault-backend.herokuapp.com/transaction/post-transaction",
       ),
-      headers: {"Content-Type": "application/json"},
+      headers: header,
       body: jsonEncode(quoteData),
     );
 

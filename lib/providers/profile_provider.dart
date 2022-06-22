@@ -32,6 +32,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   ///
   late FirebaseAuth authInstance;
+  String jwtToken = '';
 
   ///
   ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
@@ -41,8 +42,39 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         await checkAndChangeUserType(event, userType, mockAuth);
+        await login(event.uid);
       }
     });
+  }
+
+  /// Get JWT token
+  Future<void> login(String uid) async {
+    var sharedPreferences = (await SharedPreferences.getInstance());
+    final tokenFromCache =
+        sharedPreferences.getString(SharedPreferencesKeys.token) ?? '';
+    if (tokenFromCache.isNotEmpty) {
+      jwtToken = tokenFromCache;
+      notifyListeners();
+
+      return;
+    }
+    final response = await http.post(
+      Uri.parse("https://cvault-backend.herokuapp.com/token/token-login"),
+      body: jsonEncode(
+        {
+          "UID": uid,
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      jwtToken = body['token'];
+
+      sharedPreferences.setString(SharedPreferencesKeys.token, body['token']);
+      notifyListeners();
+    } else {
+      throw Exception('token/token-login, invalid response');
+    }
   }
 
   /// Checks if the user is admin
@@ -147,7 +179,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     loadStatus = LoadStatus.loading;
     notifyListeners();
     var cachedProfile = await _fetchProfileFromCache();
-
+    await login(FirebaseAuth.instance.currentUser!.uid);
     if (cachedProfile != null) {
       emit(cachedProfile);
       loadStatus = LoadStatus.done;
@@ -160,16 +192,8 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.customer ? 'customer/getCustomer' : 'dealer/getDealer'}";
 
     var userType = profile.userType == 'admin' ? 'dealer' : profile.userType;
-
-    final response = await http.post(
-      Uri.parse(
-        uri,
-      ),
-      body: jsonEncode(
-        {'${userType}Id': authInstance.currentUser!.uid},
-      ),
-      headers: {"Content-Type": "application/json"},
-    );
+    assert(jwtToken.isNotEmpty);
+    final response = await _fetchProfilePostCall(uri, userType);
     if (response.statusCode == 200) {
       _parseAndEmitProfile(response, userType);
     } else if (response.statusCode == 400) {
@@ -179,6 +203,21 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       notifyListeners();
       throw Exception(response.statusCode.toString());
     }
+  }
+
+  Future<http.Response> _fetchProfilePostCall(String uri, String userType) {
+    return http.post(
+      Uri.parse(
+        uri,
+      ),
+      body: jsonEncode(
+        {'${userType}Id': authInstance.currentUser!.uid},
+      ),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer $jwtToken',
+      },
+    );
   }
 
   void _parseUnregisteredProfile() {

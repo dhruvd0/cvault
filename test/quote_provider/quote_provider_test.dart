@@ -60,6 +60,7 @@ void main() {
 Future<QuoteProvider> _setupQuoteProvider() async {
   HomeStateNotifier homeStateNotifier = HomeStateNotifier(mockAuth);
   ProfileChangeNotifier profileChangeNotifier = ProfileChangeNotifier(mockAuth);
+  
   await Future.wait([
     homeStateNotifier.getCryptoDataFromAPIs(),
     profileChangeNotifier.fetchProfile(),

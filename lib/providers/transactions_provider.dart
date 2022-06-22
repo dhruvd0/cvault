@@ -5,11 +5,12 @@ import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/profile_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:http/http.dart' as http;
 
 class TransactionsProvider extends LoadStatusNotifier {
-  ProfileChangeNotifier profileChangeNotifier;
+  final ProfileChangeNotifier profileChangeNotifier;
   List<Transaction> _transactions = [];
 
   TransactionsProvider(this.profileChangeNotifier) {
@@ -42,11 +43,20 @@ class TransactionsProvider extends LoadStatusNotifier {
   }) async {
     loadStatus = LoadStatus.loading;
     notifyListeners();
+    if (profileChangeNotifier.jwtToken.isEmpty) {
+      await profileChangeNotifier.login(FirebaseAuth.instance.currentUser!.uid);
+    }
+    Map<String, String>? header = {
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer ${profileChangeNotifier.jwtToken}',
+    };
+
     final response = getAllTransactions
         ? await http.get(
             Uri.parse(
               "$backendBaseUrl/transaction/getAllTransaction",
             ),
+            headers: header,
           )
         : await http.post(
             Uri.parse(
@@ -57,6 +67,7 @@ class TransactionsProvider extends LoadStatusNotifier {
                 "dealerId": dealerId,
               },
             ),
+            headers: header,
           );
 
     if (response.statusCode == 200) {
