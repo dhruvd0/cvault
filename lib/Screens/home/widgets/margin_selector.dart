@@ -1,4 +1,5 @@
 import 'package:cvault/providers/home_provider.dart';
+import 'package:cvault/providers/margin_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +18,8 @@ class MarginSelector extends StatelessWidget {
       builder: (context, homeStateNotifier, _) {
         final state = homeStateNotifier.state;
         // ignore: newline-before-return
-        return Consumer<QuoteProvider>(
-          builder: (_, quoteProvider, __) {
+        return Consumer<MarginsNotifier>(
+          builder: (_, marginNotifier, __) {
             return Column(
               children: [
                 Container(
@@ -64,9 +65,8 @@ class MarginSelector extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                quoteProvider.transaction.margin.toString() +
-                                    "%",
-                                style: TextStyle(
+                                "${marginNotifier.margin.toStringAsFixed(2)}%",
+                                style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: Colors.white,
                                   fontSize: 18,

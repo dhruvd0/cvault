@@ -25,11 +25,10 @@ class TransactionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     void _onRefresh() async {
       // monitor network fetch
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
       Provider.of<TransactionsProvider>(context, listen: false)
           .getAllTransactions();
-      print(Provider.of<TransactionsProvider>(context, listen: false)
-          .getAllTransactions());
+    
       // if failed,use refreshFailed()
     }
 
@@ -50,7 +49,7 @@ class TransactionsPage extends StatelessWidget {
       body: GestureDetector(
         onVerticalDragDown: (details) {
           _onRefresh();
-          print("hey");
+        
         },
         child: Consumer<TransactionsProvider>(
           builder: (context, transactionsProvider, __) {

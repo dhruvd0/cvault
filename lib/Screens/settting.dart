@@ -219,11 +219,10 @@ class _SettingsState extends State<Settings> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                           ),
-                                          child: const Center(
-                                            child: Text(
-                                              "5.00",
-                                              // homeStateNotifier.state.difference
-                                              //     .toStringAsFixed(2),
+                                          child:  Center(
+                                            child: TextFormField(
+                                              initialValue: 0.toString(),
+                                              
                                               style: TextStyle(
                                                 color: Colors.white,
                                               ),
@@ -233,6 +232,7 @@ class _SettingsState extends State<Settings> {
                                       ),
                                     ],
                                   ),
+                                
                                 ],
                               ),
                               const SizedBox(

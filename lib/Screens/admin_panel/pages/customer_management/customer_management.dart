@@ -29,10 +29,9 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
     final customerProvider = Provider.of<CustomerProvider>(context);
     void _onRefresh() async {
       // monitor network fetch
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
       Provider.of<CustomerProvider>(context, listen: false)
           .fetchAndSetCustomers();
-
       // if failed,use refreshFailed()
     }
 

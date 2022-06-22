@@ -8,6 +8,7 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/mocks.dart';
 
@@ -16,7 +17,7 @@ void main() {
     test(
       'Test to change quote quantity',
       () async {
-        QuoteProvider quoteProvider = await _setupQuoteProvider();
+        QuoteProvider quoteProvider = await setupQuoteProvider();
 
         expect(quoteProvider.transaction.cryptoType, isNotEmpty);
         quoteProvider.changeTransactionField(TransactionProps.quantity, 12.5);
@@ -29,7 +30,8 @@ void main() {
     );
 
     test('Test to send a quote', () async {
-      QuoteProvider quoteProvider = await _setupQuoteProvider();
+      await (await SharedPreferences.getInstance()).clear();
+      QuoteProvider quoteProvider = await setupQuoteProvider();
 
       quoteProvider.changeTransactionField(
         TransactionProps.customer,
@@ -45,7 +47,8 @@ void main() {
         randomQuantity,
       );
 
-      await quoteProvider.sendQuote();
+      final success = await quoteProvider.sendQuote();
+      expect(success, true);
       final transactionsProvider =
           TransactionsProvider(quoteProvider.profileChangeNotifier);
       await transactionsProvider
@@ -57,26 +60,4 @@ void main() {
       );
     });
   });
-}
-
-Future<QuoteProvider> _setupQuoteProvider() async {
-  HomeStateNotifier homeStateNotifier = HomeStateNotifier(mockAuth);
-  ProfileChangeNotifier profileChangeNotifier = ProfileChangeNotifier(mockAuth);
-  profileChangeNotifier.changeUserType(
-    UserTypes.admin,
-    "g9wTu4GgDwNKBqlHjc24so5z4i73",
-  );
-  await Future.wait([
-    homeStateNotifier.getCryptoDataFromAPIs(),
-    profileChangeNotifier.fetchProfile(),
-  ]);
-
-  final quoteProvider = QuoteProvider(
-    homeStateNotifier,
-    profileChangeNotifier,
-  );
-  quoteProvider.updateWithHomeNotifierState();
-  quoteProvider.updateWithProfileProviderState();
-
-  return quoteProvider;
 }

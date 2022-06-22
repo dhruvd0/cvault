@@ -116,7 +116,8 @@ class _AdminPanelState extends State<AdminPanel> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CustomerManagementPage(),
+                                builder: (context) =>
+                                    const CustomerManagementPage(),
                               ),
                             );
                           },

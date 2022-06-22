@@ -21,6 +21,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:device_preview/device_preview.dart';
 
+import 'providers/margin_provider.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -58,6 +60,11 @@ List<SingleChildWidget> get _providers {
     ChangeNotifierProvider(
       lazy: false,
       create: (context) => ProfileChangeNotifier(),
+    ),
+    ChangeNotifierProvider(
+      lazy: false,
+      create: (context) =>
+          MarginsNotifier(context.read<ProfileChangeNotifier>()),
     ),
     ChangeNotifierProvider(
       lazy: false,

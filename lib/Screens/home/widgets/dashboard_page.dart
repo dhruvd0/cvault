@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/getadd.dart';
@@ -287,10 +286,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  homeStateNotifier
-                                                          .state.difference
-                                                          .toStringAsFixed(2) +
-                                                      "%",
+                                                  "${homeStateNotifier.state.difference.toStringAsFixed(2)}%",
                                                   style: const TextStyle(
                                                     fontFamily: 'Poppins',
                                                     fontSize: 16,
