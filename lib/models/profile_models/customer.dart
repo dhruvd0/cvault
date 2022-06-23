@@ -35,7 +35,7 @@ class Customer extends Profile {
         middleName: json["middleName"] ?? '',
         lastName: json["lastName"] ?? '',
         email: json["email"] ?? '',
-        referalCode: '',
+        referalCode: json['referalCode'] ?? '',
         phone: json["phone"] ?? '',
       );
 
@@ -47,6 +47,7 @@ class Customer extends Profile {
         "lastName": lastName,
         "phone": phone,
         "email": email,
+        'referalCode': referalCode,
       };
 
   ///

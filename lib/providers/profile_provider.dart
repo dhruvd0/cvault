@@ -53,6 +53,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   /// Get JWT token
   Future<void> login(String uid) async {
+    assert(uid.isNotEmpty);
     var sharedPreferences = (await SharedPreferences.getInstance());
     final response = await http.post(
       Uri.parse("https://cvault-backend.herokuapp.com/token/token-login"),
@@ -71,7 +72,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       jwtToken = data["token"];
       notifyListeners();
       await sharedPreferences.setString(SharedPreferencesKeys.token, jwtToken);
-    } else {
+    } else if (response.statusCode >= 400) {
       throw Exception('token/token-login, invalid response');
     }
   }
@@ -190,7 +191,11 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     if (jwtToken.isEmpty) {
       await login(authInstance.currentUser!.uid);
     }
-    assert(jwtToken.isNotEmpty);
+    if (jwtToken.isEmpty) {
+      _emitUnregisteredProfile();
+
+      return;
+    }
 
     var uri = "https://cvault-backend.herokuapp.com/${profilePath()}";
 
@@ -199,7 +204,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     if (response.statusCode == 200) {
       _parseAndEmitProfile(response);
     } else if (response.statusCode == 400) {
-      _parseUnregisteredProfile();
+      _emitUnregisteredProfile();
     } else {
       loadStatus = LoadStatus.error;
       notifyListeners();
@@ -232,7 +237,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     );
   }
 
-  void _parseUnregisteredProfile() {
+  void _emitUnregisteredProfile() {
     var user = profile.userType == 'dealer' || profile.userType == 'admin'
         ? Dealer.fromJson(profile.userType, const {})
         : Customer.fromJson(const {});
@@ -288,33 +293,36 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     _setDefaultreferalCodeForCustomer();
 
     Map<String, dynamic> data = profile.toJson();
-    data['phone'] = FirebaseAuth.instance.currentUser!.phoneNumber;
-    data['${profile.userType}Id'] = FirebaseAuth.instance.currentUser!.uid;
-    var uri =
-        "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.dealer ? 'dealer/createDealer' : 'customer/create-customer'}";
+    data['phone'] = authInstance.currentUser!.phoneNumber;
+    data['UID'] = authInstance.currentUser!.uid;
+
     loadStatus = LoadStatus.loading;
     notifyListeners();
     final response = await http.post(
       Uri.parse(
-        uri,
+        "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.dealer ? 'dealer/createDealer' : 'customer/create-customer'}",
       ),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(data),
     );
-    await _saveProfileToCache();
+
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body)[
           profile.userType == UserTypes.dealer ? 'InsertDealer' : 'data'];
+
       emit(
         profile.userType == UserTypes.dealer
             ? Dealer.fromJson('dealer', json)
             : Customer.fromJson(json),
       );
+      await login(authInstance.currentUser!.uid);
       loadStatus = LoadStatus.done;
+
+      await _saveProfileToCache();
     } else {
       loadStatus = LoadStatus.error;
 
-      throw Exception('$uri ${response.statusCode}');
+      throw Exception('create profile: ${response.statusCode}');
     }
     notifyListeners();
   }
