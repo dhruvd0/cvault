@@ -1,6 +1,6 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/customer_provider.dart';
-import 'package:cvault/providers/getadd.dart';
+import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
@@ -55,7 +55,7 @@ List<SingleChildWidget> get _providers {
     ),
     ChangeNotifierProvider(
       lazy: false,
-      create: ((context) => advertismentProvider()),
+      create: ((context) => AdvertisementProvider()),
     ),
     ChangeNotifierProvider(
       lazy: false,
@@ -66,13 +66,7 @@ List<SingleChildWidget> get _providers {
       create: (context) =>
           MarginsNotifier(context.read<ProfileChangeNotifier>()),
     ),
-    ChangeNotifierProvider(
-      lazy: false,
-      create: (context) => QuoteProvider(
-        context.read<HomeStateNotifier>(),
-        context.read<ProfileChangeNotifier>(),
-      ),
-    ),
+    _buildQuoteChangeNotifierProvider(),
     ChangeNotifierProvider.value(value: DealersProvider()),
     ChangeNotifierProvider(
       lazy: false,
@@ -82,6 +76,16 @@ List<SingleChildWidget> get _providers {
     ),
     ChangeNotifierProvider.value(value: CustomerProvider()),
   ];
+}
+
+ChangeNotifierProvider<QuoteProvider> _buildQuoteChangeNotifierProvider() {
+  return ChangeNotifierProvider(
+    lazy: false,
+    create: (context) => QuoteProvider(
+      context.read<HomeStateNotifier>(),
+      context.read<ProfileChangeNotifier>(),
+    ),
+  );
 }
 
 /// Entry point for cvault app

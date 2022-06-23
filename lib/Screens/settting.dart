@@ -219,11 +219,10 @@ class _SettingsState extends State<Settings> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                           ),
-                                          child:  Center(
+                                          child: Center(
                                             child: TextFormField(
                                               initialValue: 0.toString(),
-                                              
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -232,7 +231,6 @@ class _SettingsState extends State<Settings> {
                                       ),
                                     ],
                                   ),
-                                
                                 ],
                               ),
                               const SizedBox(

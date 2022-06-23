@@ -22,8 +22,6 @@ class DealerManagementPage extends StatelessWidget {
       // monitor network fetch
       await Future.delayed(const Duration(milliseconds: 1000));
       Provider.of<DealersProvider>(context, listen: false).fetchAndSetDealers();
-   
-      
     }
 
     late DealersProvider dealerProvider;

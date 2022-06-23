@@ -1,11 +1,9 @@
 import 'dart:math';
 
-import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/margin_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../config/mocks.dart';
-import '../quote_provider/quote_provider_test.dart';
 
 void main() {
   group('Margin Tests:', () {

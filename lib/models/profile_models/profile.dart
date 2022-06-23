@@ -59,6 +59,7 @@ abstract class Profile extends Equatable {
   ///
   factory Profile.fromMap(Map<String, dynamic> map) {
     var userType = map['userType'];
+
     return userType == UserTypes.dealer || userType == UserTypes.admin
         ? Dealer.fromJson(userType, map)
         : Customer.fromJson(map);

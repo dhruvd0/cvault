@@ -1,10 +1,7 @@
 import 'dart:math';
 
-import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/models/transaction/transaction.dart';
-import 'package:cvault/providers/home_provider.dart';
-import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter_test/flutter_test.dart';

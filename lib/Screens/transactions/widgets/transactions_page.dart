@@ -28,7 +28,7 @@ class TransactionsPage extends StatelessWidget {
       await Future.delayed(const Duration(milliseconds: 1000));
       Provider.of<TransactionsProvider>(context, listen: false)
           .getAllTransactions();
-    
+
       // if failed,use refreshFailed()
     }
 
@@ -49,7 +49,6 @@ class TransactionsPage extends StatelessWidget {
       body: GestureDetector(
         onVerticalDragDown: (details) {
           _onRefresh();
-        
         },
         child: Consumer<TransactionsProvider>(
           builder: (context, transactionsProvider, __) {

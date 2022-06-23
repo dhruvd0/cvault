@@ -1,8 +1,4 @@
-import 'dart:developer';
-import 'package:cvault/models/transaction/transaction.dart';
-import 'package:cvault/providers/getadd.dart';
-import 'package:cvault/providers/transactions_provider.dart';
-import 'package:http/http.dart' as http;
+import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:cvault/Screens/settting.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/models/home_state.dart';
@@ -33,15 +29,14 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero).then((value) {
-      final provider =
-          Provider.of<advertismentProvider>(context, listen: false).getadd();
+      Provider.of<AdvertisementProvider>(context, listen: false).getAd();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    final provider = Provider.of<advertismentProvider>(context);
+    final provider = Provider.of<AdvertisementProvider>(context);
 
     // ignore: newline-before-return
     return Scaffold(
@@ -330,7 +325,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
                                           const Text('AD'),
-                                          Container(
+                                          SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *

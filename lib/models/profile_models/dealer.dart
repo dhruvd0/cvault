@@ -42,22 +42,22 @@ class Dealer extends Profile {
   ///
   factory Dealer.fromJson(String userType, Map<String, dynamic> json) {
     return Dealer(
-        uid: json["UID"] ?? '',
-        dealerId: json["UID"] ?? '',
-        firstName: json["firstName"] ?? '',
-        lastName: json['lastName'] ?? '',
-        middleName: json['middleName'] ?? '',
-        userType: userType,
-        phone: json["phone"] ?? '',
-        email: json["email"] ?? '',
-        active: json["active"] ?? false,
-        referalCode: json['referalCode']??'',
-        transactions: json['transactions'] == null
-            ? []
-            : List<String>.from(
-                json["transactions"].map((x) => x.toString()),
-              ),
-      );
+      uid: json["UID"] ?? '',
+      dealerId: json["UID"] ?? '',
+      firstName: json["firstName"] ?? '',
+      lastName: json['lastName'] ?? '',
+      middleName: json['middleName'] ?? '',
+      userType: userType,
+      phone: json["phone"] ?? '',
+      email: json["email"] ?? '',
+      active: json["active"] ?? false,
+      referalCode: json['referalCode'] ?? '',
+      transactions: json['transactions'] == null
+          ? []
+          : List<String>.from(
+              json["transactions"].map((x) => x.toString()),
+            ),
+    );
   }
 
   ///

@@ -130,7 +130,6 @@ class SendQuoteBox extends StatelessWidget {
                           {'phone': '+91$string', 'customerId': 'hey'},
                         ),
                       );
-                    
                     },
                     decoration: const InputDecoration(
                       border: InputBorder.none,

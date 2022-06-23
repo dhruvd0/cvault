@@ -2,34 +2,35 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 import '../models/profile_models/get_advertisement_model.dart';
 
-class advertismentProvider extends ChangeNotifier {
-//getaddapi
-  List<Addmodel> listData = [];
-  Future<List<Addmodel>> getadd() async {
+/// Get Advertisement
+class AdvertisementProvider extends ChangeNotifier {
+  List<AdModel> listData = [];
+  Future<List<AdModel>> getAd() async {
     http.Response response;
-    response = await http.get(Uri.parse(
-      "https://cvault-backend.herokuapp.com/advertisment/get-link",
-    ));
+    response = await http.get(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/advertisment/get-link",
+      ),
+    );
 
     if (response.statusCode == 200) {
-      String stringRespone = response.body;
       List<dynamic> mapResponse = jsonDecode(response.body);
       for (var element in mapResponse) {
-        Addmodel model = Addmodel.fromJson(element);
+        AdModel model = AdModel.fromJson(element);
         listData.add(model);
       }
       notifyListeners();
     }
+
     return listData;
   }
 
-//postaddapi
-  Future<PostAdverModel> postAdd(String link) async {
-    PostAdverModel? postAdverModel;
+  /// Post Ad API
+  Future<PostAdModel> postAdd(String link) async {
+    PostAdModel? postAdModel;
     http.Response response = await http.post(
       Uri.parse(
         'https://cvault-backend.herokuapp.com/advertisment/post-link',
@@ -40,20 +41,20 @@ class advertismentProvider extends ChangeNotifier {
     );
 
     var jsonResponse = json.decode(response.body);
-    postAdverModel = PostAdverModel.fromJson(jsonResponse);
+    postAdModel = PostAdModel.fromJson(jsonResponse);
 
-    return postAdverModel;
+    return postAdModel;
   }
 }
 
-List<Addmodel> addmodelFromJson(String str) =>
-    List<Addmodel>.from(json.decode(str).map((x) => Addmodel.fromJson(x)));
+List<AdModel> addmodelFromJson(String str) =>
+    List<AdModel>.from(json.decode(str).map((x) => AdModel.fromJson(x)));
 
-String addmodelToJson(List<Addmodel> data) =>
+String addmodelToJson(List<AdModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Addmodel {
-  Addmodel({
+class AdModel {
+  AdModel({
     required this.id,
     required this.link,
     required this.date,
@@ -65,7 +66,7 @@ class Addmodel {
   DateTime date;
   int v;
 
-  factory Addmodel.fromJson(Map<String, dynamic> json) => Addmodel(
+  factory AdModel.fromJson(Map<String, dynamic> json) => AdModel(
         id: json["_id"],
         link: json["link"],
         date: DateTime.parse(json["date"]),

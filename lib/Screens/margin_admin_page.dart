@@ -8,7 +8,7 @@ class MarginAdmin extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Margin"),
+        title: const Text("Margin"),
       ),
     );
   }

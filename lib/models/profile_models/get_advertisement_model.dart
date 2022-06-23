@@ -1,13 +1,9 @@
-// To parse this JSON data, do
-//
-//     final postAdverModel = postAdverModelFromJson(jsonString);
-
 import 'dart:convert';
 
 /// @suraj96506 add document comments for this
 
-class PostAdverModel {
-  PostAdverModel({
+class PostAdModel {
+  PostAdModel({
     required this.message,
     required this.insertLink,
   });
@@ -15,12 +11,12 @@ class PostAdverModel {
   final String message;
   final InsertLink insertLink;
 
-  factory PostAdverModel.fromRawJson(String str) =>
-      PostAdverModel.fromJson(json.decode(str));
+  factory PostAdModel.fromRawJson(String str) =>
+      PostAdModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory PostAdverModel.fromJson(Map<String, dynamic> json) => PostAdverModel(
+  factory PostAdModel.fromJson(Map<String, dynamic> json) => PostAdModel(
         message: json["message"],
         insertLink: InsertLink.fromJson(json["insertLink"]),
       );

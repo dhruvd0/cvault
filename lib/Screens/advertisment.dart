@@ -1,4 +1,4 @@
-import 'package:cvault/providers/getadd.dart';
+import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +18,7 @@ class _AdvertismentState extends State<Advertisment> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<advertismentProvider>(context);
+    final provider = Provider.of<AdvertisementProvider>(context);
 
     return Scaffold(
       backgroundColor: const Color(0xff1E2224),

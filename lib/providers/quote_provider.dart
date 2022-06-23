@@ -60,9 +60,6 @@ class QuoteProvider extends LoadStatusNotifier {
   ///  [false] for 400, Bad Request(Customer not found)
   ///  and null for failure
   Future<bool?> sendQuote() async {
-    String sendersID = profileChangeNotifier.authInstance.currentUser!.uid;
-    Map<String, dynamic> quoteData = _quoteDataFromTransactions(sendersID);
-
     loadStatus = LoadStatus.loading;
 
     notifyListeners();
@@ -75,11 +72,14 @@ class QuoteProvider extends LoadStatusNotifier {
         "Content-Type": "application/json",
         "Authorization": 'Bearer ${profileChangeNotifier.jwtToken}',
       },
-      body: jsonEncode(quoteData),
+      body: jsonEncode(
+        _quoteDataFromTransactions(
+          profileChangeNotifier.authInstance.currentUser!.uid,
+        ),
+      ),
     );
 
     if (response.statusCode == 201) {
-      var body = jsonDecode(response.body);
       transaction = Transaction.fromJson(
         {TransactionProps.transactionType.name: 'buy'},
       );
@@ -93,8 +93,6 @@ class QuoteProvider extends LoadStatusNotifier {
 
       return false;
     } else {
-      loadStatus = LoadStatus.error;
-      notifyListeners();
       throw Exception('post-transaction:${response.statusCode}');
     }
   }
