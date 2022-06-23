@@ -13,12 +13,9 @@ class MarginsNotifier extends LoadStatusNotifier {
   MarginsNotifier(this.profileChangeNotifier) {
     profileChangeNotifier.addListener(() {
       if (profileChangeNotifier.loadStatus == LoadStatus.done &&
-          profileChangeNotifier.jwtToken.isNotEmpty) {
-        getMargin('admin');
-        getMargin(
-          'dealer',
-          dealerCode: profileChangeNotifier.profile.referalCode,
-        );
+          profileChangeNotifier.jwtToken.isNotEmpty &&
+          profileChangeNotifier.authInstance.currentUser != null) {
+        getAllMargins();
       }
     });
   }
@@ -77,15 +74,24 @@ class MarginsNotifier extends LoadStatusNotifier {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (userType == 'admin') {
-        adminMargin = data['margin'];
+        adminMargin = data['margin'].toDouble();
       } else {
-        dealerMargin = data['margin'];
+        dealerMargin = data['margin'].toDouble();
       }
 
       notifyListeners();
 
       return;
     }
-    throw Exception('getMargin:${response.statusCode}');
+  }
+
+  Future<void> getAllMargins() async {
+    await Future.wait([
+      getMargin('admin'),
+      getMargin(
+        'dealer',
+        dealerCode: profileChangeNotifier.profile.referalCode,
+      ),
+    ]);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cvault/Screens/settings/margin.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/profile_provider.dart';
@@ -74,8 +75,8 @@ class Quantity extends StatelessWidget {
   }
 }
 
-class Margin extends StatelessWidget {
-  const Margin({
+class QuoteMargin extends StatelessWidget {
+  const QuoteMargin({
     Key? key,
   }) : super(key: key);
 
@@ -111,36 +112,7 @@ class Margin extends StatelessWidget {
                           ),
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Center(
-                          child: TextFormField(
-                            initialValue:
-                                quoteProvider.transaction.margin.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                            ),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.phone,
-                            onChanged: (string) {
-                              double? m = double.tryParse(string);
-                              if (m != null) {
-                                quoteProvider.changeTransactionField(
-                                  TransactionProps.margin,
-                                  m,
-                                );
-                              }
-                            },
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '0',
-                              hintStyle: TextStyle(
-                                color: Colors.white54,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
+                        child: const MarginInputTextField(),
                       ),
                     ),
                   ],

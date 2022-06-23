@@ -82,8 +82,9 @@ ChangeNotifierProvider<QuoteProvider> _buildQuoteChangeNotifierProvider() {
   return ChangeNotifierProvider(
     lazy: false,
     create: (context) => QuoteProvider(
-      context.read<HomeStateNotifier>(),
-      context.read<ProfileChangeNotifier>(),
+      homeStateNotifier: context.read<HomeStateNotifier>(),
+      profileChangeNotifier: context.read<ProfileChangeNotifier>(),
+      marginsNotifier: context.read<MarginsNotifier>(),
     ),
   );
 }

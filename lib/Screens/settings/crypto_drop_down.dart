@@ -10,7 +10,7 @@ class CryptoDropdownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeStateNotifier>(
-      builder:(_,homeNotifier,__)=> DropdownButtonHideUnderline(
+      builder: (_, homeNotifier, __) => DropdownButtonHideUnderline(
         child: DropdownButton2(
           isExpanded: true,
           hint: Text(
@@ -56,7 +56,7 @@ class CryptoDropdownButton extends StatelessWidget {
 class _CryptoDropdownText extends StatelessWidget {
   final String item;
 
-  _CryptoDropdownText({required this.item});
+  const _CryptoDropdownText({required this.item});
 
   @override
   Widget build(BuildContext context) {

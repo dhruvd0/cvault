@@ -1,11 +1,5 @@
-import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
-import 'package:cvault/providers/home_provider.dart';
-import 'package:cvault/models/home_state.dart';
-import 'package:cvault/providers/profile_provider.dart';
-import 'package:cvault/Screens/profile/widgets/profile_page.dart';
-import 'package:cvault/constants/user_types.dart';
-import 'package:cvault/widgets/usd_inr_toggle.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:cvault/providers/margin_provider.dart';
+import 'package:cvault/util/ui.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +12,7 @@ class EnterMarginField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const Text(
           "Default Margin",
@@ -29,9 +24,7 @@ class EnterMarginField extends StatelessWidget {
         const SizedBox(
           height: 15,
         ),
-        SizedBox(
-          height: 50,
-          width: 120,
+        Flexible(
           child: Container(
             decoration: BoxDecoration(
               color: Colors.transparent,
@@ -46,17 +39,47 @@ class EnterMarginField extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Center(
-              child: TextFormField(
-                initialValue: 0.toString(),
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            child: const MarginInputTextField(),
           ),
         ),
       ],
+    );
+  }
+}
+
+class MarginInputTextField extends StatelessWidget {
+  const MarginInputTextField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 100),
+        child: Consumer<MarginsNotifier>(
+          builder: (_, marginsNotifier, __) => TextFormField(
+            initialValue: marginsNotifier.margin.toStringAsFixed(2),
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+            ),
+            textAlign: TextAlign.center,
+            onChanged: (string) {
+              var parse = double.tryParse(string);
+              if (parse == null) {
+                showSnackBar('Enter a valid margin', context);
+
+                return;
+              }
+              marginsNotifier.setMargin(parse);
+            },
+          ),
+        ),
+      ),
     );
   }
 }

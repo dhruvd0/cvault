@@ -228,7 +228,7 @@ class _QuoteState extends State<Quote> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
-                            Margin(),
+                            QuoteMargin(),
                             Quantity(),
                           ],
                         ),

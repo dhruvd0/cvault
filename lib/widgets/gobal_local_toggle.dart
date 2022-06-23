@@ -1,4 +1,3 @@
-
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 /// Toggle between global and local API ticker
-
 
 class GLOBALToLOCALToggle extends StatelessWidget {
   ///

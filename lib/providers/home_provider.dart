@@ -99,8 +99,8 @@ class HomeStateNotifier extends ChangeNotifier {
             cryptoCurrencies.indexWhere((element) => element.wazirxKey == key);
         if (index != -1) {
           cryptoCurrencies[index] = cryptoCurrencies[index].copyWith(
-            wazirxPrice: double.parse(buyPrice),
-            sellPrice: double.parse(sellPrice),
+            wazirxBuyPrice: double.parse(buyPrice),
+            wazirxSellPrice: double.parse(sellPrice),
           );
           emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
           notifyListeners();
@@ -279,8 +279,8 @@ class HomeStateNotifier extends ChangeNotifier {
         if (indexWhere != -1) {
           currencies[indexWhere] = currencies[indexWhere].copyWith(
             wazirxKey: key,
-            sellPrice: double.parse(cryptoData['sell']),
-            wazirxPrice: double.parse(cryptoData['buy']),
+            wazirxSellPrice: double.parse(cryptoData['sell']),
+            wazirxBuyPrice: double.parse(cryptoData['buy']),
           );
         } else {
           currencies.add(
@@ -288,9 +288,9 @@ class HomeStateNotifier extends ChangeNotifier {
               wazirxKey: key,
               krakenKey: keyPairFromWazirxToKraken[key]!,
               name: cryptoData['name'],
-              wazirxPrice: double.parse(cryptoData['buy']),
+              wazirxBuyPrice: double.parse(cryptoData['buy']),
               krakenPrice: 0.0,
-              sellPrice: double.parse(cryptoData['sell']),
+              wazirxSellPrice: double.parse(cryptoData['sell']),
             ),
           );
         }
@@ -305,7 +305,7 @@ class HomeStateNotifier extends ChangeNotifier {
     emit(
       state.copyWith(
         difference: 100 *
-            ((crypto.wazirxPrice - crypto.krakenPrice) / crypto.krakenPrice),
+            ((crypto.wazirxBuyPrice - crypto.krakenPrice) / crypto.krakenPrice),
       ),
     );
   }

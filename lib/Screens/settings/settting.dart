@@ -7,8 +7,6 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/widgets/gobal_local_toggle.dart';
-import 'package:cvault/widgets/usd_inr_toggle.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -258,8 +256,8 @@ class _SettingsState extends State<Settings> {
                                                       ? const SizedBox()
                                                       : const SizedBox(
                                                           width: 120,
-                                                          child:CryptoDropdownButton(),
-                                                              
+                                                          child:
+                                                              CryptoDropdownButton(),
                                                         ),
                                                 ),
                                         ],
@@ -347,5 +345,3 @@ class _SettingsState extends State<Settings> {
     );
   }
 }
-
-

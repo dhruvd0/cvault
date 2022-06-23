@@ -1,5 +1,6 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/home_provider.dart';
+import 'package:cvault/providers/margin_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
@@ -24,9 +25,12 @@ Future<QuoteProvider> setupQuoteProvider() async {
   expect(profileChangeNotifier.profile.uid, 'YWOid15gXkO93TIzlAOM3c84ya82');
   expect(profileChangeNotifier.profile.phone, isNotEmpty);
   expect(profileChangeNotifier.profile.userType, UserTypes.dealer);
+  MarginsNotifier marginsNotifier = MarginsNotifier(profileChangeNotifier);
+  await marginsNotifier.getAllMargins();
   final quoteProvider = QuoteProvider(
-    homeStateNotifier,
-    profileChangeNotifier,
+    homeStateNotifier: homeStateNotifier,
+    profileChangeNotifier: profileChangeNotifier,
+    marginsNotifier: marginsNotifier,
   );
   quoteProvider.updateWithHomeNotifierState();
   quoteProvider.updateWithProfileProviderState();

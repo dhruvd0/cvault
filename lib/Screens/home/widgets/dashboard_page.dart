@@ -30,7 +30,9 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
 
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<AdvertisementProvider>(context, listen: false).getAd();
+      if (mounted) {
+        Provider.of<AdvertisementProvider>(context, listen: false).getAd();
+      }
     });
   }
 
@@ -212,8 +214,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                       state.cryptoCurrencies.isEmpty
                                           ? ''
                                           : (state.isUSD
-                                              ? '\$${homeStateNotifier.currentCryptoCurrency().wazirxPrice.toStringAsFixed(2)}'
-                                              : '₹${homeStateNotifier.currentCryptoCurrency().wazirxPrice.toStringAsFixed(2)}'),
+                                              ? '\$${homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toStringAsFixed(2)}'
+                                              : '₹${homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toStringAsFixed(2)}'),
                                       textAlign: TextAlign.start,
                                       style: const TextStyle(
                                         fontFamily: 'Poppins',
@@ -256,8 +258,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                                           ? '\$${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}'
                                                           : '₹${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}')
                                                       : state.isUSD
-                                                          ? "\$${homeStateNotifier.currentCryptoCurrency().sellPrice.toStringAsFixed(2)}"
-                                                          : '₹${homeStateNotifier.currentCryptoCurrency().sellPrice.toStringAsFixed(2)}',
+                                                          ? "\$${homeStateNotifier.currentCryptoCurrency().wazirxSellPrice.toStringAsFixed(2)}"
+                                                          : '₹${homeStateNotifier.currentCryptoCurrency().wazirxSellPrice.toStringAsFixed(2)}',
                                               textAlign: TextAlign.start,
                                               style: const TextStyle(
                                                 fontFamily: 'Poppins',

@@ -200,7 +200,6 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       _parseAndEmitProfile(response);
     } else if (response.statusCode == 400) {
       _parseUnregisteredProfile();
-      throw Exception('Unregistered');
     } else {
       loadStatus = LoadStatus.error;
       notifyListeners();
