@@ -1,4 +1,4 @@
-import 'package:cvault/Screens/settting.dart';
+import 'package:cvault/Screens/settings/settting.dart';
 import 'package:cvault/Screens/quote/widgets/buy_sell_toggle.dart';
 import 'package:cvault/Screens/quote/widgets/quantity.dart';
 import 'package:cvault/Screens/quote/widgets/send_quote_box.dart';

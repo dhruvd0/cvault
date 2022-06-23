@@ -9,10 +9,11 @@ import 'package:http/http.dart' as http;
 class MarginsNotifier extends LoadStatusNotifier {
   double adminMargin = 0;
   double dealerMargin = 0;
-  ProfileChangeNotifier profileChangeNotifier;
+  final ProfileChangeNotifier profileChangeNotifier;
   MarginsNotifier(this.profileChangeNotifier) {
     profileChangeNotifier.addListener(() {
-      if (profileChangeNotifier.loadStatus == LoadStatus.done) {
+      if (profileChangeNotifier.loadStatus == LoadStatus.done &&
+          profileChangeNotifier.jwtToken.isNotEmpty) {
         getMargin('admin');
         getMargin(
           'dealer',

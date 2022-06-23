@@ -1,5 +1,5 @@
 import 'package:cvault/providers/advertisement_provider.dart';
-import 'package:cvault/Screens/settting.dart';
+import 'package:cvault/Screens/settings/settting.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/widgets/margin_selector.dart';

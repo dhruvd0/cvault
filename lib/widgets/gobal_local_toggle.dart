@@ -1,14 +1,16 @@
+
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-/// [Switch] widget to toggle between usd and inr version of a crypto currency
-class USDToINRToggle extends StatelessWidget {
-  ///
+/// Toggle between global and local API ticker
 
-  const USDToINRToggle({
+
+class GLOBALToLOCALToggle extends StatelessWidget {
+  ///
+  const GLOBALToLOCALToggle({
     Key? key,
   }) : super(key: key);
 
@@ -24,7 +26,7 @@ class USDToINRToggle extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             const Text(
-              'USD - INR',
+              'Global - Local',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: Colors.white,
@@ -40,16 +42,10 @@ class USDToINRToggle extends StatelessWidget {
               inactiveTrackColor: Colors.black,
               value: !homeStateNotifier.state.isUSD,
               onChanged: (value) {
-                if (homeStateNotifier.state.cryptoCurrencies.isNotEmpty) {
-                  try {
-                    Provider.of<HomeStateNotifier>(
-                      context,
-                      listen: false,
-                    ).toggleIsUSD(!value);
-                  } on StateError {
-                    // TODO
-                  }
-                }
+                Provider.of<HomeStateNotifier>(
+                  context,
+                  listen: false,
+                ).toggleIsUSD(!value);
               },
             ),
           ],
