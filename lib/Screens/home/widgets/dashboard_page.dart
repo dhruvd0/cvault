@@ -28,8 +28,13 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration.zero).then((value) {
-      Provider.of<AdvertisementProvider>(context, listen: false).getAd();
+      final provider =
+          Provider.of<advertismentProvider>(context, listen: false).getadd();
+      final jswtoken =
+          Provider.of<ProfileChangeNotifier>(context, listen: false).jwtToken;
+      print(jswtoken);
     });
   }
 
