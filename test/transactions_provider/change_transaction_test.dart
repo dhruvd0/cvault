@@ -1,3 +1,4 @@
+import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uuid/uuid.dart';
@@ -15,10 +16,14 @@ void main() {
     }
     final lastTransaction = transactionsProvider.transactions.first;
     final randomStatus = 'status-${Uuid().v4()}';
-    await transactionsProvider.changeTransactionStatus(0, randomStatus);
+    await transactionsProvider.changeTransactionStatus(
+        lastTransaction.id, TransactionStatus.accepted);
     expect(
-      transactionsProvider.transactions
-          .any((t) => t.id == lastTransaction.id && t.status == randomStatus),
+      transactionsProvider.transactions.any(
+        (t) =>
+            t.id == lastTransaction.id &&
+            t.status == TransactionStatus.accepted,
+      ),
       true,
     );
   });

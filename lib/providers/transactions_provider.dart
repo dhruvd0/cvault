@@ -56,7 +56,7 @@ class TransactionsProvider extends LoadStatusNotifier {
 
     final response = await http.get(
       Uri.parse(
-        "$backendBaseUrl/transaction/${getAllTransactions ? 'getAllTransaction' : 'get-transaction'}",
+        "$backendBaseUrl/transaction/${getAllTransactions ? 'getAllTransaction' : 'get-transaction'}?page=$page",
       ),
       headers: header,
     );
@@ -80,7 +80,7 @@ class TransactionsProvider extends LoadStatusNotifier {
   ) {
     List<Transaction> transactions = [];
     var body = jsonDecode(response.body);
-    final List<dynamic> data = body is Map ? body['fetchTrans'] : body;
+    final List<dynamic> data = body is Map ? body['docs'] : body;
     for (var tr in data) {
       transactions.add(Transaction.fromJson(tr));
     }
