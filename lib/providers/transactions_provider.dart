@@ -5,6 +5,7 @@ import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/profile_provider.dart';
+import 'package:cvault/util/http.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -88,25 +89,22 @@ class TransactionsProvider extends LoadStatusNotifier {
   }
 
   Future<void> changeTransactionStatus(int index, String status) async {
-    try {
-      final response = await http.post(
-        Uri.parse(
-          "$backendBaseUrl/transaction/edit-trans",
-        ),
-        body: jsonEncode({
-          {"transactionId": _transactions[index].id, "status": status},
-        }),
-      );
+    final response = await http.post(
+      Uri.parse(
+        "$backendBaseUrl/transaction/edit-trans",
+      ),
+      body: jsonEncode({
+        {"transactionId": _transactions[index].id, "status": status},
+      }),
+      headers: defaultAuthenticatedHeader(profileChangeNotifier.token),
+    );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> trUpdated = jsonDecode(response.body);
-        _transactions[index] = Transaction.fromJson(trUpdated["updated"]);
-        notifyListeners();
-      } else {
-        throw Exception(response.statusCode);
-      }
-    } catch (error) {
-      rethrow;
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> trUpdated = jsonDecode(response.body);
+      _transactions[index] = Transaction.fromJson(trUpdated["updated"]);
+      notifyListeners();
+    } else {
+      throw Exception(response.statusCode);
     }
   }
 }
