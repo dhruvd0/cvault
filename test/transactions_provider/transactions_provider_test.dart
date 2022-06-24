@@ -1,4 +1,3 @@
-import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,7 +12,7 @@ void main() {
         profileProvider,
       );
 
-      await transactionsProvider.getAllTransactions();
+      await transactionsProvider.getTransactions();
       expect(transactionsProvider.transactions, isNotEmpty);
     });
     test('Test to fetch transactions of a dealer', () async {
@@ -21,10 +20,14 @@ void main() {
           await setupProfileProvider(TestUserIds.dealer, 'dealer');
       final transactionsProvider = TransactionsProvider(profileProvider);
 
-      await transactionsProvider.getDealerTransaction(
-        profileProvider.authInstance.currentUser!.uid,
+      await transactionsProvider.getTransactions(
+       
       );
       expect(transactionsProvider.transactions, isNotEmpty);
+      expect(
+        transactionsProvider.transactions.first.receiver.firstName,
+        isNotEmpty,
+      );
     });
   });
 }

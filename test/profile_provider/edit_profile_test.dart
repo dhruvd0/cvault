@@ -12,7 +12,13 @@ void main() {
   group('Tests to fetch and edit a profile for: :', () {
     for (var type in [UserTypes.dealer, UserTypes.customer]) {
       test(type, () async {
-        final profileProvider = ProfileChangeNotifier();
+        final profileProvider = ProfileChangeNotifier(MockFirebaseAuth(
+          signedIn: true,
+          mockUser: MockUser(
+            uid: type == 'dealer' ? TestUserIds.dealer : TestUserIds.customer,
+            phoneNumber: '+911111111111',
+          ),
+        ),);
         profileProvider.changeUserType(
           type,
           type == 'dealer' ? TestUserIds.dealer : TestUserIds.customer,
@@ -21,7 +27,7 @@ void main() {
           type == 'dealer' ? TestUserIds.dealer : TestUserIds.customer,
         );
         await profileProvider.fetchProfile();
-        String randomFirstName = Uuid().v4() + '-name';
+        String randomFirstName =  '${const Uuid().v4()}-name';
         profileProvider.profile = type == 'dealer'
             ? (profileProvider.profile as Dealer).copyWith(
                 firstName: randomFirstName,

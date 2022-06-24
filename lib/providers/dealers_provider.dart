@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -66,6 +65,4 @@ class DealersProvider extends LoadStatusNotifier {
       rethrow;
     }
   }
-
-  
 }

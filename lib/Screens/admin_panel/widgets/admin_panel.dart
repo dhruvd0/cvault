@@ -64,7 +64,7 @@ class _AdminPanelState extends State<AdminPanel> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const TransactionsPage(),
+                          builder: (context) => TransactionsPage(),
                         ),
                       );
                     },

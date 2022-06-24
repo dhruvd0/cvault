@@ -271,12 +271,11 @@ class ProfilePage extends StatelessWidget {
                                 );
                               }
                             } else {
-                               if (_formKey.currentState!.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 await Provider.of<ProfileChangeNotifier>(
                                   context,
                                   listen: false,
                                 ).updateProfile();
-                               
                               }
                             }
                           },

@@ -28,9 +28,10 @@ class TransactionTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      transaction.customer.firstName,
+                      transaction.receiver.firstName,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -68,7 +69,7 @@ class TransactionTile extends StatelessWidget {
                     ),
                     Text(
                       DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY)
-                          .format(DateTime.now()),
+                          .format(DateTime.parse(transaction.createdAt)),
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Colors.white,
@@ -95,7 +96,9 @@ class TransactionTile extends StatelessWidget {
                   onTap: () {
                     Provider.of<TransactionsProvider>(context, listen: false)
                         .changeTransactionStatus(
-                            transaction.id, TransactionStatus.accepted);
+                      transaction.id,
+                      TransactionStatus.accepted,
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -103,7 +106,9 @@ class TransactionTile extends StatelessWidget {
                       color: Colors.white,
                     ),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
+                      vertical: 10,
+                      horizontal: 20,
+                    ),
                     child: const Text('Accept'),
                   ),
                 ),
@@ -124,7 +129,9 @@ class TransactionTile extends StatelessWidget {
                       color: Colors.red,
                     ),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
+                      vertical: 10,
+                      horizontal: 20,
+                    ),
                     child: const Text(
                       'Reject',
                       style: TextStyle(color: Colors.white),

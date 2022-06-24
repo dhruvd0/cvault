@@ -1,7 +1,6 @@
 import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uuid/uuid.dart';
 
 import '../config/mocks.dart';
 
@@ -10,19 +9,21 @@ void main() {
     final profileChangeNotifier =
         await setupProfileProvider(TestUserIds.dealer, 'dealer');
     final transactionsProvider = TransactionsProvider(profileChangeNotifier);
-    await transactionsProvider.getDealerTransaction(TestUserIds.dealer);
+    await transactionsProvider.getTransactions();
     if (transactionsProvider.transactions.isEmpty) {
       /// TODO: send test quote
     }
     final lastTransaction = transactionsProvider.transactions.first;
-    final randomStatus = 'status-${Uuid().v4()}';
+
     await transactionsProvider.changeTransactionStatus(
-        lastTransaction.id, TransactionStatus.accepted);
+      lastTransaction.id,
+      TransactionStatus.accepted,
+    );
     expect(
       transactionsProvider.transactions.any(
         (t) =>
             t.id == lastTransaction.id &&
-            t.status == TransactionStatus.accepted,
+            t.status == TransactionStatus.accepted.name,
       ),
       true,
     );

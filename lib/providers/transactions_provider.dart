@@ -14,14 +14,10 @@ class TransactionsProvider extends LoadStatusNotifier {
   List<Transaction> _transactions = [];
 
   TransactionsProvider(this.profileChangeNotifier) {
-    profileChangeNotifier.addListener(() {
+    profileChangeNotifier.addListener(() async {
       if (profileChangeNotifier.loadStatus == LoadStatus.done &&
           profileChangeNotifier.token.isNotEmpty) {
-        if (profileChangeNotifier.profile.userType == UserTypes.admin) {
-          getAllTransactions();
-        } else {
-          getDealerTransaction(profileChangeNotifier.profile.uid);
-        }
+        await getTransactions();
       } else {
         _transactions = [];
         notifyListeners();
@@ -29,16 +25,24 @@ class TransactionsProvider extends LoadStatusNotifier {
     });
   }
 
+  Future<void> getTransactions() async {
+    if (profileChangeNotifier.profile.userType == UserTypes.admin) {
+      await _getAllTransactions();
+    } else {
+      await _getDealerTransaction(profileChangeNotifier.profile.uid);
+    }
+  }
+
   List<Transaction> get transactions {
     return [..._transactions];
   }
 
-  Future<void> getAllTransactions() async {
-    await getDealerTransaction('', getAllTransactions: true);
+  Future<void> _getAllTransactions() async {
+    await _getDealerTransaction('', getAllTransactions: true);
   }
 
   // To get transactions for a dealer
-  Future<void> getDealerTransaction(
+  Future<void> _getDealerTransaction(
     String dealerId, {
     bool getAllTransactions = false,
   }) async {
@@ -62,9 +66,12 @@ class TransactionsProvider extends LoadStatusNotifier {
     );
 
     if (response.statusCode == 200) {
-      _transactions = _parseTransactionsFromJsonData(
-        response,
-      ).reversed.toList();
+      _transactions.insertAll(
+        0,
+        _parseTransactionsFromJsonData(
+          response,
+        ).reversed.toList(),
+      );
 
       loadStatus = LoadStatus.done;
       notifyListeners();
@@ -96,9 +103,9 @@ class TransactionsProvider extends LoadStatusNotifier {
       Uri.parse(
         "$backendBaseUrl/transaction/edit-trans",
       ),
-      body: jsonEncode({
+      body: jsonEncode(
         {"transactionId": transactionID, "status": status.name},
-      }),
+      ),
       headers: defaultAuthenticatedHeader(profileChangeNotifier.token),
     );
 

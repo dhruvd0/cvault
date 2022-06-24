@@ -9,7 +9,7 @@ class CustomerProvider extends LoadStatusNotifier {
   /// @suraj96506 document this
   bool isBack = false;
 
-  List<Customer> _customers = [];
+  final List<Customer> _customers = [];
 
   ///
   bool get isLoadedCustomers {
@@ -35,7 +35,7 @@ class CustomerProvider extends LoadStatusNotifier {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       List<Customer> temp = [];
-      data['docs'].forEach(
+      (data is Map ? data['docs'] : data).forEach(
         (element) => temp.add(
           Customer.fromJson(element),
         ),

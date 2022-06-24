@@ -60,7 +60,7 @@ class MarginInputTextField extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 100),
         child: Consumer<MarginsNotifier>(
           builder: (_, marginsNotifier, __) => TextFormField(
-          enabled: editEnabled??true,
+            enabled: editEnabled ?? true,
             initialValue: marginsNotifier.margin.toStringAsFixed(2),
             style: const TextStyle(
               color: Colors.white,

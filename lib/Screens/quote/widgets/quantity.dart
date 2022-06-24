@@ -112,7 +112,9 @@ class QuoteMargin extends StatelessWidget {
                           ),
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: const MarginInputTextField(editEnabled: false,),
+                        child: const MarginInputTextField(
+                          editEnabled: false,
+                        ),
                       ),
                     ),
                   ],

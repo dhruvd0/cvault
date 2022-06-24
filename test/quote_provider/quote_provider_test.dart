@@ -31,7 +31,7 @@ void main() {
       QuoteProvider quoteProvider = await setupQuoteProvider();
 
       quoteProvider.changeTransactionField(
-        TransactionProps.customer,
+        TransactionProps.receiver,
         Profile.fromMap(
           const {'phone': '1234567890', 'customerId': ''},
         ),
@@ -43,16 +43,18 @@ void main() {
         TransactionProps.quantity,
         randomQuantity,
       );
-
+      assert(quoteProvider.transaction.quantity == randomQuantity);
       final success = await quoteProvider.sendQuote();
       expect(success, true);
       final transactionsProvider =
           TransactionsProvider(quoteProvider.profileChangeNotifier);
-      await transactionsProvider
-          .getDealerTransaction(mockAuth.currentUser!.uid);
+      await transactionsProvider.getTransactions();
       expect(
-        transactionsProvider.transactions
-            .any((element) => element.quantity == randomQuantity),
+        transactionsProvider.transactions.any(
+          (element) =>
+              element.quantity == randomQuantity &&
+              element.createdAt.isNotEmpty,
+        ),
         true,
       );
     });
