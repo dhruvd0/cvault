@@ -34,7 +34,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   ///
   late FirebaseAuth authInstance;
-  String jwtToken = '';
+  String token = '';
 
   ///
   ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
@@ -69,10 +69,10 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
       var data = body['data'][0];
-      jwtToken = data["token"];
+      token = data["token"];
       notifyListeners();
-      await sharedPreferences.setString(SharedPreferencesKeys.token, jwtToken);
-    } else if (response.statusCode >= 400) {
+      await sharedPreferences.setString(SharedPreferencesKeys.token, token);
+    } else if (response.statusCode > 404) {
       throw Exception('token/token-login, invalid response');
     }
   }
@@ -169,7 +169,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   ///
   void reset() {
-    jwtToken = '';
+    token = '';
     emit(const ProfileInitial());
   }
 
@@ -188,10 +188,10 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
       return;
     }
-    if (jwtToken.isEmpty) {
+    if (token.isEmpty) {
       await login(authInstance.currentUser!.uid);
     }
-    if (jwtToken.isEmpty) {
+    if (token.isEmpty) {
       _emitUnregisteredProfile();
 
       return;
@@ -199,7 +199,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
     var uri = "https://cvault-backend.herokuapp.com/${profilePath()}";
 
-    assert(jwtToken.isNotEmpty);
+    assert(token.isNotEmpty);
     final response = await _fetchProfileGetCall(uri);
     if (response.statusCode == 200) {
       _parseAndEmitProfile(response);
@@ -232,7 +232,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       ),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer $jwtToken',
+        "Authorization": 'Bearer $token',
       },
     );
   }

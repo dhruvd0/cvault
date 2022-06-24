@@ -43,7 +43,7 @@ void main() {
               );
         await profileProvider.createNewProfile();
         await profileProvider.fetchProfile();
-        expect(profileProvider.jwtToken, isNotEmpty);
+        expect(profileProvider.token, isNotEmpty);
       });
     }
   });

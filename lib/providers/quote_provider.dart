@@ -98,7 +98,7 @@ class QuoteProvider extends LoadStatusNotifier {
       ),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ${profileChangeNotifier.jwtToken}',
+        "Authorization": 'Bearer ${profileChangeNotifier.token}',
       },
       body: jsonEncode(
         _quoteDataFromTransactions(

@@ -14,7 +14,8 @@ class TransactionsProvider extends LoadStatusNotifier {
 
   TransactionsProvider(this.profileChangeNotifier) {
     profileChangeNotifier.addListener(() {
-      if (profileChangeNotifier.loadStatus == LoadStatus.done) {
+      if (profileChangeNotifier.loadStatus == LoadStatus.done &&
+          profileChangeNotifier.token.isNotEmpty) {
         if (profileChangeNotifier.profile.userType == UserTypes.admin) {
           getAllTransactions();
         } else {
@@ -42,14 +43,14 @@ class TransactionsProvider extends LoadStatusNotifier {
   }) async {
     loadStatus = LoadStatus.loading;
     notifyListeners();
-    if (profileChangeNotifier.jwtToken.isEmpty) {
+    if (profileChangeNotifier.token.isEmpty) {
       await profileChangeNotifier.login(
         profileChangeNotifier.authInstance.currentUser!.uid,
       );
     }
     Map<String, String>? header = {
       "Content-Type": "application/json",
-      "Authorization": 'Bearer ${profileChangeNotifier.jwtToken}',
+      "Authorization": 'Bearer ${profileChangeNotifier.token}',
     };
 
     final response = await http.get(

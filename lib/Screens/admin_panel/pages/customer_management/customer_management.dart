@@ -27,7 +27,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
 
   @override
   Widget build(BuildContext context) {
-    final jswtokcen = Provider.of<ProfileChangeNotifier>(context).jwtToken;
+    final jswtokcen = Provider.of<ProfileChangeNotifier>(context).token;
     final customerProvider = Provider.of<CustomerProvider>(context);
     void _onRefresh() async {
       // monitor network fetch

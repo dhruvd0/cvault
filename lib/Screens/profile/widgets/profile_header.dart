@@ -60,11 +60,11 @@ class ProfileHeader extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
-                  'Code',
-                  style: TextStyle(
+                 Text(
+                'Referral Code: ${state.referalCode}',
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
               ],

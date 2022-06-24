@@ -13,7 +13,7 @@ class MarginsNotifier extends LoadStatusNotifier {
   MarginsNotifier(this.profileChangeNotifier) {
     profileChangeNotifier.addListener(() {
       if (profileChangeNotifier.loadStatus == LoadStatus.done &&
-          profileChangeNotifier.jwtToken.isNotEmpty &&
+          profileChangeNotifier.token.isNotEmpty &&
           profileChangeNotifier.authInstance.currentUser != null) {
         getAllMargins();
       }
@@ -25,7 +25,7 @@ class MarginsNotifier extends LoadStatusNotifier {
       : dealerMargin;
   Future<bool> setMargin(double margin) async {
     var defaultAuthenticatedHeader2 =
-        defaultAuthenticatedHeader(profileChangeNotifier.jwtToken);
+        defaultAuthenticatedHeader(profileChangeNotifier.token);
     var user =
         profileChangeNotifier.profile.userType == 'admin' ? '' : 'Dealer';
     if (profileChangeNotifier.profile.userType == 'admin') {
@@ -57,7 +57,7 @@ class MarginsNotifier extends LoadStatusNotifier {
     var uri = Uri.parse(
       "$baseCvaultUrl/$userType/get${user}Margin",
     );
-    var header = defaultAuthenticatedHeader(profileChangeNotifier.jwtToken);
+    var header = defaultAuthenticatedHeader(profileChangeNotifier.token);
     final response = dealerCode != null
         ? await http.post(
             uri,

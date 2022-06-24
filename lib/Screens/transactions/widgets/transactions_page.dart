@@ -20,18 +20,18 @@ class TransactionsPage extends StatelessWidget {
       },
     );
   }
+  void _onRefresh(context) async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    Provider.of<TransactionsProvider>(context, listen: false)
+        .getAllTransactions();
+
+    // if failed,use refreshFailed()
+  }
 
   @override
   Widget build(BuildContext context) {
-    void _onRefresh() async {
-      // monitor network fetch
-      await Future.delayed(const Duration(milliseconds: 1000));
-      Provider.of<TransactionsProvider>(context, listen: false)
-          .getAllTransactions();
-
-      // if failed,use refreshFailed()
-    }
-
+  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -46,39 +46,42 @@ class TransactionsPage extends StatelessWidget {
         elevation: 0,
       ),
       backgroundColor: const Color(0xff1E2224),
-      body: GestureDetector(
-        onVerticalDragDown: (details) {
-          _onRefresh();
+      body: RefreshIndicator(
+        onRefresh: () async{
+           _onRefresh(context);
         },
-        child: Consumer<TransactionsProvider>(
-          builder: (context, transactionsProvider, __) {
-            switch (transactionsProvider.loadStatus) {
-              case LoadStatus.loading:
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: Color(0xff03dac6),
-                  ),
-                );
-              case LoadStatus.error:
-                return const Center(
-                  child: Text(
-                    "An error has occurred!",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              default:
-                return GestureDetector(
-                  onVerticalDragDown: ((details) {
-                    _buildTransactionList(
+        child: GestureDetector(
+         
+          child: Consumer<TransactionsProvider>(
+            builder: (context, transactionsProvider, __) {
+              switch (transactionsProvider.loadStatus) {
+                case LoadStatus.loading:
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xff03dac6),
+                    ),
+                  );
+                case LoadStatus.error:
+                  return const Center(
+                    child: Text(
+                      "An error has occurred!",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                default:
+                  return GestureDetector(
+                    onVerticalDragDown: ((details) {
+                      _buildTransactionList(
+                        transactionsProvider.transactions,
+                      );
+                    }),
+                    child: _buildTransactionList(
                       transactionsProvider.transactions,
-                    );
-                  }),
-                  child: _buildTransactionList(
-                    transactionsProvider.transactions,
-                  ),
-                );
-            }
-          },
+                    ),
+                  );
+              }
+            },
+          ),
         ),
       ),
     );

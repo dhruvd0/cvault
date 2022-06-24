@@ -50,8 +50,9 @@ class EnterMarginField extends StatelessWidget {
 class MarginInputTextField extends StatelessWidget {
   const MarginInputTextField({
     Key? key,
+    this.editEnabled,
   }) : super(key: key);
-
+  final bool? editEnabled;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -59,6 +60,7 @@ class MarginInputTextField extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 100),
         child: Consumer<MarginsNotifier>(
           builder: (_, marginsNotifier, __) => TextFormField(
+          enabled: editEnabled??true,
             initialValue: marginsNotifier.margin.toStringAsFixed(2),
             style: const TextStyle(
               color: Colors.white,
