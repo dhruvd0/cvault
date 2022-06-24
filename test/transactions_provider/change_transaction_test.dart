@@ -13,7 +13,9 @@ void main() {
     if (transactionsProvider.transactions.isEmpty) {
       /// TODO: send test quote
     }
-    final lastTransaction = transactionsProvider.transactions.first;
+    
+    final lastTransaction = transactionsProvider.transactions
+        .firstWhere((element) => element.receiver.uid == TestUserIds.dealer);
 
     await transactionsProvider.changeTransactionStatus(
       lastTransaction.id,

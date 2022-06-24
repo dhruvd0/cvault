@@ -99,21 +99,23 @@ class TransactionsProvider extends LoadStatusNotifier {
     String transactionID,
     TransactionStatus status,
   ) async {
-    final response = await http.post(
+    var object = {"transID": transactionID, "status": status.name};
+    var jsonEncode2 = jsonEncode(
+        object,
+      );
+    final response = await http.patch(
       Uri.parse(
-        "$backendBaseUrl/transaction/edit-trans",
+        "$backendBaseUrl/transaction/changeStatus",
       ),
-      body: jsonEncode(
-        {"transactionId": transactionID, "status": status.name},
-      ),
+      body: jsonEncode2,
       headers: defaultAuthenticatedHeader(profileChangeNotifier.token),
     );
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> trUpdated = jsonDecode(response.body);
+     
       int index =
           _transactions.indexWhere((element) => element.id == transactionID);
-      _transactions[index] = Transaction.fromJson(trUpdated["updated"]);
+      _transactions[index] = _transactions[index].copyWith(status: status.name);
       notifyListeners();
     } else {
       throw Exception(response.statusCode);

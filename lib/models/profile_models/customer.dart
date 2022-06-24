@@ -30,8 +30,8 @@ class Customer extends Profile {
   ///
   factory Customer.fromJson(Map<String, dynamic> json) {
     return Customer(
-      uid: json['customerId'] ?? '',
-      customerId: json["customerId"] ?? '',
+      uid: json['UID'] ?? '',
+      customerId: json["UID"] ?? '',
       firstName: json["firstName"] ?? '',
       middleName: json["middleName"] ?? '',
       lastName: json["lastName"] ?? '',

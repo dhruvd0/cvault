@@ -253,10 +253,8 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     var body = jsonDecode(response.body);
     log(body.toString());
     var data = body['${profile.userType}Data'];
-    var user = profile.userType == 'dealer' || profile.userType == 'admin'
-        ? Dealer.fromJson(profile.userType, data)
-        : Customer.fromJson(data);
-    if (user.phone == '1111111111') {
+    var user = Profile.fromMap(data);
+    if (user.phone == '+911111111111') {
       user = (user as Dealer).copyWith(userType: 'admin');
     }
     emit(user);
@@ -339,16 +337,14 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     }
   }
 
-  Future<void> updateProfile({BuildContext? buildContext}) async {
+  Future<bool> updateProfile({BuildContext? buildContext}) async {
     Map<String, dynamic> data = profile.toJson();
-    data['phone'] = authInstance.currentUser!.phoneNumber;
-    data['UID'] = authInstance.currentUser!.uid;
 
     loadStatus = LoadStatus.loading;
     notifyListeners();
-    final response = await http.post(
+    final response = await http.patch(
       Uri.parse(
-        "https://cvault-backend.herokuapp.com/edit-profile/",
+        "https://cvault-backend.herokuapp.com/dealer/editProfile/",
       ),
       headers: defaultAuthenticatedHeader(token),
       body: jsonEncode(data),
@@ -360,8 +356,16 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         showSnackBar(map.toString(), buildContext);
       }
       loadStatus = LoadStatus.error;
+      throw Exception('edit Profile:${response.statusCode}');
     } else {
+      var map = jsonDecode(response.body);
+      profile = Profile.fromMap(map);
       loadStatus = LoadStatus.done;
+      notifyListeners();
+
+      _saveProfileToCache();
+
+      return true;
     }
   }
 }

@@ -28,6 +28,7 @@ void main() {
         transactionsProvider.transactions.first.receiver.firstName,
         isNotEmpty,
       );
+      
     });
   });
 }
