@@ -6,11 +6,14 @@ import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
+import 'package:cvault/util/http.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
+import 'package:cvault/util/ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 
 ///
 enum LoadStatus {
@@ -333,6 +336,32 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         profile = (profile as Customer).copyWith(referalCode: 'default_code');
         notifyListeners();
       }
+    }
+  }
+
+  Future<void> updateProfile({BuildContext? buildContext}) async {
+    Map<String, dynamic> data = profile.toJson();
+    data['phone'] = authInstance.currentUser!.phoneNumber;
+    data['UID'] = authInstance.currentUser!.uid;
+
+    loadStatus = LoadStatus.loading;
+    notifyListeners();
+    final response = await http.post(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/edit-profile/",
+      ),
+      headers: defaultAuthenticatedHeader(token),
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode != 200) {
+      var map = jsonDecode(response.body);
+      if (buildContext != null) {
+        showSnackBar(map.toString(), buildContext);
+      }
+      loadStatus = LoadStatus.error;
+    } else {
+      loadStatus = LoadStatus.done;
     }
   }
 }

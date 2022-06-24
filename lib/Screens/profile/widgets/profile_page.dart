@@ -271,7 +271,13 @@ class ProfilePage extends StatelessWidget {
                                 );
                               }
                             } else {
-                              /// TODO: profile edit api
+                               if (_formKey.currentState!.validate()) {
+                                await Provider.of<ProfileChangeNotifier>(
+                                  context,
+                                  listen: false,
+                                ).updateProfile();
+                               
+                              }
                             }
                           },
                           label: Consumer<ProfileChangeNotifier>(
