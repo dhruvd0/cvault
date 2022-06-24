@@ -6,11 +6,14 @@ import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
+import 'package:cvault/util/http.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
+import 'package:cvault/util/ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 
 ///
 enum LoadStatus {
@@ -250,10 +253,8 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     var body = jsonDecode(response.body);
     log(body.toString());
     var data = body['${profile.userType}Data'];
-    var user = profile.userType == 'dealer' || profile.userType == 'admin'
-        ? Dealer.fromJson(profile.userType, data)
-        : Customer.fromJson(data);
-    if (user.phone == '1111111111') {
+    var user = Profile.fromMap(data);
+    if (user.phone == '+911111111111') {
       user = (user as Dealer).copyWith(userType: 'admin');
     }
     emit(user);
@@ -333,6 +334,38 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         profile = (profile as Customer).copyWith(referalCode: 'default_code');
         notifyListeners();
       }
+    }
+  }
+
+  Future<bool> updateProfile({BuildContext? buildContext}) async {
+    Map<String, dynamic> data = profile.toJson();
+
+    loadStatus = LoadStatus.loading;
+    notifyListeners();
+    final response = await http.patch(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/dealer/editProfile/",
+      ),
+      headers: defaultAuthenticatedHeader(token),
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode != 200) {
+      var map = jsonDecode(response.body);
+      if (buildContext != null) {
+        showSnackBar(map.toString(), buildContext);
+      }
+      loadStatus = LoadStatus.error;
+      throw Exception('edit Profile:${response.statusCode}');
+    } else {
+      var map = jsonDecode(response.body);
+      profile = Profile.fromMap(map);
+      loadStatus = LoadStatus.done;
+      notifyListeners();
+
+      _saveProfileToCache();
+
+      return true;
     }
   }
 }

@@ -1,35 +1,43 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
 import 'package:cvault/models/profile_models/profile.dart';
 
+enum TransactionStatus {
+  accepted,
+  rejected,
+  expired,
+  sent,
+}
+
 /// Transaction Model
 class Transaction extends Equatable {
   ///
   const Transaction({
-    required this.id,
-    required this.sender,
-    required this.customer,
-    required this.transactionType,
-    required this.currency,
-    required this.cryptoType,
-    required this.price,
     required this.costPrice,
+    required this.cryptoType,
+    required this.currency,
+    required this.receiver,
+    required this.id,
+    required this.price,
     required this.quantity,
-    required this.status,
     required this.margin,
+    required this.sender,
+    required this.status,
+    required this.transactionType,
+    this.createdAt = '',
   });
 
   ///
   factory Transaction.fromJson(
-    Map<String, dynamic> map, {
-    String receiver = 'transaction',
-  }) {
+    Map<String, dynamic> map,
+  ) {
     return Transaction(
-      id: map['id'] ?? '',
+      id: map['_id'] ?? '',
       sender: Profile.fromMap(map['sender'] ?? {}),
-      customer: Profile.fromMap(map['customer'] ?? {}),
+      receiver: Profile.fromMap(map['receiver'] ?? {}),
       transactionType: map['transactionType'] ?? '',
       currency: map['currency'] ?? '',
       cryptoType: map['cryptoType'] ?? '',
@@ -37,6 +45,7 @@ class Transaction extends Equatable {
       costPrice: map['costPrice']?.toDouble() ?? 0.0,
       quantity: map['quantity']?.toDouble() ?? 0,
       status: map['status'] ?? '',
+      createdAt: map['createdAt'] ?? '',
       margin: map['margin']?.toDouble() ?? 0,
     );
   }
@@ -55,7 +64,7 @@ class Transaction extends Equatable {
   final String currency;
 
   ///
-  final Profile customer;
+  final Profile receiver;
 
   ///
   final String id;
@@ -73,18 +82,20 @@ class Transaction extends Equatable {
   /// Sender
   final Profile sender;
 
-  /// Status can be "Accepted","Declined","Cancelled"
+  /// See [TransactionStatus]
   final String status;
 
   /// can be "buy" or "sell"
   final String transactionType;
+
+  final String createdAt;
 
   @override
   List<Object> get props {
     return [
       id,
       sender,
-      customer,
+      receiver,
       transactionType,
       currency,
       cryptoType,
@@ -103,7 +114,7 @@ class Transaction extends Equatable {
   Map<String, dynamic> toJson() => {
         "_id": id,
         "sender": sender,
-        "customer": customer,
+        "customer": receiver,
         "transactionType": transactionType,
         "currency": currency,
         "cryptoType": cryptoType,
@@ -133,30 +144,32 @@ class Transaction extends Equatable {
 
   ///
   Transaction copyWith({
-    String? id,
-    Profile? sender,
-    Profile? customer,
-    String? transactionType,
-    String? currency,
-    String? cryptoType,
-    double? price,
     double? costPrice,
+    String? cryptoType,
+    String? currency,
+    Profile? receiver,
+    String? id,
+    double? price,
     double? quantity,
-    String? status,
     double? margin,
+    Profile? sender,
+    String? status,
+    String? transactionType,
+    String? timestamps,
   }) {
     return Transaction(
-      id: id ?? this.id,
-      sender: sender ?? this.sender,
-      customer: customer ?? this.customer,
-      transactionType: transactionType ?? this.transactionType,
-      currency: currency ?? this.currency,
-      cryptoType: cryptoType ?? this.cryptoType,
-      price: price ?? this.price,
       costPrice: costPrice ?? this.costPrice,
+      cryptoType: cryptoType ?? this.cryptoType,
+      currency: currency ?? this.currency,
+      receiver: receiver ?? this.receiver,
+      id: id ?? this.id,
+      price: price ?? this.price,
       quantity: quantity ?? this.quantity,
-      status: status ?? this.status,
       margin: margin ?? this.margin,
+      sender: sender ?? this.sender,
+      status: status ?? this.status,
+      transactionType: transactionType ?? this.transactionType,
+      createdAt: timestamps ?? createdAt,
     );
   }
 }
@@ -170,7 +183,7 @@ enum TransactionProps {
   sender,
 
   ///
-  customer,
+  receiver,
 
   ///
   transactionType,

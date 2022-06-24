@@ -125,7 +125,7 @@ class SendQuoteBox extends StatelessWidget {
                     inputFormatters: const [],
                     onChanged: (string) {
                       quoteProvider.changeTransactionField(
-                        TransactionProps.customer,
+                        TransactionProps.receiver,
                         Profile.fromMap(
                           {'phone': '+91$string', 'customerId': 'hey'},
                         ),

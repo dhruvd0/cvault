@@ -133,7 +133,8 @@ class QuoteProvider extends LoadStatusNotifier {
       "costPrice": transaction.costPrice,
       "currency": transaction.currency,
       "quantity": transaction.quantity,
-      "receiversPhone": transaction.customer.phone,
+      "timestamps": DateTime.now().toIso8601String(),
+      "receiversPhone": transaction.receiver.phone,
       "sendersID": sendersID,
     };
   }
@@ -141,8 +142,8 @@ class QuoteProvider extends LoadStatusNotifier {
   void changeTransactionField(TransactionProps field, dynamic data) {
     updatePriceWithMargins();
     switch (field) {
-      case TransactionProps.customer:
-        transaction = transaction.copyWith(customer: data);
+      case TransactionProps.receiver:
+        transaction = transaction.copyWith(receiver: data);
         break;
       case TransactionProps.transactionType:
         _changeTransactionType(data);

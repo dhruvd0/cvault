@@ -1,37 +1,51 @@
 import 'package:cvault/Screens/transactions/widgets/transaction_tile.dart';
+import 'package:cvault/constants/theme.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/transaction/transaction.dart';
-
 /// ListView to see all transactions
-class TransactionsPage extends StatelessWidget {
+class TransactionsPage extends StatefulWidget {
   ///
   const TransactionsPage({Key? key}) : super(key: key);
 
-  Widget _buildTransactionList(List<Transaction> transactions) {
-    return ListView.builder(
-      itemCount: transactions.length,
-      itemBuilder: (BuildContext context, int index) {
-        // var transaction = Transaction.mock();
-        return TransactionTile(transaction: transactions[index]);
-      },
-    );
-  }
-  void _onRefresh(context) async {
-    // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
-    Provider.of<TransactionsProvider>(context, listen: false)
-        .getAllTransactions();
+  @override
+  State<TransactionsPage> createState() => _TransactionsPageState();
+}
 
-    // if failed,use refreshFailed()
+class _TransactionsPageState extends State<TransactionsPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  void _onRefresh(context) async {
+    var provider = Provider.of<TransactionsProvider>(context, listen: false);
+    provider.changePage(1);
+    await provider.getTransactions();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _scrollController.addListener(() {
+        if (!_scrollController.hasClients) {
+          return;
+        }
+        final provider =
+            Provider.of<TransactionsProvider>(context, listen: false);
+        if (_scrollController.offset ==
+                _scrollController.position.maxScrollExtent &&
+            !(provider.loadStatus == LoadStatus.loading)) {
+          provider.incrementPage();
+          provider.getTransactions();
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -47,20 +61,13 @@ class TransactionsPage extends StatelessWidget {
       ),
       backgroundColor: const Color(0xff1E2224),
       body: RefreshIndicator(
-        onRefresh: () async{
-           _onRefresh(context);
+        onRefresh: () async {
+          _onRefresh(context);
         },
         child: GestureDetector(
-         
           child: Consumer<TransactionsProvider>(
             builder: (context, transactionsProvider, __) {
               switch (transactionsProvider.loadStatus) {
-                case LoadStatus.loading:
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: Color(0xff03dac6),
-                    ),
-                  );
                 case LoadStatus.error:
                   return const Center(
                     child: Text(
@@ -69,15 +76,33 @@ class TransactionsPage extends StatelessWidget {
                     ),
                   );
                 default:
-                  return GestureDetector(
-                    onVerticalDragDown: ((details) {
-                      _buildTransactionList(
-                        transactionsProvider.transactions,
-                      );
-                    }),
-                    child: _buildTransactionList(
-                      transactionsProvider.transactions,
-                    ),
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: ListView.builder(
+                          itemCount: transactionsProvider.transactions.length,
+                          controller: _scrollController,
+                          itemBuilder: (BuildContext context, int index) {
+                            // var transaction = Transaction.mock();
+                            return TransactionTile(
+                              transaction:
+                                  transactionsProvider.transactions[index],
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      transactionsProvider.loadStatus == LoadStatus.loading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: ThemeColors.lightGreenAccentColor,
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
                   );
               }
             },

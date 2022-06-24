@@ -1,4 +1,3 @@
-import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/margin_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
@@ -15,16 +14,15 @@ MockFirebaseAuth mockAuth = MockFirebaseAuth(
   ),
 );
 
-Future<QuoteProvider> setupQuoteProvider() async {
+Future<QuoteProvider> setupQuoteProvider(String uid,String userType) async {
   HomeStateNotifier homeStateNotifier = HomeStateNotifier(mockAuth);
   ProfileChangeNotifier profileChangeNotifier =
-      await setupProfileProvider(TestUserIds.dealer, 'dealer');
+      await setupProfileProvider(uid, userType);
   await Future.wait([
     homeStateNotifier.getCryptoDataFromAPIs(),
   ]);
-  expect(profileChangeNotifier.profile.uid, 'YWOid15gXkO93TIzlAOM3c84ya82');
-  expect(profileChangeNotifier.profile.phone, isNotEmpty);
-  expect(profileChangeNotifier.profile.userType, UserTypes.dealer);
+
+  expect(profileChangeNotifier.profile.userType,userType);
   MarginsNotifier marginsNotifier = MarginsNotifier(profileChangeNotifier);
   await marginsNotifier.getAllMargins();
   final quoteProvider = QuoteProvider(
@@ -51,8 +49,7 @@ Future<ProfileChangeNotifier> setupProfileProvider(
   );
   await profileChangeNotifier.login(testID);
   await profileChangeNotifier.fetchProfile();
-  expect(profileChangeNotifier.profile.uid, testID);
-  expect(profileChangeNotifier.profile.phone, isNotEmpty);
+  
 
   return profileChangeNotifier;
 }

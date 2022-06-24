@@ -9,7 +9,7 @@ class CustomerProvider extends LoadStatusNotifier {
   /// @suraj96506 document this
   bool isBack = false;
 
-  List<Customer> _customers = [];
+  final List<Customer> _customers = [];
 
   ///
   bool get isLoadedCustomers {
@@ -27,7 +27,7 @@ class CustomerProvider extends LoadStatusNotifier {
   Future<void> fetchAndSetCustomers(String token) async {
     final response = await http.get(
       Uri.parse(
-        "https://cvault-backend.herokuapp.com/dealer/getDealerCustomer",
+        "https://cvault-backend.herokuapp.com/dealer/getDealerCustomer?page=$page",
       ),
       headers: {
         'Authorization': 'Bearer $token',
@@ -37,12 +37,12 @@ class CustomerProvider extends LoadStatusNotifier {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       List<Customer> temp = [];
-      data.forEach(
+      (data is Map ? data['docs'] : data).forEach(
         (element) => temp.add(
           Customer.fromJson(element),
         ),
       );
-      _customers = temp;
+      _customers.addAll(temp);
       notifyListeners();
     } else {
       throw Exception(response.statusCode);

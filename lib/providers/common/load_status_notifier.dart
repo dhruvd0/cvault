@@ -6,4 +6,17 @@ import 'package:flutter/material.dart';
 abstract class LoadStatusNotifier extends ChangeNotifier {
   ///
   LoadStatus loadStatus = LoadStatus.initial;
+
+  /// Page number to maintain for pagination
+  int page = 1;
+
+  void incrementPage() {
+    page += 1;
+    notifyListeners();
+  }
+
+  void changePage(int newPage) {
+    page = newPage;
+    notifyListeners();
+  }
 }
