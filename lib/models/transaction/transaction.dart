@@ -32,9 +32,8 @@ class Transaction extends Equatable {
 
   ///
   factory Transaction.fromJson(
-    Map<String, dynamic> map, {
-    String receiver = 'transaction',
-  }) {
+    Map<String, dynamic> map,
+  ) {
     return Transaction(
       id: map['_id'] ?? '',
       sender: Profile.fromMap(map['sender'] ?? {}),

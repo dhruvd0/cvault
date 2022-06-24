@@ -1,8 +1,6 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
-import 'package:cvault/providers/profile_provider.dart';
-import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uuid/uuid.dart';
 

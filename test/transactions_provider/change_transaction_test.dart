@@ -20,6 +20,7 @@ void main() {
     await transactionsProvider.changeTransactionStatus(
       lastTransaction.id,
       TransactionStatus.accepted,
+   
     );
     expect(
       transactionsProvider.transactions.any(

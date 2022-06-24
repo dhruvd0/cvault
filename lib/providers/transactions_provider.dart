@@ -6,7 +6,8 @@ import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/util/http.dart';
-
+import 'package:cvault/util/ui.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class TransactionsProvider extends LoadStatusNotifier {
@@ -66,11 +67,10 @@ class TransactionsProvider extends LoadStatusNotifier {
     );
 
     if (response.statusCode == 200) {
-      _transactions.insertAll(
-        0,
+      _transactions.addAll(
         _parseTransactionsFromJsonData(
           response,
-        ).reversed.toList(),
+        ).toList(),
       );
 
       loadStatus = LoadStatus.done;
@@ -97,12 +97,17 @@ class TransactionsProvider extends LoadStatusNotifier {
 
   Future<void> changeTransactionStatus(
     String transactionID,
-    TransactionStatus status,
-  ) async {
+    TransactionStatus status, [
+    BuildContext? context,
+  ]) async {
     var object = {"transID": transactionID, "status": status.name};
     var jsonEncode2 = jsonEncode(
-        object,
-      );
+      object,
+    );
+    int index =
+        _transactions.indexWhere((element) => element.id == transactionID);
+    _transactions[index] = _transactions[index].copyWith(status: status.name);
+    notifyListeners();
     final response = await http.patch(
       Uri.parse(
         "$backendBaseUrl/transaction/changeStatus",
@@ -112,11 +117,10 @@ class TransactionsProvider extends LoadStatusNotifier {
     );
 
     if (response.statusCode == 200) {
-     
-      int index =
-          _transactions.indexWhere((element) => element.id == transactionID);
-      _transactions[index] = _transactions[index].copyWith(status: status.name);
-      notifyListeners();
+      if (context == null) {
+        return;
+      }
+      showSnackBar('Transaction ${status.name}', context);
     } else {
       throw Exception(response.statusCode);
     }

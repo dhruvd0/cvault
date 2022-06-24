@@ -1,4 +1,3 @@
-import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/margin_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';

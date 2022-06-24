@@ -5,41 +5,43 @@ import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/transaction/transaction.dart';
-
 /// ListView to see all transactions
-class TransactionsPage extends StatelessWidget {
+class TransactionsPage extends StatefulWidget {
   ///
-  TransactionsPage({Key? key}) : super(key: key);
-  final ScrollController _scrollController = ScrollController();
-  Widget _buildTransactionList(
-    List<Transaction> transactions,
-    BuildContext context,
-  ) {
-    var provider = Provider.of<TransactionsProvider>(context, listen: false);
+  const TransactionsPage({Key? key}) : super(key: key);
 
-    return ListView.builder(
-      itemCount: transactions.length,
-      controller: _scrollController
-        ..addListener(() {
-          if (_scrollController.offset ==
-                  _scrollController.position.maxScrollExtent &&
-              !(provider.loadStatus == LoadStatus.loading)) {
-            provider.incrementPage();
-            provider.getTransactions();
-          }
-        }),
-      itemBuilder: (BuildContext context, int index) {
-        // var transaction = Transaction.mock();
-        return TransactionTile(transaction: transactions[index]);
-      },
-    );
-  }
+  @override
+  State<TransactionsPage> createState() => _TransactionsPageState();
+}
+
+class _TransactionsPageState extends State<TransactionsPage> {
+  final ScrollController _scrollController = ScrollController();
 
   void _onRefresh(context) async {
     var provider = Provider.of<TransactionsProvider>(context, listen: false);
     provider.changePage(1);
     await provider.getTransactions();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _scrollController.addListener(() {
+        if (!_scrollController.hasClients) {
+          return;
+        }
+        final provider =
+            Provider.of<TransactionsProvider>(context, listen: false);
+        if (_scrollController.offset ==
+                _scrollController.position.maxScrollExtent &&
+            !(provider.loadStatus == LoadStatus.loading)) {
+          provider.incrementPage();
+          provider.getTransactions();
+        }
+      });
+    });
   }
 
   @override
@@ -78,9 +80,16 @@ class TransactionsPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Flexible(
-                        child: _buildTransactionList(
-                          transactionsProvider.transactions,
-                          context,
+                        child: ListView.builder(
+                          itemCount: transactionsProvider.transactions.length,
+                          controller: _scrollController,
+                          itemBuilder: (BuildContext context, int index) {
+                            // var transaction = Transaction.mock();
+                            return TransactionTile(
+                              transaction:
+                                  transactionsProvider.transactions[index],
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(

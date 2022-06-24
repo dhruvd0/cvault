@@ -4,6 +4,7 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/profile/widgets/common/profile_field.dart';
 import 'package:cvault/Screens/profile/widgets/profile_header.dart';
 import 'package:cvault/home_page.dart';
+import 'package:cvault/util/ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -272,11 +273,14 @@ class ProfilePage extends StatelessWidget {
                               }
                             } else {
                               if (_formKey.currentState!.validate()) {
-                               final result= await Provider.of<ProfileChangeNotifier>(
+                                final result =
+                                    await Provider.of<ProfileChangeNotifier>(
                                   context,
                                   listen: false,
                                 ).updateProfile();
-
+                                if (result ?? false) {
+                                  showSnackBar('Profile Updated', context);
+                                }
                               }
                             }
                           },
