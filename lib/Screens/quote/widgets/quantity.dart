@@ -87,8 +87,9 @@ class QuoteMargin extends StatelessWidget {
         var userType = profileNotifier.profile.userType;
         // ignore: newline-before-return
         return Consumer<QuoteProvider>(
-          builder: (_, quoteProvider, __) => userType == UserTypes.dealer
-              ? Column(
+          builder: (_, quoteProvider, __) => userType == UserTypes.customer
+              ? Container()
+              : Column(
                   children: [
                     const Text(
                       "Margin %",
@@ -112,12 +113,13 @@ class QuoteMargin extends StatelessWidget {
                           ),
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: const MarginInputTextField(editEnabled: false,),
+                        child: const MarginInputTextField(
+                          editEnabled: false,
+                        ),
                       ),
                     ),
                   ],
-                )
-              : Container(),
+                ),
         );
       },
     );

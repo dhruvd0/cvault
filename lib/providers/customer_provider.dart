@@ -21,7 +21,9 @@ class CustomerProvider extends LoadStatusNotifier {
     return [..._customers];
   }
 
-  /// Fetches all customers
+  /// fetch all customers
+
+  /// Fetches specific customers
   Future<void> fetchAndSetCustomers(String token) async {
     final response = await http.get(
       Uri.parse(

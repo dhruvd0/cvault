@@ -8,6 +8,7 @@ import '../models/profile_models/get_advertisement_model.dart';
 /// Get Advertisement
 class AdvertisementProvider extends ChangeNotifier {
   List<AdModel> listData = [];
+  bool? loading;
   Future<List<AdModel>> getAd() async {
     http.Response response;
     response = await http.get(
@@ -19,6 +20,7 @@ class AdvertisementProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       List<dynamic> mapResponse = jsonDecode(response.body);
       for (var element in mapResponse) {
+        loading = false;
         AdModel model = AdModel.fromJson(element);
         listData.add(model);
       }
@@ -44,6 +46,20 @@ class AdvertisementProvider extends ChangeNotifier {
     postAdModel = PostAdModel.fromJson(jsonResponse);
 
     return postAdModel;
+  }
+// delete add
+
+  Future<void> deleteAdd(link) async {
+    loading = true;
+    PostAdModel? postAdMode;
+    http.Response response = await http.delete(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/advertisment/delete-ad",
+      ),
+      body: {
+        "link": link,
+      },
+    );
   }
 }
 

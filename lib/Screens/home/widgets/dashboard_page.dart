@@ -309,53 +309,57 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                               userType == UserTypes.admin
                                   ? Container()
-                                  : Container(
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.50,
-                                      margin: const EdgeInsets.symmetric(
-                                        vertical: 5,
-                                        horizontal: 10,
-                                      ),
-                                      width: MediaQuery.of(context).size.width *
-                                          0.85,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: Colors.white,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          const Text('AD'),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.60,
-                                            child: Center(
-                                              child: provider.listData.isEmpty
-                                                  ? Image.asset(
-                                                      "assets/test_ad.gif",
-                                                      fit: BoxFit.fitHeight,
-                                                    )
-                                                  : Image.network(
-                                                      provider.listData[0].link,
-                                                      fit: BoxFit.contain,
-                                                      errorBuilder: (
-                                                        context,
-                                                        exception,
-                                                        stackTrack,
-                                                      ) {
-                                                        return Image.asset(
-                                                          "assets/test_ad.gif",
-                                                        );
-                                                      },
-                                                    ),
+                                  : Visibility(
+                                      visible: provider.listData.isEmpty
+                                          ? false
+                                          : true,
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.50,
+                                        margin: const EdgeInsets.symmetric(
+                                          vertical: 5,
+                                          horizontal: 10,
+                                        ),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.85,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          color: Colors.white,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            const Text('AD'),
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.60,
+                                              child: Center(
+                                                child: Image.network(
+                                                  provider.listData.isEmpty
+                                                      ? ""
+                                                      : provider
+                                                          .listData[0].link,
+                                                  fit: BoxFit.contain,
+                                                  errorBuilder: (
+                                                    context,
+                                                    exception,
+                                                    striktrace,
+                                                  ) =>
+                                                      Image.asset(
+                                                    "assets/test_ad.gif",
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          const Text('AD'),
-                                        ],
+                                            const Text('AD'),
+                                          ],
+                                        ),
                                       ),
                                     ),
                             ],
