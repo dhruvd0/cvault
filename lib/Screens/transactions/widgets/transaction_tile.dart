@@ -1,5 +1,7 @@
+import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/transaction/transaction.dart';
 
@@ -89,28 +91,44 @@ class TransactionTile extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(child: Container()),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    Provider.of<TransactionsProvider>(context, listen: false)
+                        .changeTransactionStatus(
+                            transaction.id, TransactionStatus.accepted);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: const Text('Accept'),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: const Text('Accept'),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.red,
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: const Text(
-                    'Reject',
-                    style: TextStyle(color: Colors.white),
+                GestureDetector(
+                  onTap: () {
+                    Provider.of<TransactionsProvider>(context, listen: false)
+                        .changeTransactionStatus(
+                      transaction.id,
+                      TransactionStatus.rejected,
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.red,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: const Text(
+                      'Reject',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ],

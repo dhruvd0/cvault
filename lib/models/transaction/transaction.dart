@@ -3,7 +3,12 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 import 'package:cvault/models/profile_models/profile.dart';
-
+enum TransactionStatus {
+  accepted,
+  rejected,
+  expired,
+  sent,
+}
 /// Transaction Model
 class Transaction extends Equatable {
   ///
@@ -73,7 +78,7 @@ class Transaction extends Equatable {
   /// Sender
   final Profile sender;
 
-  /// Status can be "Accepted","Declined","Cancelled"
+  /// See [TransactionStatus]
   final String status;
 
   /// can be "buy" or "sell"
