@@ -125,4 +125,29 @@ class TransactionsProvider extends LoadStatusNotifier {
       throw Exception(response.statusCode);
     }
   }
+
+  Future<void> deleteTransaction(
+    String transactionID,
+  ) async {
+    var object = {
+      "transID": transactionID,
+    };
+    var jsonEncode2 = jsonEncode(
+      object,
+    );
+
+    final response = await http.patch(
+      Uri.parse(
+        "$backendBaseUrl/transaction/deleteTrans",
+      ),
+      body: jsonEncode2,
+      headers: defaultAuthenticatedHeader(profileChangeNotifier.token),
+    );
+
+    if (response.statusCode != 200) {
+      {
+        throw Exception(response.statusCode);
+      }
+    }
+  }
 }

@@ -126,15 +126,18 @@ class TransactionTile extends StatelessWidget {
                                     width: 10,
                                   ),
                                   GestureDetector(
-                                    onTap: () {
-                                      Provider.of<TransactionsProvider>(
+                                    onTap: () async {
+                                      var of =
+                                          Provider.of<TransactionsProvider>(
                                         context,
                                         listen: false,
-                                      ).changeTransactionStatus(
+                                      );
+                                      await of.changeTransactionStatus(
                                         transaction.id,
                                         TransactionStatus.rejected,
                                         context,
                                       );
+                                      of.deleteTransaction(transaction.id);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(

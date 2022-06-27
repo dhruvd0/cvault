@@ -47,7 +47,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         await checkAndChangeUserType(event, userType, mockAuth);
-        if (Firebase.apps.isNotEmpty) {
+        if (Firebase.apps.isNotEmpty && token.isEmpty) {
           await login(event.uid);
         }
       }
@@ -58,6 +58,14 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   Future<void> login(String uid) async {
     assert(uid.isNotEmpty);
     var sharedPreferences = (await SharedPreferences.getInstance());
+    final tokenFromCache =
+        (sharedPreferences.getString(SharedPreferencesKeys.token) ?? '');
+    if (tokenFromCache.isNotEmpty) {
+      token = tokenFromCache;
+      notifyListeners();
+
+      return;
+    }
     final response = await http.post(
       Uri.parse("https://cvault-backend.herokuapp.com/token/token-login"),
       headers: {
@@ -171,8 +179,9 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   }
 
   ///
-  void reset() {
+  Future<void> reset() async {
     token = '';
+    await (await SharedPreferences.getInstance()).clear();
     emit(const ProfileInitial());
   }
 
@@ -316,6 +325,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
             ? Dealer.fromJson('dealer', json)
             : Customer.fromJson(json),
       );
+      await (await SharedPreferences.getInstance()).clear();
       await login(authInstance.currentUser!.uid);
       loadStatus = LoadStatus.done;
 
