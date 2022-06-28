@@ -125,4 +125,16 @@ class TransactionsProvider extends LoadStatusNotifier {
       throw Exception(response.statusCode);
     }
   }
+
+  Future<void> deleteTransaction(id) async {
+    http.Response response;
+    response = await http.delete(
+      Uri.parse(
+        'https://cvault-backend.herokuapp.com/transaction/deleteTrans',
+      ),
+      body: {
+        "transID": id,
+      },
+    );
+  }
 }

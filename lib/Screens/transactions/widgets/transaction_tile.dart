@@ -130,10 +130,8 @@ class TransactionTile extends StatelessWidget {
                                       Provider.of<TransactionsProvider>(
                                         context,
                                         listen: false,
-                                      ).changeTransactionStatus(
+                                      ).deleteTransaction(
                                         transaction.id,
-                                        TransactionStatus.rejected,
-                                        context,
                                       );
                                     },
                                     child: Container(
