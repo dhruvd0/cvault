@@ -129,27 +129,15 @@ class TransactionsProvider extends LoadStatusNotifier {
     }
   }
 
-  Future<void> deleteTransaction(
-    String transactionID,
-  ) async {
-    await changeTransactionStatus(transactionID, TransactionStatus.rejected);
-    var object = {
-      "transID": transactionID,
-    };
-    var jsonEncode2 = jsonEncode(
-      object,
-    );
-
-    final response = await http.delete(
+  Future<void> deleteTransaction(id) async {
+    http.Response response;
+    response = await http.delete(
       Uri.parse(
-        "$backendBaseUrl/transaction/deleteTrans",
+        'https://cvault-backend.herokuapp.com/transaction/deleteTrans',
       ),
-      body: jsonEncode2,
-      headers: defaultAuthenticatedHeader(profileChangeNotifier.token),
+      body: {
+        "transID": id,
+      },
     );
-
-    if (response.statusCode != 200) {
-      throw Exception(response.statusCode);
-    }
   }
 }
