@@ -13,6 +13,7 @@ import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/margin_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
+import 'package:flutter/foundation.dart';
 
 class QuoteProvider extends LoadStatusNotifier {
   Transaction transaction =
@@ -118,6 +119,9 @@ class QuoteProvider extends LoadStatusNotifier {
     } else if (response.statusCode == 400) {
       loadStatus = LoadStatus.done;
       notifyListeners();
+      if (!kReleaseMode) {
+        throw Exception('post-transaction:${response.statusCode}');
+      }
 
       return false;
     } else {

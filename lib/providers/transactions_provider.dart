@@ -48,7 +48,10 @@ class TransactionsProvider extends LoadStatusNotifier {
     bool getAllTransactions = false,
   }) async {
     loadStatus = LoadStatus.loading;
-    notifyListeners();
+    if (page == 1) {
+      _transactions = [];
+    }
+
     if (profileChangeNotifier.token.isEmpty) {
       await profileChangeNotifier.login(
         profileChangeNotifier.authInstance.currentUser!.uid,
@@ -129,6 +132,7 @@ class TransactionsProvider extends LoadStatusNotifier {
   Future<void> deleteTransaction(
     String transactionID,
   ) async {
+    await changeTransactionStatus(transactionID, TransactionStatus.rejected);
     var object = {
       "transID": transactionID,
     };
@@ -136,7 +140,7 @@ class TransactionsProvider extends LoadStatusNotifier {
       object,
     );
 
-    final response = await http.patch(
+    final response = await http.delete(
       Uri.parse(
         "$backendBaseUrl/transaction/deleteTrans",
       ),
@@ -145,9 +149,7 @@ class TransactionsProvider extends LoadStatusNotifier {
     );
 
     if (response.statusCode != 200) {
-      {
-        throw Exception(response.statusCode);
-      }
+      throw Exception(response.statusCode);
     }
   }
 }

@@ -80,22 +80,30 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Flexible(
-                        child: ListView.builder(
-                          itemCount: transactionsProvider.transactions.length,
-                          controller: _scrollController,
-                          itemBuilder: (BuildContext context, int index) {
-                            // var transaction = Transaction.mock();
-                            return TransactionTile(
-                              transaction:
-                                  transactionsProvider.transactions[index],
-                            );
-                          },
-                        ),
+                        child: transactionsProvider.transactions.isEmpty &&
+                                transactionsProvider.loadStatus ==
+                                    LoadStatus.loading
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : ListView.builder(
+                                itemCount:
+                                    transactionsProvider.transactions.length,
+                                controller: _scrollController,
+                                itemBuilder: (BuildContext context, int index) {
+                                  // var transaction = Transaction.mock();
+                                  return TransactionTile(
+                                    transaction: transactionsProvider
+                                        .transactions[index],
+                                  );
+                                },
+                              ),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      transactionsProvider.loadStatus == LoadStatus.loading
+                      transactionsProvider.loadStatus == LoadStatus.loading &&
+                              transactionsProvider.transactions.isNotEmpty
                           ? const Center(
                               child: CircularProgressIndicator(
                                 color: ThemeColors.lightGreenAccentColor,

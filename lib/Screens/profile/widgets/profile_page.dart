@@ -273,7 +273,7 @@ class ProfilePage extends StatelessWidget {
                               }
                             } else {
                               if (_formKey.currentState!.validate()) {
-                                final result =
+                                final bool? result =
                                     await Provider.of<ProfileChangeNotifier>(
                                   context,
                                   listen: false,
