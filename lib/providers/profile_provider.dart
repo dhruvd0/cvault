@@ -14,6 +14,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 ///
 enum LoadStatus {
@@ -47,7 +48,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         String? userType = (await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey);
         await checkAndChangeUserType(event, userType, mockAuth);
-        if (Firebase.apps.isNotEmpty) {
+        if (Firebase.apps.isNotEmpty && token.isEmpty) {
           await login(event.uid);
         }
       }
@@ -58,11 +59,17 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   Future<void> login(String uid) async {
     assert(uid.isNotEmpty);
     var sharedPreferences = (await SharedPreferences.getInstance());
+    final tokenFromCache =
+        (sharedPreferences.getString(SharedPreferencesKeys.token) ?? '');
+    if (tokenFromCache.isNotEmpty) {
+      token = tokenFromCache;
+      notifyListeners();
+
+      return;
+    }
     final response = await http.post(
       Uri.parse("https://cvault-backend.herokuapp.com/token/token-login"),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: defaultAuthenticatedHeader(token),
       body: jsonEncode(
         {
           "UID": uid,
@@ -73,6 +80,9 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       var body = jsonDecode(response.body);
       var data = body['data'][0];
       token = data["token"];
+
+      log(token);
+
       notifyListeners();
       await sharedPreferences.setString(SharedPreferencesKeys.token, token);
     } else if (response.statusCode > 404) {
@@ -171,8 +181,9 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   }
 
   ///
-  void reset() {
+  Future<void> reset() async {
     token = '';
+    await (await SharedPreferences.getInstance()).clear();
     emit(const ProfileInitial());
   }
 
@@ -251,7 +262,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   void _parseAndEmitProfile(http.Response response) {
     var body = jsonDecode(response.body);
-    log(body.toString());
+
     var data = body['${profile.userType}Data'];
     var user = Profile.fromMap(data);
     if (user.phone == '+911111111111') {
@@ -316,6 +327,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
             ? Dealer.fromJson('dealer', json)
             : Customer.fromJson(json),
       );
+      await (await SharedPreferences.getInstance()).clear();
       await login(authInstance.currentUser!.uid);
       loadStatus = LoadStatus.done;
 
@@ -337,7 +349,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     }
   }
 
-  Future<bool> updateProfile({BuildContext? buildContext}) async {
+  Future<bool?> updateProfile({BuildContext? buildContext}) async {
     Map<String, dynamic> data = profile.toJson();
 
     loadStatus = LoadStatus.loading;
@@ -356,7 +368,12 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
         showSnackBar(map.toString(), buildContext);
       }
       loadStatus = LoadStatus.error;
-      throw Exception('edit Profile:${response.statusCode}');
+      notifyListeners();
+      if (kReleaseMode) {
+        throw Exception('edit Profile:${response.statusCode}');
+      }
+
+      return false;
     } else {
       var map = jsonDecode(response.body);
       profile = Profile.fromMap(map);

@@ -58,7 +58,7 @@ void main() {
       quoteProvider.changeTransactionField(
         TransactionProps.receiver,
         Profile.fromMap(
-          const {'phone': '+919999999999', 'customerId': ''},
+          const {'phone': '+919999999999', },
         ),
       );
       double randomQuantity =

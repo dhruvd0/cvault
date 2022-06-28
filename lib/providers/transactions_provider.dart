@@ -48,7 +48,10 @@ class TransactionsProvider extends LoadStatusNotifier {
     bool getAllTransactions = false,
   }) async {
     loadStatus = LoadStatus.loading;
-    notifyListeners();
+    if (page == 1) {
+      _transactions = [];
+    }
+
     if (profileChangeNotifier.token.isEmpty) {
       await profileChangeNotifier.login(
         profileChangeNotifier.authInstance.currentUser!.uid,
