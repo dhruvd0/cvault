@@ -47,7 +47,7 @@ class HomeStateNotifier extends ChangeNotifier {
     _calculateDifference();
     wazirXChannel?.sink.close();
     startWazirXCryptoTicker();
-    await marginsNotifier.getAllMargins();
+    
   }
 
   /// [currency] corresponds to either "inr" or "usdt"
@@ -75,12 +75,12 @@ class HomeStateNotifier extends ChangeNotifier {
   /// Listens and updates for changes from 'wss://stream.wazirx.com/stream'
   ///
   ///
-  void startWazirXCryptoTicker() {
+  void startWazirXCryptoTicker() async {
     wazirXChannel = IOWebSocketChannel.connect(
       Uri.parse('wss://stream.wazirx.com/stream'),
     );
 
-    wazirXChannel?.stream.asBroadcastStream().listen((event) {
+    wazirXChannel?.stream.asBroadcastStream().listen((event) async {
       if (event != null && event.contains('connected')) {
         wazirXChannel?.sink.add(
           jsonEncode({
@@ -94,7 +94,9 @@ class HomeStateNotifier extends ChangeNotifier {
           var cryptoData = baseData['data'];
           _parseAndEmitWazirXTickerData(cryptoData);
         }
-        fetchCurrencyDataFromKraken();
+         fetchCurrencyDataFromKraken();
+        await marginsNotifier.getAllMargins();
+       
       }
     });
   }
