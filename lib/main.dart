@@ -1,5 +1,4 @@
 import 'package:cvault/constants/user_types.dart';
-import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/providers/customer_provider.dart';
 import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
