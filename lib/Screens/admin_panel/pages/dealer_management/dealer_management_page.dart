@@ -20,117 +20,111 @@ class DealerManagementPage extends StatelessWidget {
   Widget build(BuildContext context) {
     void _onRefresh() async {
       // monitor network fetch
-      await Future.delayed(const Duration(milliseconds: 1000));
       Provider.of<DealersProvider>(context, listen: false).fetchAndSetDealers();
     }
 
     late DealersProvider dealerProvider;
     dealerProvider = Provider.of<DealersProvider>(context);
 
-    return GestureDetector(
-      onVerticalDragDown: ((details) {
-        _onRefresh();
-      }),
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: const Text(
-            "Dealer Management",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const Text(
+          "Dealer Management",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
           ),
-          elevation: 0,
         ),
-        backgroundColor: const Color(0xff1E2224),
-        body: GestureDetector(
-          onVerticalDragDown: ((details) {
-            _onRefresh();
-          }),
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.65,
-                  child: FloatingActionButton.extended(
-                    heroTag: 'inv_dealer',
-                    backgroundColor: const Color(0xff03dac6),
-                    foregroundColor: Colors.black,
-                    onPressed: () async {
-                      /// TODO: Invite Dealer
-                    },
-                    label: const Text(
-                      'Invite Dealer',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
+        elevation: 0,
+      ),
+      backgroundColor: const Color(0xff1E2224),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          _onRefresh();
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.65,
+                child: FloatingActionButton.extended(
+                  heroTag: 'inv_dealer',
+                  backgroundColor: const Color(0xff03dac6),
+                  foregroundColor: Colors.black,
+                  onPressed: () async {
+                    /// TODO: Invite Dealer
+                  },
+                  label: const Text(
+                    'Invite Dealer',
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Flexible(
-                  child: (dealerProvider.isDealersLoaded)
-                      ? _buildListView(dealerProvider.dealers)
-                      : FutureBuilder(
-                          future: dealerProvider.fetchAndSetDealers(),
-                          builder: (context, snapshot) {
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.none:
-                              case ConnectionState.active:
-                              case ConnectionState.waiting:
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Flexible(
+                child: (dealerProvider.isDealersLoaded)
+                    ? _buildListView(dealerProvider.dealers)
+                    : FutureBuilder(
+                        future: dealerProvider.fetchAndSetDealers(),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.none:
+                            case ConnectionState.active:
+                            case ConnectionState.waiting:
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: Color(0xff03dac6),
+                                ),
+                              );
+                            case ConnectionState.done:
+                              if (snapshot.hasError) {
                                 return const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Color(0xff03dac6),
+                                  child: Text(
+                                    "An error has occurred!",
+                                    style: TextStyle(color: Colors.white),
                                   ),
                                 );
-                              case ConnectionState.done:
-                                if (snapshot.hasError) {
-                                  return const Center(
-                                    child: Text(
-                                      "An error has occurred!",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  );
-                                }
+                              }
 
-                                return _buildListView(dealerProvider.dealers);
-                            }
-                          },
-                        ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.65,
-                  child: FloatingActionButton.extended(
-                    backgroundColor: const Color(0xff03dac6),
-                    foregroundColor: Colors.black,
-                    onPressed: () async {
-                      /// TODO: Toggle all
-                    },
-                    label: const Text(
-                      'Toggle All',
-                      style: TextStyle(
-                        fontSize: 18,
+                              return _buildListView(dealerProvider.dealers);
+                          }
+                        },
                       ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.65,
+                child: FloatingActionButton.extended(
+                  backgroundColor: const Color(0xff03dac6),
+                  foregroundColor: Colors.black,
+                  onPressed: () async {
+                    /// TODO: Toggle all
+                  },
+                  label: const Text(
+                    'Toggle All',
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
           ),
         ),
       ),
