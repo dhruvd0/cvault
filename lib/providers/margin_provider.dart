@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/util/http.dart';
 
@@ -18,6 +20,17 @@ class MarginsNotifier extends LoadStatusNotifier {
         getAllMargins();
       }
     });
+  }
+  double totalMargin = 0;
+  void getTotalMargin() {
+    var userType = profileChangeNotifier.profile.userType;
+    totalMargin = userType == 'admin'
+        ? 0.0
+        : userType == 'dealer'
+            ? adminMargin.toDouble()
+            : (adminMargin + dealerMargin).toDouble();
+    log(totalMargin.toString());
+    notifyListeners();
   }
 
   double get margin => profileChangeNotifier.profile.userType == 'admin'
@@ -93,5 +106,7 @@ class MarginsNotifier extends LoadStatusNotifier {
         dealerCode: profileChangeNotifier.profile.referalCode,
       ),
     ]);
+
+    getTotalMargin();
   }
 }

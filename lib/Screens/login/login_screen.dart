@@ -41,8 +41,8 @@ class _LogInScreenState extends State<LogInScreen> {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phone,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        await _postLoginSubRoutine();
+        // await FirebaseAuth.instance.signInWithCredential(credential);
+        // await _postLoginSubRoutine();
       },
       verificationFailed: (FirebaseAuthException e) {
         final snackBar = SnackBar(content: Text("${e.message}"));
@@ -71,13 +71,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
 //loading navigation
 
-  Future<void> doTask() async {
-    // Any future process here
-    await Future.delayed(
-      const Duration(seconds: 3),
-    );
-  }
-
+ 
   Future<void> verifyPin(String pin) async {
     PhoneAuthCredential credential =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: pin);

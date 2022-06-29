@@ -29,22 +29,8 @@ class HomeStateNotifier extends ChangeNotifier {
       }
     });
   }
-  double totalMargin = 0;
+ 
   final ProfileChangeNotifier profileChangeNotifier;
-  void getTotalMargin() {
-    if (state.cryptoCurrencies.isNotEmpty &&
-        profileChangeNotifier.token.isNotEmpty &&
-        profileChangeNotifier.profile.uid.isNotEmpty) {
-      var userType = profileChangeNotifier.profile.userType;
-      totalMargin = userType == 'admin'
-          ? 0
-          : userType == 'dealer'
-              ? marginsNotifier.adminMargin
-              : marginsNotifier.adminMargin + marginsNotifier.dealerMargin;
-      log(totalMargin.toString());
-      notifyListeners();
-    }
-  }
 
   final MarginsNotifier marginsNotifier;
 
@@ -61,7 +47,7 @@ class HomeStateNotifier extends ChangeNotifier {
     _calculateDifference();
     wazirXChannel?.sink.close();
     startWazirXCryptoTicker();
-    marginsNotifier.getAllMargins().then((value) => getTotalMargin());
+    await marginsNotifier.getAllMargins();
   }
 
   /// [currency] corresponds to either "inr" or "usdt"
@@ -124,7 +110,7 @@ class HomeStateNotifier extends ChangeNotifier {
         if (index != -1) {
           cryptoCurrencies[index] = cryptoCurrencies[index].copyWith(
             wazirxBuyPrice: double.parse(buyPrice) +
-                (double.parse(buyPrice) * totalMargin / 100),
+                (double.parse(buyPrice) * marginsNotifier.totalMargin / 100),
           );
           emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
           notifyListeners();
@@ -301,7 +287,7 @@ class HomeStateNotifier extends ChangeNotifier {
         var indexWhere =
             currencies.indexWhere((currency) => currency.wazirxKey == key);
         var totalBuyPrice = double.parse(cryptoData['buy']) +
-            (double.parse(cryptoData['buy']) * totalMargin / 100);
+            (double.parse(cryptoData['buy']) * marginsNotifier.totalMargin / 100);
         if (indexWhere != -1) {
           currencies[indexWhere] = currencies[indexWhere].copyWith(
             wazirxKey: key,

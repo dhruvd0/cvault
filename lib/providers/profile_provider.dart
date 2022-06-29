@@ -194,6 +194,9 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   Future<void> fetchProfile() async {
     loadStatus = LoadStatus.loading;
     notifyListeners();
+    if (token.isEmpty) {
+      await login(authInstance.currentUser!.uid);
+    }
     var cachedProfile = await _fetchProfileFromCache();
 
     if (cachedProfile != null) {
@@ -203,9 +206,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
       return;
     }
-    if (token.isEmpty) {
-      await login(authInstance.currentUser!.uid);
-    }
+
     if (token.isEmpty) {
       _emitUnregisteredProfile();
 
