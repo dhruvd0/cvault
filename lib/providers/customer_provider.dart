@@ -9,7 +9,7 @@ class CustomerProvider extends LoadStatusNotifier {
   /// @suraj96506 document this
   bool isBack = false;
 
-  final List<Customer> _customers = [];
+  List<Customer> _customers = [];
 
   ///
   bool get isLoadedCustomers {
@@ -42,7 +42,7 @@ class CustomerProvider extends LoadStatusNotifier {
           Customer.fromJson(element),
         ),
       );
-      _customers.addAll(temp);
+      _customers = temp;
       notifyListeners();
     } else {
       throw Exception(response.statusCode);
