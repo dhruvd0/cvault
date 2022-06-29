@@ -253,13 +253,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                           : Text(
                                               state.cryptoCurrencies.isEmpty
                                                   ? ''
-                                                  : userType == UserTypes.admin
-                                                      ? (state.isUSD
-                                                          ? '\$${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}'
-                                                          : '₹${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}')
-                                                      : state.isUSD
-                                                          ? "\$${homeStateNotifier.currentCryptoCurrency().wazirxSellPrice.toStringAsFixed(2)}"
-                                                          : '₹${homeStateNotifier.currentCryptoCurrency().wazirxSellPrice.toStringAsFixed(2)}',
+                                                  : (state.isUSD)
+                                                      ? '\$${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}'
+                                                      : '₹${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}',
                                               textAlign: TextAlign.start,
                                               style: const TextStyle(
                                                 fontFamily: 'Poppins',

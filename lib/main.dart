@@ -1,4 +1,5 @@
 import 'package:cvault/constants/user_types.dart';
+import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/providers/customer_provider.dart';
 import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
@@ -51,15 +52,23 @@ List<SingleChildWidget> get _providers {
   return [
     ChangeNotifierProvider(
       lazy: false,
-      create: (context) => HomeStateNotifier(),
+      create: (context) => ProfileChangeNotifier(),
+    ),
+    ChangeNotifierProvider(
+      lazy: false,
+      create: ((context) =>
+          MarginsNotifier(context.read<ProfileChangeNotifier>())),
+    ),
+    ChangeNotifierProvider(
+      lazy: false,
+      create: (context) => HomeStateNotifier(
+        marginsNotifier: context.read<MarginsNotifier>(),
+        profileChangeNotifier: context.read<ProfileChangeNotifier>(),
+      ),
     ),
     ChangeNotifierProvider(
       lazy: false,
       create: ((context) => AdvertisementProvider()),
-    ),
-    ChangeNotifierProvider(
-      lazy: false,
-      create: (context) => ProfileChangeNotifier(),
     ),
     ChangeNotifierProvider(
       lazy: false,
@@ -84,7 +93,6 @@ ChangeNotifierProvider<QuoteProvider> _buildQuoteChangeNotifierProvider() {
     create: (context) => QuoteProvider(
       homeStateNotifier: context.read<HomeStateNotifier>(),
       profileChangeNotifier: context.read<ProfileChangeNotifier>(),
-      marginsNotifier: context.read<MarginsNotifier>(),
     ),
   );
 }

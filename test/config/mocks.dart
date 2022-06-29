@@ -14,21 +14,24 @@ MockFirebaseAuth mockAuth = MockFirebaseAuth(
   ),
 );
 
-Future<QuoteProvider> setupQuoteProvider(String uid,String userType) async {
-  HomeStateNotifier homeStateNotifier = HomeStateNotifier(mockAuth);
+Future<QuoteProvider> setupQuoteProvider(String uid, String userType) async {
   ProfileChangeNotifier profileChangeNotifier =
       await setupProfileProvider(uid, userType);
+  MarginsNotifier marginsNotifier = MarginsNotifier(profileChangeNotifier);
+  HomeStateNotifier homeStateNotifier = HomeStateNotifier(
+    profileChangeNotifier: profileChangeNotifier,
+    firebaseAuthMock: mockAuth,
+    marginsNotifier: marginsNotifier,
+  );
   await Future.wait([
     homeStateNotifier.getCryptoDataFromAPIs(),
   ]);
+  expect(profileChangeNotifier.profile.userType, userType);
 
-  expect(profileChangeNotifier.profile.userType,userType);
-  MarginsNotifier marginsNotifier = MarginsNotifier(profileChangeNotifier);
   await marginsNotifier.getAllMargins();
   final quoteProvider = QuoteProvider(
     homeStateNotifier: homeStateNotifier,
     profileChangeNotifier: profileChangeNotifier,
-    marginsNotifier: marginsNotifier,
   );
   quoteProvider.updateWithHomeNotifierState();
   quoteProvider.updateWithProfileProviderState();
@@ -49,7 +52,6 @@ Future<ProfileChangeNotifier> setupProfileProvider(
   );
   await profileChangeNotifier.login(testID);
   await profileChangeNotifier.fetchProfile();
-  
 
   return profileChangeNotifier;
 }

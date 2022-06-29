@@ -19,11 +19,11 @@ class QuoteProvider extends LoadStatusNotifier {
   Transaction transaction =
       Transaction.fromJson({TransactionProps.transactionType.name: 'buy'});
   final HomeStateNotifier homeStateNotifier;
-  final MarginsNotifier marginsNotifier;
+
   final ProfileChangeNotifier profileChangeNotifier;
   QuoteProvider({
     required this.homeStateNotifier,
-    required this.marginsNotifier,
+   
     required this.profileChangeNotifier,
   }) {
     homeStateNotifier.addListener(() {
@@ -33,20 +33,7 @@ class QuoteProvider extends LoadStatusNotifier {
       updateWithProfileProviderState();
     });
   }
-  void updatePriceWithMargins() {
-    double totalMargin = marginsNotifier.adminMargin;
-    if (profileChangeNotifier.profile.userType == UserTypes.customer) {
-      totalMargin += marginsNotifier.dealerMargin;
-    }
-    if (transaction.transactionType == 'buy') {
-      transaction = transaction.copyWith(
-        costPrice: transaction.costPrice +
-            ((totalMargin / 100) * transaction.costPrice),
-      );
-    }
 
-    notifyListeners();
-  }
 
   void updateWithProfileProviderState() {
     Profile profile = profileChangeNotifier.profile;
@@ -66,18 +53,16 @@ class QuoteProvider extends LoadStatusNotifier {
         transaction.copyWith(currency: homeState.isUSD ? 'usdt' : 'inr');
 
     if (homeState.cryptoCurrencies.isNotEmpty) {
-      marginsNotifier.getAllMargins();
+     
       try {
         var crypto = homeStateNotifier.currentCryptoCurrency();
         transaction = transaction.copyWith(
           costPrice: transaction.transactionType == 'sell'
-              ? profileChangeNotifier.profile.userType == UserTypes.dealer
-                  ? crypto.krakenPrice
-                  : crypto.wazirxSellPrice
+              ? crypto.krakenPrice
               : crypto.wazirxBuyPrice,
         );
         notifyListeners();
-        updatePriceWithMargins();
+       
       } on StateError {
         // TODO
       }
@@ -144,7 +129,7 @@ class QuoteProvider extends LoadStatusNotifier {
   }
 
   void changeTransactionField(TransactionProps field, dynamic data) {
-    updatePriceWithMargins();
+
     switch (field) {
       case TransactionProps.receiver:
         transaction = transaction.copyWith(receiver: data);
@@ -184,6 +169,6 @@ class QuoteProvider extends LoadStatusNotifier {
       );
     }
     notifyListeners();
-    updatePriceWithMargins();
+    
   }
 }

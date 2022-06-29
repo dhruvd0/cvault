@@ -34,13 +34,6 @@ enum LoadStatus {
 /// bloc to fetch profile, register profile, change user Type, and handle form for [Profile] page
 class ProfileChangeNotifier extends LoadStatusNotifier {
   ///
-  Profile profile = const ProfileInitial();
-
-  ///
-  late FirebaseAuth authInstance;
-  String token = '';
-
-  ///
   ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
     authInstance = mockAuth ?? FirebaseAuth.instance;
     authInstance.authStateChanges().asBroadcastStream().listen((event) async {
@@ -54,6 +47,14 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       }
     });
   }
+
+  ///
+  late FirebaseAuth authInstance;
+
+  ///
+  Profile profile = const ProfileInitial();
+
+  String token = '';
 
   /// Get JWT token
   Future<void> login(String uid) async {
@@ -239,6 +240,83 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     return '';
   }
 
+  /// Registers a new customer or a new dealer, and fetches a profile if successfully created.
+  Future<void> createNewProfile() async {
+    _setDefaultreferalCodeForCustomer();
+
+    Map<String, dynamic> data = profile.toJson();
+    data['phone'] = authInstance.currentUser!.phoneNumber;
+    data['UID'] = authInstance.currentUser!.uid;
+
+    loadStatus = LoadStatus.loading;
+    notifyListeners();
+    final response = await http.post(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.dealer ? 'dealer/createDealer' : 'customer/create-customer'}",
+      ),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body)[
+          profile.userType == UserTypes.dealer ? 'InsertDealer' : 'data'];
+
+      emit(
+        profile.userType == UserTypes.dealer
+            ? Dealer.fromJson('dealer', json)
+            : Customer.fromJson(json),
+      );
+      await (await SharedPreferences.getInstance()).clear();
+      await login(authInstance.currentUser!.uid);
+      loadStatus = LoadStatus.done;
+
+      await _saveProfileToCache();
+    } else {
+      loadStatus = LoadStatus.error;
+
+      throw Exception('create profile: ${response.statusCode}');
+    }
+    notifyListeners();
+  }
+
+  Future<bool?> updateProfile({BuildContext? buildContext}) async {
+    Map<String, dynamic> data = profile.toJson();
+
+    loadStatus = LoadStatus.loading;
+    notifyListeners();
+    final response = await http.patch(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/dealer/editProfile/",
+      ),
+      headers: defaultAuthenticatedHeader(token),
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode != 200) {
+      var map = jsonDecode(response.body);
+      if (buildContext != null) {
+        showSnackBar(map.toString(), buildContext);
+      }
+      loadStatus = LoadStatus.error;
+      notifyListeners();
+      if (kReleaseMode) {
+        throw Exception('edit Profile:${response.statusCode}');
+      }
+
+      return false;
+    } else {
+      var map = jsonDecode(response.body);
+      profile = Profile.fromMap(map);
+      loadStatus = LoadStatus.done;
+      notifyListeners();
+
+      _saveProfileToCache();
+
+      return true;
+    }
+  }
+
   Future<http.Response> _fetchProfileGetCall(String uri) {
     return http.get(
       Uri.parse(
@@ -300,89 +378,12 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     await prefs.setString(profile.userType, jsonEncode(profile.toJson()));
   }
 
-  /// Registers a new customer or a new dealer, and fetches a profile if successfully created.
-  Future<void> createNewProfile() async {
-    _setDefaultreferalCodeForCustomer();
-
-    Map<String, dynamic> data = profile.toJson();
-    data['phone'] = authInstance.currentUser!.phoneNumber;
-    data['UID'] = authInstance.currentUser!.uid;
-
-    loadStatus = LoadStatus.loading;
-    notifyListeners();
-    final response = await http.post(
-      Uri.parse(
-        "https://cvault-backend.herokuapp.com/${profile.userType == UserTypes.dealer ? 'dealer/createDealer' : 'customer/create-customer'}",
-      ),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(data),
-    );
-
-    if (response.statusCode == 200) {
-      var json = jsonDecode(response.body)[
-          profile.userType == UserTypes.dealer ? 'InsertDealer' : 'data'];
-
-      emit(
-        profile.userType == UserTypes.dealer
-            ? Dealer.fromJson('dealer', json)
-            : Customer.fromJson(json),
-      );
-      await (await SharedPreferences.getInstance()).clear();
-      await login(authInstance.currentUser!.uid);
-      loadStatus = LoadStatus.done;
-
-      await _saveProfileToCache();
-    } else {
-      loadStatus = LoadStatus.error;
-
-      throw Exception('create profile: ${response.statusCode}');
-    }
-    notifyListeners();
-  }
-
   void _setDefaultreferalCodeForCustomer() {
     if (profile.userType == UserTypes.customer) {
       if (profile.referalCode.isEmpty) {
         profile = (profile as Customer).copyWith(referalCode: 'default_code');
         notifyListeners();
       }
-    }
-  }
-
-  Future<bool?> updateProfile({BuildContext? buildContext}) async {
-    Map<String, dynamic> data = profile.toJson();
-
-    loadStatus = LoadStatus.loading;
-    notifyListeners();
-    final response = await http.patch(
-      Uri.parse(
-        "https://cvault-backend.herokuapp.com/dealer/editProfile/",
-      ),
-      headers: defaultAuthenticatedHeader(token),
-      body: jsonEncode(data),
-    );
-
-    if (response.statusCode != 200) {
-      var map = jsonDecode(response.body);
-      if (buildContext != null) {
-        showSnackBar(map.toString(), buildContext);
-      }
-      loadStatus = LoadStatus.error;
-      notifyListeners();
-      if (kReleaseMode) {
-        throw Exception('edit Profile:${response.statusCode}');
-      }
-
-      return false;
-    } else {
-      var map = jsonDecode(response.body);
-      profile = Profile.fromMap(map);
-      loadStatus = LoadStatus.done;
-      notifyListeners();
-
-      _saveProfileToCache();
-
-      return true;
     }
   }
 }
