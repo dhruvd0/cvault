@@ -264,9 +264,9 @@ class _SettingsState extends State<Settings> {
                                       );
                                     },
                                   ),
-                                  userType == UserTypes.dealer
-                                      ? const EnterMarginField()
-                                      : Container(),
+                                  userType == UserTypes.customer
+                                      ? Container()
+                                      : const EnterMarginField(),
                                 ],
                               ),
                               const SizedBox(
