@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/models/crypto_currency.dart';
@@ -25,38 +26,23 @@ class HomeStateNotifier extends ChangeNotifier {
     authInstance.authStateChanges().asBroadcastStream().listen((event) {
       if (event != null) {
         getCryptoDataFromAPIs();
-        marginsNotifier.getAllMargins();
       }
     });
-
-    addListener(() {
-      updateCryptoPricesWithMargins();
-    });
   }
+  double totalMargin = 0;
   final ProfileChangeNotifier profileChangeNotifier;
-  void updateCryptoPricesWithMargins() {
+  void getTotalMargin() {
     if (state.cryptoCurrencies.isNotEmpty &&
         profileChangeNotifier.token.isNotEmpty &&
         profileChangeNotifier.profile.uid.isNotEmpty) {
-      final index = state.cryptoCurrencies.indexWhere(
-        (element) => element.wazirxKey == state.selectedCurrencyKey,
-      );
-      if (index != -1) {
-        var cryptoCurrencies = state.cryptoCurrencies.toList();
-        var crypto = cryptoCurrencies[index];
-        var userType = profileChangeNotifier.profile.userType;
-        final totalMargin = userType == 'admin'
-            ? 0
-            : userType == 'dealer'
-                ? marginsNotifier.adminMargin
-                : marginsNotifier.adminMargin + marginsNotifier.dealerMargin;
-        crypto = crypto.copyWith(
-          wazirxBuyPrice: crypto.wazirxBuyPrice +
-              (crypto.wazirxBuyPrice * (totalMargin / 100)),
-        );
-        cryptoCurrencies[index] = crypto;
-        emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
-      }
+      var userType = profileChangeNotifier.profile.userType;
+      totalMargin = userType == 'admin'
+          ? 0
+          : userType == 'dealer'
+              ? marginsNotifier.adminMargin
+              : marginsNotifier.adminMargin + marginsNotifier.dealerMargin;
+      log(totalMargin.toString());
+      notifyListeners();
     }
   }
 
@@ -75,6 +61,7 @@ class HomeStateNotifier extends ChangeNotifier {
     _calculateDifference();
     wazirXChannel?.sink.close();
     startWazirXCryptoTicker();
+    marginsNotifier.getAllMargins().then((value) => getTotalMargin());
   }
 
   /// [currency] corresponds to either "inr" or "usdt"
@@ -136,7 +123,8 @@ class HomeStateNotifier extends ChangeNotifier {
             cryptoCurrencies.indexWhere((element) => element.wazirxKey == key);
         if (index != -1) {
           cryptoCurrencies[index] = cryptoCurrencies[index].copyWith(
-            wazirxBuyPrice: double.parse(buyPrice),
+            wazirxBuyPrice: double.parse(buyPrice) +
+                (double.parse(buyPrice) * totalMargin / 100),
           );
           emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
           notifyListeners();
@@ -312,10 +300,12 @@ class HomeStateNotifier extends ChangeNotifier {
         var cryptoData = mapResponse[key];
         var indexWhere =
             currencies.indexWhere((currency) => currency.wazirxKey == key);
+        var totalBuyPrice = double.parse(cryptoData['buy']) +
+            (double.parse(cryptoData['buy']) * totalMargin / 100);
         if (indexWhere != -1) {
           currencies[indexWhere] = currencies[indexWhere].copyWith(
             wazirxKey: key,
-            wazirxBuyPrice: double.parse(cryptoData['buy']),
+            wazirxBuyPrice: totalBuyPrice,
           );
         } else {
           currencies.add(
@@ -323,7 +313,7 @@ class HomeStateNotifier extends ChangeNotifier {
               wazirxKey: key,
               krakenKey: keyPairFromWazirxToKraken[key]!,
               name: cryptoData['name'],
-              wazirxBuyPrice: double.parse(cryptoData['buy']),
+              wazirxBuyPrice: totalBuyPrice,
               krakenPrice: 0.0,
             ),
           );

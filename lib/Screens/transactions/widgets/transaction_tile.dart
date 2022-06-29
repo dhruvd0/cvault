@@ -15,13 +15,15 @@ class TransactionTile extends StatelessWidget {
   final Transaction transaction;
 
   bool isUserAReceiverDealer(ProfileChangeNotifier profileProvider) {
-    return profileProvider.profile.userType == 'admin'
-        ? true
-        : profileProvider.profile.userType == UserTypes.customer ||
-                transaction.status != 'sent'
-            ? false
-            : transaction.receiver.uid ==
-                FirebaseAuth.instance.currentUser!.uid;
+    return transaction.status == 'accepted' || transaction.status == 'rejected'
+        ? false
+        : profileProvider.profile.userType == 'admin'
+            ? true
+            : profileProvider.profile.userType == UserTypes.customer ||
+                    transaction.status != 'sent'
+                ? false
+                : transaction.receiver.uid ==
+                    FirebaseAuth.instance.currentUser!.uid;
   }
 
   Widget expansionTileContent(BuildContext context) {

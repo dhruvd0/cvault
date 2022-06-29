@@ -18,7 +18,6 @@ class CryptoCurrency extends Equatable {
   /// Price retrieved from wazirx api
   final double wazirxBuyPrice;
 
-
   /// Price retrieved from kraken api
   final double krakenPrice;
 
@@ -32,7 +31,6 @@ class CryptoCurrency extends Equatable {
     required this.wazirxBuyPrice,
     required this.krakenPrice,
     required this.name,
-    
   });
 
   ///
@@ -40,7 +38,6 @@ class CryptoCurrency extends Equatable {
     String? wazirxKey,
     String? krakenKey,
     double? wazirxBuyPrice,
-   
     double? krakenPrice,
     String? name,
   }) {
@@ -48,7 +45,6 @@ class CryptoCurrency extends Equatable {
       wazirxKey: wazirxKey ?? this.wazirxKey,
       krakenKey: krakenKey ?? this.krakenKey,
       wazirxBuyPrice: wazirxBuyPrice ?? this.wazirxBuyPrice,
-    
       krakenPrice: krakenPrice ?? this.krakenPrice,
       name: name ?? this.name,
     );
@@ -80,7 +76,6 @@ class CryptoCurrency extends Equatable {
   ///
   String toJson() => json.encode(toMap());
 
- 
   @override
   List<Object> get props {
     return [

@@ -3,7 +3,6 @@
 
 import 'dart:convert';
 
-import 'package:cvault/constants/user_types.dart';
 import 'package:http/http.dart';
 
 import 'package:cvault/models/home_state.dart';
@@ -11,7 +10,6 @@ import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/home_provider.dart';
-import 'package:cvault/providers/margin_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:flutter/foundation.dart';
 
@@ -23,7 +21,6 @@ class QuoteProvider extends LoadStatusNotifier {
   final ProfileChangeNotifier profileChangeNotifier;
   QuoteProvider({
     required this.homeStateNotifier,
-   
     required this.profileChangeNotifier,
   }) {
     homeStateNotifier.addListener(() {
@@ -33,7 +30,6 @@ class QuoteProvider extends LoadStatusNotifier {
       updateWithProfileProviderState();
     });
   }
-
 
   void updateWithProfileProviderState() {
     Profile profile = profileChangeNotifier.profile;
@@ -53,7 +49,6 @@ class QuoteProvider extends LoadStatusNotifier {
         transaction.copyWith(currency: homeState.isUSD ? 'usdt' : 'inr');
 
     if (homeState.cryptoCurrencies.isNotEmpty) {
-     
       try {
         var crypto = homeStateNotifier.currentCryptoCurrency();
         transaction = transaction.copyWith(
@@ -62,7 +57,6 @@ class QuoteProvider extends LoadStatusNotifier {
               : crypto.wazirxBuyPrice,
         );
         notifyListeners();
-       
       } on StateError {
         // TODO
       }
@@ -129,7 +123,6 @@ class QuoteProvider extends LoadStatusNotifier {
   }
 
   void changeTransactionField(TransactionProps field, dynamic data) {
-
     switch (field) {
       case TransactionProps.receiver:
         transaction = transaction.copyWith(receiver: data);
@@ -169,6 +162,5 @@ class QuoteProvider extends LoadStatusNotifier {
       );
     }
     notifyListeners();
-    
   }
 }
