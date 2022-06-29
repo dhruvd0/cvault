@@ -14,10 +14,23 @@ class CustomerManagementPage extends StatefulWidget {
 }
 
 class _CustomerManagementPageState extends State<CustomerManagementPage> {
-  // Map<String, dynamic> data = {};
+  final ScrollController _scrollController = ScrollController();
+
+  void _onRefresh(context) async {
+    // monitor network fetch
+    var provider = Provider.of<CustomerProvider>(
+      context,
+      listen: false,
+    );
+    provider.changePage(1);
+    await provider.fetchAndSetCustomers(
+      Provider.of<ProfileChangeNotifier>(context, listen: false).token,
+    );
+  }
 
   Widget _buildListView(List<Customer> customers) {
     return ListView.builder(
+      controller: _scrollController,
       itemCount: customers.length,
       itemBuilder: (BuildContext context, int index) {
         return CustomerTile(customer: customers[index]);
@@ -26,15 +39,31 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _scrollController.addListener(() {
+        if (!_scrollController.hasClients) {
+          return;
+        }
+        final provider = Provider.of<CustomerProvider>(context, listen: false);
+        if (_scrollController.offset ==
+                _scrollController.position.maxScrollExtent &&
+            !(provider.loadStatus == LoadStatus.loading)) {
+          provider.incrementPage();
+          provider.fetchAndSetCustomers(
+            Provider.of<ProfileChangeNotifier>(context, listen: false).token,
+          );
+        }
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final jswtokcen = Provider.of<ProfileChangeNotifier>(context).token;
     final customerProvider = Provider.of<CustomerProvider>(context);
-    void _onRefresh() async {
-      // monitor network fetch
-      Provider.of<CustomerProvider>(context, listen: false)
-          .fetchAndSetCustomers(jswtokcen);
-      // if failed,use refreshFailed()
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +81,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
       backgroundColor: const Color(0xff1E2224),
       body: RefreshIndicator(
         onRefresh: () async {
-          _onRefresh();
+          _onRefresh(context);
         },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
