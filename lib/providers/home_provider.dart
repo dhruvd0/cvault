@@ -49,7 +49,10 @@ class HomeStateNotifier extends ChangeNotifier {
     await fetchCurrencyDataFromKraken();
 
     _emit(state.copyWith(loadStatus: LoadStatus.done));
-    // _calculateDifference();
+    if(state.cryptoCurrencies.isNotEmpty){
+    _calculateDifference();
+    }
+   
     wazirXChannel?.sink.close();
     startWazirXCryptoTicker();
   }
