@@ -22,9 +22,7 @@ class CryptoDropdownButton extends StatelessWidget {
               ).hintColor,
             ),
           ),
-          items: HomeStateNotifier.cryptoKeys(
-            homeNotifier.state.isUSD ? 'usdt' : 'inr',
-          )
+          items: HomeStateNotifier.cryptoKeys()
               .map(
                 (item) => DropdownMenuItem(
                   value: item,
@@ -63,7 +61,7 @@ class _CryptoDropdownText extends StatelessWidget {
     return Consumer<HomeStateNotifier>(
       builder: (_, homeNotifier, __) => Text(
         homeNotifier.state.cryptoCurrencies
-            .firstWhere((e) => e.wazirxKey == item)
+            .firstWhere((e) => e.key == item)
             .name,
         style: const TextStyle(color: Colors.white, fontSize: 18),
       ),
