@@ -1,6 +1,7 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/customer_provider.dart';
 import 'package:cvault/providers/advertisement_provider.dart';
+import 'package:cvault/providers/notification_bloc/notification_bloc.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
@@ -15,6 +16,7 @@ import 'package:cvault/providers/transactions_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,9 +30,17 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  
+
   runApp(
     MultiProvider(
-      providers: _providers,
+      providers: _providers..add(
+      BlocProvider(
+        lazy:  false,
+        create: (context) => NotificationCubit(),
+        
+      )
+      ),
       child: DevicePreview(
         enabled: true,
         builder: (context) {
