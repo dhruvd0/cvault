@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 class TransactionsProvider extends LoadStatusNotifier {
   final ProfileChangeNotifier profileChangeNotifier;
   List<Transaction> _transactions = [];
-
+  bool visible = false;
   TransactionsProvider(this.profileChangeNotifier) {
     profileChangeNotifier.addListener(() async {
       if (profileChangeNotifier.loadStatus == LoadStatus.done &&
@@ -43,6 +43,7 @@ class TransactionsProvider extends LoadStatusNotifier {
   }
 
   // To get transactions for a dealer
+  // ignore: long-method
   Future<void> _getDealerTransaction(
     String dealerId, {
     bool getAllTransactions = false,
@@ -140,4 +141,11 @@ class TransactionsProvider extends LoadStatusNotifier {
       },
     );
   }
+
+  void Expand() {
+    visible = visible ? false : true;
+    print(visible);
+  }
+
+  notifyListeners();
 }

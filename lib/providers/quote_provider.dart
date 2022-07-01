@@ -79,6 +79,7 @@ class QuoteProvider extends LoadStatusNotifier {
   /// Returns [true] if successful,
   ///  [false] for 400, Bad Request(Customer not found)
   ///  and null for failure
+  // ignore: long-method
   Future<bool?> sendQuote() async {
     loadStatus = LoadStatus.loading;
 

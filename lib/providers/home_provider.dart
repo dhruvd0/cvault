@@ -217,6 +217,7 @@ class HomeStateNotifier extends ChangeNotifier {
         .indexWhere((element) => element.key == state.selectedCurrencyKey);
     if (index != -1) {
       var crypto = state.cryptoCurrencies[index];
+      // ignore: prefer-conditional-expressions
       if (isUsd) {
         crypto = crypto.copyWith(
           wazirxBuyPrice: crypto.wazirxBuyPrice / usdToInrFactor,

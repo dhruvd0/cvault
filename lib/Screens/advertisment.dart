@@ -30,6 +30,12 @@ class _AdvertismentState extends State<Advertisment> {
     return Scaffold(
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         title: const Text("Advertisment"),
         centerTitle: true,
         backgroundColor: Colors.transparent,

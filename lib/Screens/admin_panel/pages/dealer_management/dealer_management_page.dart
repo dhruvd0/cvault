@@ -30,6 +30,14 @@ class DealerManagementPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+          ),
+        ),
         title: const Text(
           "Dealer Management",
           style: TextStyle(

@@ -45,7 +45,7 @@ class CustomerProvider extends LoadStatusNotifier {
           Customer.fromJson(element),
         ),
       );
-      _customers.addAll(temp);
+      _customers = temp;
       notifyListeners();
     } else {
       throw Exception(response.statusCode);
