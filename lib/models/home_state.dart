@@ -70,7 +70,7 @@ class HomeInitial extends HomeState {
   HomeInitial()
       : super(
           cryptoCurrencies: [],
-          selectedCurrencyKey: HomeStateNotifier.cryptoKeys('inr').first,
+          selectedCurrencyKey: HomeStateNotifier.cryptoKeys().first,
           isUSD: false,
           loadStatus: LoadStatus.initial,
           difference: 0,

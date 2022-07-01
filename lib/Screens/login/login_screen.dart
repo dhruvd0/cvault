@@ -71,7 +71,6 @@ class _LogInScreenState extends State<LogInScreen> {
 
 //loading navigation
 
- 
   Future<void> verifyPin(String pin) async {
     PhoneAuthCredential credential =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: pin);
@@ -252,7 +251,7 @@ class _LogInScreenState extends State<LogInScreen> {
           height: MediaQuery.of(context).size.height,
           margin: const EdgeInsets.only(left: 20, right: 20),
           child: profile.loadStatus == LoadStatus.loading
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : codeSent
                   ? _otpTextField(context)
                   : Column(

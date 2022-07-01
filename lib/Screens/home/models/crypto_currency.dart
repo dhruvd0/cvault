@@ -5,15 +5,9 @@ import 'package:equatable/equatable.dart';
 
 ///
 class CryptoCurrency extends Equatable {
-  /// The code name of the currency only for wazirx api
-  ///
-  /// For example: btcinr
-  final String wazirxKey;
-
-  /// The code name of the currency only for kraken api
-  ///
-  /// For example: BTCUSD
-  final String krakenKey;
+  /// The code name of the currency
+  /// For example: btc
+  final String key;
 
   /// Price retrieved from wazirx api
   final double wazirxBuyPrice;
@@ -26,8 +20,7 @@ class CryptoCurrency extends Equatable {
 
   ///
   const CryptoCurrency({
-    required this.wazirxKey,
-    required this.krakenKey,
+    required this.key,
     required this.wazirxBuyPrice,
     required this.krakenPrice,
     required this.name,
@@ -35,15 +28,13 @@ class CryptoCurrency extends Equatable {
 
   ///
   CryptoCurrency copyWith({
-    String? wazirxKey,
-    String? krakenKey,
+    String? key,
     double? wazirxBuyPrice,
     double? krakenPrice,
     String? name,
   }) {
     return CryptoCurrency(
-      wazirxKey: wazirxKey ?? this.wazirxKey,
-      krakenKey: krakenKey ?? this.krakenKey,
+      key: key ?? this.key,
       wazirxBuyPrice: wazirxBuyPrice ?? this.wazirxBuyPrice,
       krakenPrice: krakenPrice ?? this.krakenPrice,
       name: name ?? this.name,
@@ -53,8 +44,7 @@ class CryptoCurrency extends Equatable {
   ///
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'wazirxKey': wazirxKey,
-      'krakenKey': krakenKey,
+      'key': key,
       'wazirxBuyPrice': wazirxBuyPrice,
       'krakenPrice': krakenPrice,
       'name': name,
@@ -65,8 +55,7 @@ class CryptoCurrency extends Equatable {
 
   factory CryptoCurrency.fromMap(Map<String, dynamic> map) {
     return CryptoCurrency(
-      wazirxKey: (map['wazirxKey'] ?? '') as String,
-      krakenKey: (map['krakenKey'] ?? '') as String,
+      key: (map['key'] ?? '') as String,
       wazirxBuyPrice: (map['wazirxBuyPrice'] ?? 0.0) as double,
       krakenPrice: (map['krakenPrice'] ?? 0.0) as double,
       name: (map['name'] ?? '') as String,
@@ -77,13 +66,5 @@ class CryptoCurrency extends Equatable {
   String toJson() => json.encode(toMap());
 
   @override
-  List<Object> get props {
-    return [
-      wazirxKey,
-      krakenKey,
-      wazirxBuyPrice,
-      krakenPrice,
-      name,
-    ];
-  }
+  List<Object> get props => [key, wazirxBuyPrice, krakenPrice, name];
 }
