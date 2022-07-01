@@ -21,7 +21,7 @@ class NotificationCubit extends Cubit<NotificationState> {
   }
   static NotificationDetails _initLocalNotification() {
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('logo');
+        AndroidInitializationSettings('ic_launcher');
 
     const IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
@@ -44,7 +44,7 @@ class NotificationCubit extends Cubit<NotificationState> {
       'notifications',
       importance: Importance.high,
       enableLights: true,
-      icon: "logo",
+      icon: "ic_launcher",
       playSound: true,
     );
 
@@ -146,15 +146,16 @@ class NotificationCubit extends Cubit<NotificationState> {
         print('user not registered');
 
         FirebaseCrashlytics.instance.recordError(
-            Exception('Tried to send a notification to an invalid fcm token'),
-            StackTrace.current);
+          Exception('Tried to send a notification to an invalid fcm token'),
+          StackTrace.current,
+        );
         return;
       }
 
       final String token = data['token'];
       await _sendNotificationToFCMToken(title, body, token);
     } catch (e) {
-      // TODO
+      log(e.toString());
     }
   }
 
@@ -194,11 +195,5 @@ class NotificationCubit extends Cubit<NotificationState> {
       'token': newToken,
       'generated': Timestamp.fromDate(DateTime.now()),
     });
-
-    NotificationCubit.sendNotificationToUser(
-      'Test',
-      'test',
-      FirebaseAuth.instance.currentUser!.uid,
-    );
   }
 }

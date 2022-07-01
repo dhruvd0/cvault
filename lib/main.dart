@@ -30,17 +30,15 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  
-
   runApp(
     MultiProvider(
-      providers: _providers..add(
-      BlocProvider(
-        lazy:  false,
-        create: (context) => NotificationCubit(),
-        
-      )
-      ),
+      providers: _providers
+        ..add(
+          BlocProvider(
+            lazy: false,
+            create: (context) => NotificationCubit(),
+          ),
+        ),
       child: DevicePreview(
         enabled: true,
         builder: (context) {

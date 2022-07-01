@@ -3,6 +3,8 @@
 
 import 'dart:convert';
 
+import 'package:cvault/providers/notification_bloc/notification_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
 
 import 'package:cvault/models/home_state.dart';
@@ -99,19 +101,30 @@ class QuoteProvider extends LoadStatusNotifier {
     );
 
     if (response.statusCode == 201) {
-      transaction = Transaction.fromJson(
-        {TransactionProps.transactionType.name: 'buy'},
+      var decodedBody = jsonDecode(response.body);
+      String title = 'Quote Received';
+      String body =
+          '${transaction.transactionType} | ${transaction.cryptoType} | ${transaction.price} ${transaction.currency} | ${transaction.quantity} ${transaction.cryptoType}';
+       NotificationCubit.sendNotificationToUser(
+        'Quote Sent',
+        body,
+        FirebaseAuth.instance.currentUser!.uid,
       );
+      NotificationCubit.sendNotificationToUser(
+        title,
+        body,
+       decodedBody['recieverUID'],
+      );
+
+      
       loadStatus = LoadStatus.done;
+
       notifyListeners();
 
       return true;
     } else if (response.statusCode == 400) {
       loadStatus = LoadStatus.done;
       notifyListeners();
-      if (!kReleaseMode) {
-        throw Exception('post-transaction:${response.statusCode}');
-      }
 
       return false;
     } else {
