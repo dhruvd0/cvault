@@ -25,6 +25,9 @@ class CustomerProvider extends LoadStatusNotifier {
 
   /// Fetches specific customers
   Future<void> fetchAndSetCustomers(String token) async {
+    if (page == 1) {
+      _customers = [];
+    }
     final response = await http.get(
       Uri.parse(
         "https://cvault-backend.herokuapp.com/dealer/getDealerCustomer?page=$page",
@@ -42,7 +45,7 @@ class CustomerProvider extends LoadStatusNotifier {
           Customer.fromJson(element),
         ),
       );
-      _customers = temp;
+      _customers.addAll(temp);
       notifyListeners();
     } else {
       throw Exception(response.statusCode);
