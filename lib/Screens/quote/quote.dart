@@ -1,6 +1,7 @@
+import 'package:cvault/Screens/quote/widgets/margins_percentage_field.dart';
 import 'package:cvault/Screens/settings/settting.dart';
 import 'package:cvault/Screens/quote/widgets/buy_sell_toggle.dart';
-import 'package:cvault/Screens/quote/widgets/quantity.dart';
+import 'package:cvault/Screens/quote/widgets/edit_quote_metric.dart';
 import 'package:cvault/Screens/quote/widgets/send_quote_box.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/home_state.dart';
@@ -19,8 +20,6 @@ class Quote extends StatefulWidget {
   @override
   State<Quote> createState() => _QuoteState();
 }
-
-bool price = true;
 
 class _QuoteState extends State<Quote> {
   @override
@@ -65,179 +64,198 @@ class _QuoteState extends State<Quote> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : Container(
-                    margin: const EdgeInsets.all(20),
-                    color: Colors.transparent,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          child: Container(
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      price = true;
-                                    });
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.40,
-                                    margin: const EdgeInsets.all(5),
-                                    color: price ? Colors.white : Colors.black,
-                                    child: Center(
-                                      child: Text(
-                                        "Price",
-                                        style: TextStyle(
-                                          color: price
-                                              ? Colors.black
-                                              : Colors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      price = false;
-                                    });
-                                  },
-                                  child: Container(
-                                    color: !price ? Colors.white : Colors.black,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.40,
-                                    margin: const EdgeInsets.all(5),
-                                    child: Center(
-                                      child: Text(
-                                        "Quantity",
-                                        style: TextStyle(
-                                          color: !price
-                                              ? Colors.black
-                                              : Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                : Consumer<QuoteProvider>(
+                    builder: (context, quoteProvider, __) {
+                      return Container(
+                        margin: const EdgeInsets.all(20),
+                        color: Colors.transparent,
+                        child: Column(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Settings(),
-                                  ),
-                                );
-                              },
-                              child: Consumer<HomeStateNotifier>(
-                                builder: (context, notifier, _) {
-                                  return Row(
-                                    children: [
-                                      const CircleAvatar(
-                                        radius: 25,
-                                        backgroundColor: Colors.blue,
-                                        backgroundImage: NetworkImage(
-                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoG97VgQYJGXN8kDJkOMvh79mgLvO5iEfVWA&usqp=CAU",
+                            SizedBox(
+                              height: 50,
+                              child: Container(
+                                color: Colors.white,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        quoteProvider
+                                            .changeQuoteMode(QuoteMode.Price);
+                                      },
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.40,
+                                        margin: const EdgeInsets.all(5),
+                                        color: quoteProvider.quoteMode ==
+                                                QuoteMode.Price
+                                            ? Colors.white
+                                            : Colors.black,
+                                        child: Center(
+                                          child: Text(
+                                            "Price",
+                                            style: TextStyle(
+                                              color: quoteProvider.quoteMode ==
+                                                      QuoteMode.Price
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      Text(
-                                        notifier.state.selectedCurrencyKey
-                                            .toUpperCase(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        quoteProvider.changeQuoteMode(
+                                          QuoteMode.Quantity,
+                                        );
+                                      },
+                                      child: Container(
+                                        color: quoteProvider.quoteMode ==
+                                                QuoteMode.Quantity
+                                            ? Colors.white
+                                            : Colors.black,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.40,
+                                        margin: const EdgeInsets.all(5),
+                                        child: Center(
+                                          child: Text(
+                                            "Quantity",
+                                            style: TextStyle(
+                                              color: quoteProvider.quoteMode ==
+                                                      QuoteMode.Quantity
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ],
-                                  );
-                                },
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            const USDToINRToggle(),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Cost Price",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Consumer<QuoteProvider>(
-                                  builder: (context, quoteProvider, __) {
-                                    return Flexible(
-                                      child: Center(
-                                        child: homeStateNotifier.state
-                                                is HomeInitial
-                                            ? const Text("Loading")
-                                            : Text(
-                                                state.cryptoCurrencies.isEmpty
-                                                    ? ''
-                                                    : '${homeStateNotifier.state.isUSD ? '\$' : '₹'}${quoteProvider.transaction.costPrice.toStringAsFixed(2)}',
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const Settings(),
                                       ),
                                     );
                                   },
+                                  child: Consumer<HomeStateNotifier>(
+                                    builder: (context, notifier, _) {
+                                      return Row(
+                                        children: [
+                                          const CircleAvatar(
+                                            radius: 25,
+                                            backgroundColor: Colors.blue,
+                                            backgroundImage: NetworkImage(
+                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoG97VgQYJGXN8kDJkOMvh79mgLvO5iEfVWA&usqp=CAU",
+                                            ),
+                                          ),
+                                          Text(
+                                            notifier.state.selectedCurrencyKey
+                                                .toUpperCase(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
+                                const USDToINRToggle(),
                               ],
                             ),
-                            const BuySellToggle(),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Cost Price",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    Consumer<QuoteProvider>(
+                                      builder: (context, quoteProvider, __) {
+                                        return Flexible(
+                                          child: Center(
+                                            child: homeStateNotifier.state
+                                                    is HomeInitial
+                                                ? const Text("Loading")
+                                                : Text(
+                                                    state.cryptoCurrencies
+                                                            .isEmpty
+                                                        ? ''
+                                                        : '${homeStateNotifier.state.isUSD ? '\$' : '₹'}${quoteProvider.transaction.costPrice.toStringAsFixed(2)}',
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                const BuySellToggle(),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                MarginPercentageField(),
+                                EditQuoteMetric(),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            SendQuoteBox(
+                              isPriceSelected:
+                                  quoteProvider.quoteMode == QuoteMode.Price,
+                            ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            QuoteMargin(),
-                            Quantity(),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        SendQuoteBox(isPriceSelected: price),
-                      ],
-                    ),
+                      );
+                    },
                   );
           },
         ),

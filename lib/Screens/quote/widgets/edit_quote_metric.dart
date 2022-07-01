@@ -1,13 +1,12 @@
-import 'package:cvault/Screens/settings/margin.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/transaction/transaction.dart';
-import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Quantity extends StatelessWidget {
-  const Quantity({
+/// Widget to edit either Quantity or Amount
+class EditQuoteMetric extends StatelessWidget {
+  const EditQuoteMetric({
     Key? key,
   }) : super(key: key);
 
@@ -16,9 +15,11 @@ class Quantity extends StatelessWidget {
     return Consumer<QuoteProvider>(
       builder: (_, quoteProvider, __) => Column(
         children: [
-          const Text(
-            "Quantity",
-            style: TextStyle(
+          Text(
+            quoteProvider.quoteMode == QuoteMode.Quantity
+                ? 'Amount'
+                : 'Quantity',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
             ),
@@ -40,7 +41,9 @@ class Quantity extends StatelessWidget {
               ),
               child: Center(
                 child: TextFormField(
-                  initialValue: quoteProvider.transaction.quantity.toString(),
+                  initialValue: quoteProvider.quoteMode == QuoteMode.Quantity
+                      ? quoteProvider.transaction.price.toString()
+                      : quoteProvider.transaction.quantity.toString(),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -50,8 +53,17 @@ class Quantity extends StatelessWidget {
                   onChanged: (string) {
                     double? q = double.tryParse(string);
                     if (q != null) {
+                      if (quoteProvider
+                              .profileChangeNotifier.profile.userType ==
+                          UserTypes.customer) {
+                        if (quoteProvider.quoteMode == QuoteMode.Quantity) {
+                          return;
+                        }
+                      }
                       quoteProvider.changeTransactionField(
-                        TransactionProps.quantity,
+                        quoteProvider.quoteMode == QuoteMode.Quantity
+                            ? TransactionProps.price
+                            : TransactionProps.quantity,
                         q,
                       );
                     }
@@ -71,57 +83,6 @@ class Quantity extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class QuoteMargin extends StatelessWidget {
-  const QuoteMargin({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<ProfileChangeNotifier>(
-      builder: (_, profileNotifier, k) {
-        var userType = profileNotifier.profile.userType;
-        // ignore: newline-before-return
-        return Consumer<QuoteProvider>(
-          builder: (_, quoteProvider, __) => userType == UserTypes.customer
-              ? Container()
-              : Column(
-                  children: [
-                    const Text(
-                      "Margin %",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    SizedBox(
-                      height: 50,
-                      width: 120,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(
-                            width: 1.5,
-                            color: const Color.fromARGB(255, 165, 231, 243),
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: const MarginInputTextField(
-                          editEnabled: false,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-        );
-      },
     );
   }
 }

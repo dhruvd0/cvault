@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
@@ -38,11 +40,15 @@ class _LogInScreenState extends State<LogInScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> verifyPhone() async {
+    setState(() {
+      isLoading = true;
+    });
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phone,
       verificationCompleted: (PhoneAuthCredential credential) async {
         // await FirebaseAuth.instance.signInWithCredential(credential);
         // await _postLoginSubRoutine();
+        log('verification completed');
       },
       verificationFailed: (FirebaseAuthException e) {
         final snackBar = SnackBar(content: Text("${e.message}"));
@@ -54,6 +60,7 @@ class _LogInScreenState extends State<LogInScreen> {
       },
       codeSent: (String verificationId, int? resendToken) {
         setState(() {
+          isLoading = false;
           codeSent = true;
           verId = verificationId;
         });
@@ -65,7 +72,7 @@ class _LogInScreenState extends State<LogInScreen> {
           });
         }
       },
-      timeout: const Duration(seconds: 60),
+      timeout: const Duration(seconds: 10),
     );
   }
 
@@ -250,81 +257,78 @@ class _LogInScreenState extends State<LogInScreen> {
         builder: (_, profile, __) => Container(
           height: MediaQuery.of(context).size.height,
           margin: const EdgeInsets.only(left: 20, right: 20),
-          child: profile.loadStatus == LoadStatus.loading
-              ? const Center(child: CircularProgressIndicator())
-              : codeSent
-                  ? _otpTextField(context)
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "Enter your \nmobile number",
-                          style: GoogleFonts.lato(
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          "we will send you a confirmation code",
-                          style: GoogleFonts.lato(
-                            textStyle: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
-                              fontSize: 14,
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: IntlPhoneField(
-                            showCountryFlag: true,
-                            showDropdownIcon: true,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              counter: Container(),
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              hintText: '00000-00000',
-                              hintStyle: TextStyle(
-                                color: Colors.white.withOpacity(0.4),
-                                fontSize: 16,
-                              ),
-                            ),
-                            initialCountryCode: 'IN',
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                            onChanged: (phoneNumber) {
-                              setState(() {
-                                phone = phoneNumber.completeNumber;
-                              });
-                            },
-                          ),
-                        ),
-                      ],
+          child: codeSent
+              ? _otpTextField(context)
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(
+                      height: 20,
                     ),
+                    Text(
+                      "Enter your \nmobile number",
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      "we will send you a confirmation code",
+                      style: GoogleFonts.lato(
+                        textStyle: TextStyle(
+                          color: Colors.white.withOpacity(0.7),
+                          fontSize: 14,
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: IntlPhoneField(
+                        showCountryFlag: true,
+                        showDropdownIcon: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          counter: Container(),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          hintText: '00000-00000',
+                          hintStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.4),
+                            fontSize: 16,
+                          ),
+                        ),
+                        initialCountryCode: 'IN',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        onChanged: (phoneNumber) {
+                          setState(() {
+                            phone = phoneNumber.completeNumber;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
       floatingActionButton: codeSent
@@ -348,10 +352,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     child: FloatingActionButton.extended(
                       backgroundColor: const Color(0xff03dac6),
                       foregroundColor: Colors.black,
-                      onPressed: () {
-                        setState(() {
-                          isLoading = true;
-                        });
+                      onPressed: () async {
                         verifyPhone();
                       },
                       label: !isLoading

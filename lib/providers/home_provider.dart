@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/models/crypto_currency.dart';
@@ -31,10 +32,12 @@ class HomeStateNotifier extends ChangeNotifier {
 
   final MarginsNotifier marginsNotifier;
   final ProfileChangeNotifier profileChangeNotifier;
+
   ///
   HomeState state = HomeInitial();
 
   double usdToInrFactor = 79;
+
   /// Websocket to listen : wss://stream.wazirx.com/stream
   IOWebSocketChannel? wazirXChannel;
 
@@ -49,10 +52,10 @@ class HomeStateNotifier extends ChangeNotifier {
     await fetchCurrencyDataFromKraken();
 
     _emit(state.copyWith(loadStatus: LoadStatus.done));
-    if(state.cryptoCurrencies.isNotEmpty){
-    _calculateDifference();
+    if (state.cryptoCurrencies.isNotEmpty) {
+      _calculateDifference();
     }
-   
+
     wazirXChannel?.sink.close();
     startWazirXCryptoTicker();
   }
@@ -76,6 +79,7 @@ class HomeStateNotifier extends ChangeNotifier {
     );
 
     wazirXChannel?.stream.asBroadcastStream().listen((event) async {
+      log('listening to wazirx api');
       if (event != null && event.contains('connected')) {
         wazirXChannel?.sink.add(
           jsonEncode({
@@ -88,9 +92,9 @@ class HomeStateNotifier extends ChangeNotifier {
         if (baseData.containsKey('data') && baseData['data'] is List) {
           var cryptoData = baseData['data'];
           _parseAndEmitWazirXTickerData(cryptoData);
+          fetchCurrencyDataFromKraken();
+          await marginsNotifier.getAllMargins();
         }
-        fetchCurrencyDataFromKraken();
-        await marginsNotifier.getAllMargins();
       }
     });
   }

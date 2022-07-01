@@ -13,12 +13,23 @@ import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:flutter/foundation.dart';
 
+enum QuoteMode {
+  Price,
+  Quantity,
+}
+
 class QuoteProvider extends LoadStatusNotifier {
   Transaction transaction =
       Transaction.fromJson({TransactionProps.transactionType.name: 'buy'});
   final HomeStateNotifier homeStateNotifier;
 
   final ProfileChangeNotifier profileChangeNotifier;
+  var quoteMode = QuoteMode.Price;
+  void changeQuoteMode(QuoteMode mode) {
+    quoteMode = mode;
+    notifyListeners();
+  }
+
   QuoteProvider({
     required this.homeStateNotifier,
     required this.profileChangeNotifier,
@@ -119,6 +130,7 @@ class QuoteProvider extends LoadStatusNotifier {
       "timestamps": DateTime.now().toIso8601String(),
       "receiversPhone": transaction.receiver.phone,
       "sendersID": sendersID,
+      'dealerMargin': homeStateNotifier.marginsNotifier.dealerMargin,
     };
   }
 
@@ -160,6 +172,11 @@ class QuoteProvider extends LoadStatusNotifier {
       transaction = transaction.copyWith(
         costPrice: homeStateNotifier.currentCryptoCurrency().krakenPrice,
       );
+    }
+    if (quoteMode == QuoteMode.Price) {
+      changeTransactionField(TransactionProps.quantity, transaction.quantity);
+    } else {
+      changeTransactionField(TransactionProps.price, transaction.price);
     }
     notifyListeners();
   }
