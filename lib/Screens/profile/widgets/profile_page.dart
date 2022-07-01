@@ -23,8 +23,8 @@ class ProfilePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          leading: Container(),
           centerTitle: true,
+          
           title: Title(
             color: Colors.white,
             child: Text(

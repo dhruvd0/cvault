@@ -36,15 +36,7 @@ class _AdminPanelState extends State<AdminPanel> {
           ),
         ),
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (builder) => const HomePage()),
-            );
-          },
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
+      
       ),
       body: SingleChildScrollView(
         child: Consumer<ProfileChangeNotifier>(

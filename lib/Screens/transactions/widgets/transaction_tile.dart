@@ -26,76 +26,154 @@ class TransactionTile extends StatelessWidget {
                     FirebaseAuth.instance.currentUser!.uid;
   }
 
+  // ignore: long-method
   Widget expansionTileContent(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
+    return Consumer<TransactionsProvider>(
+      builder: (_, transProvider, k) {
+        return ExpansionTile(
+          trailing: null,
+          title: Container(
+            padding: const EdgeInsets.all(5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width / 3,
+                          ),
+                          child: Text(
+                            transaction.receiver.firstName,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          (transaction.currency == 'usdt' ? '\$' : '₹') +
+                              transaction.price.toStringAsFixed(2),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TransactionStatusWidget(transaction: transaction),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY)
+                              .format(DateTime.parse(transaction.createdAt)),
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+              ],
+            ),
+          ),
+          children: [
+            Container(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width / 3,
+                  Text(
+                    transaction.sender.firstName,
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
-                    child: Text(
-                      transaction.receiver.firstName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Price",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
+                      Text(
+                        transaction.transactionType.toUpperCase() +
+                            " order".toUpperCase(),
+                        style: TextStyle(
+                          color: transaction.transactionType == "buy"
+                              ? Colors.blue
+                              : Colors.green,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "Currecncy",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 5,
+                  SizedBox(
+                    height: 10,
                   ),
-                  Text(
-                    (transaction.currency == 'usdt' ? '\$' : '₹') +
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
                         transaction.price.toStringAsFixed(2),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        transaction.cryptoType.toUpperCase() +
+                            "${transaction.quantity.toStringAsFixed(5)}",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TransactionStatusWidget(transaction: transaction),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY)
-                        .format(DateTime.parse(transaction.createdAt)),
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-        ],
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 
+  // ignore: long-method
   List<Widget> _tileButtons(BuildContext context) {
     return [
       Padding(

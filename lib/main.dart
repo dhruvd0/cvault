@@ -47,6 +47,7 @@ Future<void> main() async {
   );
 }
 
+// ignore: long-method
 List<SingleChildWidget> get _providers {
   return [
     ChangeNotifierProvider(

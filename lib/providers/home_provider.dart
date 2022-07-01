@@ -31,10 +31,12 @@ class HomeStateNotifier extends ChangeNotifier {
 
   final MarginsNotifier marginsNotifier;
   final ProfileChangeNotifier profileChangeNotifier;
+
   ///
   HomeState state = HomeInitial();
 
   double usdToInrFactor = 79;
+
   /// Websocket to listen : wss://stream.wazirx.com/stream
   IOWebSocketChannel? wazirXChannel;
 
@@ -49,10 +51,10 @@ class HomeStateNotifier extends ChangeNotifier {
     await fetchCurrencyDataFromKraken();
 
     _emit(state.copyWith(loadStatus: LoadStatus.done));
-    if(state.cryptoCurrencies.isNotEmpty){
-    _calculateDifference();
+    if (state.cryptoCurrencies.isNotEmpty) {
+      _calculateDifference();
     }
-   
+
     wazirXChannel?.sink.close();
     startWazirXCryptoTicker();
   }
@@ -213,6 +215,7 @@ class HomeStateNotifier extends ChangeNotifier {
         .indexWhere((element) => element.key == state.selectedCurrencyKey);
     if (index != -1) {
       var crypto = state.cryptoCurrencies[index];
+      // ignore: prefer-conditional-expressions
       if (isUsd) {
         crypto = crypto.copyWith(
           wazirxBuyPrice: crypto.wazirxBuyPrice / usdToInrFactor,

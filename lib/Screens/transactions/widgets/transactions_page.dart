@@ -64,29 +64,32 @@ class _TransactionsPageState extends State<TransactionsPage> {
         onRefresh: () async {
           _onRefresh(context);
         },
-        child: GestureDetector(
-          child: Consumer<TransactionsProvider>(
-            builder: (context, transactionsProvider, __) {
-              switch (transactionsProvider.loadStatus) {
-                case LoadStatus.error:
-                  return const Center(
-                    child: Text(
-                      "An error has occurred!",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  );
-                default:
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: transactionsProvider.transactions.isEmpty &&
-                                transactionsProvider.loadStatus ==
-                                    LoadStatus.loading
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : ListView.builder(
+        child: Consumer<TransactionsProvider>(
+          builder: (context, transactionsProvider, __) {
+            switch (transactionsProvider.loadStatus) {
+              case LoadStatus.error:
+                return const Center(
+                  child: Text(
+                    "An error has occurred!",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              default:
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: transactionsProvider.transactions.isEmpty &&
+                              transactionsProvider.loadStatus ==
+                                  LoadStatus.loading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                transactionsProvider.Expand();
+                              },
+                              child: ListView.builder(
                                 itemCount:
                                     transactionsProvider.transactions.length,
                                 controller: _scrollController,
@@ -98,23 +101,23 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   );
                                 },
                               ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      transactionsProvider.loadStatus == LoadStatus.loading &&
-                              transactionsProvider.transactions.isNotEmpty
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: ThemeColors.lightGreenAccentColor,
-                              ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  );
-              }
-            },
-          ),
+                            ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    transactionsProvider.loadStatus == LoadStatus.loading &&
+                            transactionsProvider.transactions.isNotEmpty
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: ThemeColors.lightGreenAccentColor,
+                            ),
+                          )
+                        : const SizedBox(),
+                  ],
+                );
+            }
+          },
         ),
       ),
     );

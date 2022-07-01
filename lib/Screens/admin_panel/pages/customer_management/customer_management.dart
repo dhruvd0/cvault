@@ -6,6 +6,8 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../home_page.dart';
+
 class CustomerManagementPage extends StatefulWidget {
   const CustomerManagementPage({Key? key}) : super(key: key);
 
@@ -69,6 +71,14 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+          ),
+        ),
         title: const Text(
           "Customer Management",
           style: TextStyle(
