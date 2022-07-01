@@ -1,3 +1,4 @@
+import 'package:cvault/Screens/notifications_screen.dart';
 import 'package:cvault/Screens/settings/settting.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/providers/home_provider.dart';
@@ -97,7 +98,12 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
               ),
               onTap: () {
-                /// TODO: navigate to notifications
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NotificationScreen(),
+                  ),
+                );
               },
             ),
             const SizedBox(

@@ -13,7 +13,6 @@ import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
-import 'package:flutter/foundation.dart';
 
 enum QuoteMode {
   Price,
@@ -105,7 +104,7 @@ class QuoteProvider extends LoadStatusNotifier {
       String title = 'Quote Received';
       String body =
           '${transaction.transactionType} | ${transaction.cryptoType} | ${transaction.price} ${transaction.currency} | ${transaction.quantity} ${transaction.cryptoType}';
-       NotificationCubit.sendNotificationToUser(
+      NotificationCubit.sendNotificationToUser(
         'Quote Sent',
         body,
         FirebaseAuth.instance.currentUser!.uid,
@@ -113,10 +112,9 @@ class QuoteProvider extends LoadStatusNotifier {
       NotificationCubit.sendNotificationToUser(
         title,
         body,
-       decodedBody['recieverUID'],
+        decodedBody['recieverUID'],
       );
 
-      
       loadStatus = LoadStatus.done;
 
       notifyListeners();

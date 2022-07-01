@@ -1,5 +1,6 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/profile.dart';
+import 'package:cvault/models/transaction/transaction.dart';
 
 /// Customer Model
 class Customer extends Profile {
@@ -16,6 +17,7 @@ class Customer extends Profile {
     required String uid,
     required String referalCode,
     required String phone,
+    required List<Transaction> transactions,
   }) : super(
           middleName: middleName,
           referalCode: referalCode,
@@ -25,6 +27,7 @@ class Customer extends Profile {
           uid: uid,
           phone: phone,
           lastName: lastName,
+          transactions: transactions,
         );
 
   ///
@@ -36,6 +39,11 @@ class Customer extends Profile {
       middleName: json["middleName"] ?? '',
       lastName: json["lastName"] ?? '',
       email: json["email"] ?? '',
+      transactions: json['transactions'] == null
+          ? []
+          : List<Transaction>.from(
+              json["transactions"].map((x) => Transaction.fromJson(x)),
+            ),
       referalCode: json['referalCode'] ?? '',
       phone: json["phone"] ?? '',
     );
@@ -63,6 +71,7 @@ class Customer extends Profile {
     String? userType,
     String? referalCode,
     String? phone,
+    List<Transaction>? transactions,
   }) {
     return Customer(
       customerId: customerId ?? this.customerId,
@@ -73,6 +82,7 @@ class Customer extends Profile {
       uid: uid ?? this.uid,
       referalCode: referalCode ?? this.referalCode,
       phone: phone ?? this.phone,
+      transactions: transactions ?? this.transactions,
     );
   }
 

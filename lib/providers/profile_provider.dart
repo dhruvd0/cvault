@@ -52,7 +52,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   late FirebaseAuth authInstance;
 
   ///
-  Profile profile = const ProfileInitial();
+  Profile profile = ProfileInitial();
 
   String token = '';
 
@@ -185,7 +185,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   Future<void> reset() async {
     token = '';
     await (await SharedPreferences.getInstance()).clear();
-    emit(const ProfileInitial());
+    emit(ProfileInitial());
   }
 
   /// Fetches and updates profile
@@ -203,8 +203,6 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       emit(cachedProfile);
       loadStatus = LoadStatus.done;
       notifyListeners();
-
-      return;
     }
 
     if (token.isEmpty) {

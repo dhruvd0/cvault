@@ -3,6 +3,7 @@
 //     final dealer = dealerFromJson(jsonString);
 
 import 'package:cvault/models/profile_models/profile.dart';
+import 'package:cvault/models/transaction/transaction.dart';
 
 ///
 class Dealer extends Profile {
@@ -10,7 +11,7 @@ class Dealer extends Profile {
   const Dealer({
     required this.dealerId,
     required this.active,
-    required this.transactions,
+    required List<Transaction> transactions,
     required String userType,
     required String firstName,
     required String middleName,
@@ -28,6 +29,7 @@ class Dealer extends Profile {
           uid: uid,
           phone: phone,
           lastName: lastName,
+          transactions: transactions,
         );
 
   ///
@@ -35,9 +37,6 @@ class Dealer extends Profile {
 
   ///
   final bool active;
-
-  /// List of transactions, with [Transaction.sender.uid] as [dealerId]
-  final List<String> transactions;
 
   ///
   factory Dealer.fromJson(String userType, Map<String, dynamic> json) {
@@ -54,8 +53,8 @@ class Dealer extends Profile {
       referalCode: json['referalCode'] ?? '',
       transactions: json['transactions'] == null
           ? []
-          : List<String>.from(
-              json["transactions"].map((x) => x.toString()),
+          : List<Transaction>.from(
+              json["transactions"].map((x) => Transaction.fromJson(x)),
             ),
     );
   }
@@ -88,7 +87,7 @@ class Dealer extends Profile {
   Dealer copyWith({
     String? dealerId,
     bool? active,
-    List<String>? transactions,
+    List<Transaction>? transactions,
     String? firstName,
     String? middleName,
     String? lastName,

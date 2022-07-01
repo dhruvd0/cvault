@@ -1,6 +1,7 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
+import 'package:cvault/models/transaction/transaction.dart';
 import 'package:equatable/equatable.dart';
 
 /// Parent class for [Dealer] and [Customer] classes
@@ -31,6 +32,8 @@ abstract class Profile extends Equatable {
   /// Phone should always have the country code as a prefix-'+91'
   final String phone;
 
+  final List<Transaction> transactions;
+
   ///
   const Profile({
     required this.firstName,
@@ -41,6 +44,7 @@ abstract class Profile extends Equatable {
     required this.userType,
     required this.referalCode,
     required this.phone,
+    required this.transactions,
   });
   @override
   List<Object> get props {
@@ -95,7 +99,7 @@ enum ProfileFields {
 ///
 class ProfileInitial extends Profile {
   ///
-  const ProfileInitial()
+  ProfileInitial()
       : super(
           firstName: '',
           email: '',
@@ -105,5 +109,6 @@ class ProfileInitial extends Profile {
           userType: '',
           uid: '',
           phone: '',
+          transactions: [],
         );
 }
