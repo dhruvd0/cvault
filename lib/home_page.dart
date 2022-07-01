@@ -47,6 +47,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ProfilePage(),
         ];
       });
+    } else if (userType == UserTypes.admin) {
+      setState(() {
+        screens = [
+          const DashboardPage(),
+          const AdminPanel(),
+          ProfilePage(),
+        ];
+      });
     }
   }
 
