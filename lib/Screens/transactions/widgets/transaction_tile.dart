@@ -100,76 +100,82 @@ class TransactionTile extends StatelessWidget {
             ),
           ),
           children: [
-            Container(
-              padding: EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    transaction.sender.firstName,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Price",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        transaction.transactionType.toUpperCase() +
-                            " order".toUpperCase(),
-                        style: TextStyle(
-                          color: transaction.transactionType == "buy"
-                              ? Colors.blue
-                              : Colors.green,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        "Currecncy",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        transaction.price.toStringAsFixed(2),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        transaction.cryptoType.toUpperCase() +
-                            "${transaction.quantity.toStringAsFixed(5)}",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            _additonalTrans(context),
           ],
         );
       },
+    );
+  }
+//Trans more datils
+
+  // ignore: long-method
+  Widget _additonalTrans(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            transaction.sender.firstName,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Price",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                transaction.transactionType.toUpperCase() +
+                    " order".toUpperCase(),
+                style: TextStyle(
+                  color: transaction.transactionType == "buy"
+                      ? Colors.blue
+                      : Colors.green,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const Text(
+                "Currecncy",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                transaction.price.toStringAsFixed(2),
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                transaction.cryptoType.toUpperCase() +
+                    "${transaction.quantity.toStringAsFixed(5)}",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
