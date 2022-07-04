@@ -60,6 +60,7 @@ dependencies:
   regexed_validator: ^2.0.0+1
   shared_preferences: ^2.0.15
   simple_animations: ^4.0.2
+  url_launcher: ^6.1.4
   uuid: ^3.0.6
   web_socket_channel: ^2.2.0
 

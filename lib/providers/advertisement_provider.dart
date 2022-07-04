@@ -6,11 +6,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/profile_models/get_advertisement_model.dart';
 
 /// Get Advertisement
 class AdvertisementProvider extends ChangeNotifier {
+  late SharedPreferences preferences;
   List<AdModel> listData = [];
   String? imageLink;
   bool? loading;
@@ -81,14 +84,22 @@ class AdvertisementProvider extends ChangeNotifier {
     Reference deb =
         FirebaseStorage.instance.ref("image Folder/${getImageName(image)}");
     await deb.putFile(File(image.path));
-    imageLink = await deb.getDownloadURL();
-    print(imageLink);
+    await deb.getDownloadURL().then((value) {
+      setImageLink(value);
+      imageLink = value;
+
+      print(imageLink);
+    });
+
     return imageLink;
   }
 
   //delete image from firebase
   Future<void> DeleteImage(String image) async {
-    await FirebaseStorage.instance.refFromURL(image).delete();
+    await FirebaseStorage.instance.refFromURL(image).delete().then((value) {
+      removeImageLink();
+      imageLink = null;
+    });
   }
 
 //image name picker
@@ -96,7 +107,26 @@ class AdvertisementProvider extends ChangeNotifier {
   String getImageName(XFile image) {
     return image.path.split("/").last;
   }
+
+  //void _launchUrl() async {
+  Future<void> urlLauncher(Uri url) async {
+    if (!await launchUrl(url)) throw 'Could not launch $url';
+  }
+
+  //Sharedprefrences for image link
+
+  Future<void> setImageLink(String link) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("noteData", link);
+  }
+
+  Future<void> removeImageLink() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove("noteData");
+  }
 }
+
+//
 
 List<AdModel> addmodelFromJson(String str) =>
     List<AdModel>.from(json.decode(str).map((x) => AdModel.fromJson(x)));

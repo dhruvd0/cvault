@@ -39,6 +39,9 @@ class DealersProvider extends LoadStatusNotifier {
 
   /// Fetches all dealers
   Future<void> fetchAndSetDealers() async {
+    if (page == 1) {
+      _dealers = [];
+    }
     try {
       final response = await http.get(
         Uri.parse(

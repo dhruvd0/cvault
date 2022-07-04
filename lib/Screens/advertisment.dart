@@ -95,10 +95,8 @@ class _AdvertismentState extends State<Advertisment> {
                 onPressed: () async {
                   singleImage = await provider.pickImage();
                   if (singleImage != null && singleImage!.path.isNotEmpty) {
-                    setState(() {
-                      provider.uploadImage(singleImage!);
-                      setState(() {});
-                    });
+                    provider.uploadImage(singleImage!);
+                    setState(() {});
                   }
                 },
                 child: const Text("Pick Image"),
@@ -107,6 +105,7 @@ class _AdvertismentState extends State<Advertisment> {
                 onPressed: () {
                   provider.deleteAdd(addLink);
                   provider.DeleteImage(provider.imageLink!);
+
                   setState(() {});
                 },
                 child: const Text("Remove Add's"),
