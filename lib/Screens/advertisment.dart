@@ -2,6 +2,7 @@ import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:regexed_validator/regexed_validator.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Advertisment extends StatefulWidget {
   const Advertisment({Key? key}) : super(key: key);
@@ -17,14 +18,11 @@ class _AdvertismentState extends State<Advertisment> {
     super.initState();
   }
 
-  onrefresh() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-    Provider.of<AdvertisementProvider>(context).listData;
-  }
+  XFile? singleImage;
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AdvertisementProvider>(context, listen: true);
+    final provider = Provider.of<AdvertisementProvider>(context, listen: false);
     String addLink = "";
     // ignore: newline-before-return
     return Scaffold(
@@ -40,10 +38,12 @@ class _AdvertismentState extends State<Advertisment> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          onrefresh();
-        },
+      body: GestureDetector(
+        onVerticalDragDown: ((details) async {
+          await provider.listData;
+          await provider.getAd();
+          setState(() {});
+        }),
         child: Container(
           color: Colors.transparent,
           child: Column(
@@ -64,7 +64,7 @@ class _AdvertismentState extends State<Advertisment> {
                   inputFormatters: const [],
                   validator: (string) {
                     if (string == null || !validator.url(string)) {
-                      return 'Please enter a valid email';
+                      return '   Please enter a valid link';
                     }
                     // ignore: newline-before-return
                     return null;
@@ -72,6 +72,7 @@ class _AdvertismentState extends State<Advertisment> {
                   onChanged: (string1) {
                     provider.postAdd(string1);
                     addLink = string1;
+                    setState(() {});
                   },
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -84,44 +85,31 @@ class _AdvertismentState extends State<Advertisment> {
                   ),
                 ),
               ),
+              provider.imageLink != null
+                  ? Image.network(
+                      provider.imageLink.toString(),
+                      height: 200,
+                    )
+                  : const SizedBox.shrink(),
+              ElevatedButton(
+                onPressed: () async {
+                  singleImage = await provider.pickImage();
+                  if (singleImage != null && singleImage!.path.isNotEmpty) {
+                    setState(() {
+                      provider.uploadImage(singleImage!);
+                      setState(() {});
+                    });
+                  }
+                },
+                child: const Text("Pick Image"),
+              ),
               ElevatedButton(
                 onPressed: () {
                   provider.deleteAdd(addLink);
+                  provider.DeleteImage(provider.imageLink!);
+                  setState(() {});
                 },
                 child: const Text("Remove Add's"),
-              ),
-              Visibility(
-                visible: provider.listData.isEmpty ? false : true,
-                child: Container(
-                  height: MediaQuery.of(context).size.width * 0.50,
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 5,
-                    horizontal: 10,
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.85,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const Text('AD'),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.60,
-                        child: Center(
-                          child: Image.network(
-                            provider.listData.isNotEmpty
-                                ? provider.listData[0].link
-                                : "",
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                      const Text('AD'),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),

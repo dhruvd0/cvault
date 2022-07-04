@@ -1,13 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:cvault/Screens/advertisment.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../models/profile_models/get_advertisement_model.dart';
 
 /// Get Advertisement
 class AdvertisementProvider extends ChangeNotifier {
   List<AdModel> listData = [];
+  String? imageLink;
   bool? loading;
   Future<List<AdModel>> getAd() async {
     http.Response response;
@@ -44,7 +49,8 @@ class AdvertisementProvider extends ChangeNotifier {
 
     var jsonResponse = json.decode(response.body);
     postAdModel = PostAdModel.fromJson(jsonResponse);
-
+    notifyListeners();
+    // ignore: newline-before-return
     return postAdModel;
   }
 // delete add
@@ -60,6 +66,35 @@ class AdvertisementProvider extends ChangeNotifier {
         "link": link,
       },
     );
+  }
+
+  notifyListeners();
+
+//image picker
+
+  Future<XFile?> pickImage() async {
+    return await ImagePicker().pickImage(source: ImageSource.gallery);
+  }
+
+//image upload to firebase
+  Future<String?> uploadImage(XFile image) async {
+    Reference deb =
+        FirebaseStorage.instance.ref("image Folder/${getImageName(image)}");
+    await deb.putFile(File(image.path));
+    imageLink = await deb.getDownloadURL();
+    print(imageLink);
+    return imageLink;
+  }
+
+  //delete image from firebase
+  Future<void> DeleteImage(String image) async {
+    await FirebaseStorage.instance.refFromURL(image).delete();
+  }
+
+//image name picker
+
+  String getImageName(XFile image) {
+    return image.path.split("/").last;
   }
 }
 
