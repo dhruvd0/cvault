@@ -32,7 +32,6 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   bool codeSent = false;
   bool isLoading = false;
-  String otp = '';
   bool otpLoading = false;
   late String phone;
   late String verId;
@@ -79,21 +78,164 @@ class _LogInScreenState extends State<LogInScreen> {
 //loading navigation
 
   Future<void> verifyPin(String pin) async {
+    setState(() {
+      isLoading = true;
+    });
     PhoneAuthCredential credential =
         PhoneAuthProvider.credential(verificationId: verId, smsCode: pin);
 
     try {
       await FirebaseAuth.instance.signInWithCredential(credential);
 
-      await _postLoginSubRoutine();
+      await postLoginSubRoutine();
     } on FirebaseAuthException catch (e) {
-      otpLoading = false;
+      setState(() {
+        otpLoading = false;
+        isLoading = false;
+      });
+
       final snackBar = SnackBar(content: Text("${e.message}"));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
-  Column _otpTextField(BuildContext context) {
+  /// Fetches data and navigates user to the next screen after logging in
+  Future<void> postLoginSubRoutine() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var notifier = Provider.of<ProfileChangeNotifier>(context, listen: false);
+    if (phone == "+911111111111") {
+      await postLoginRoutineForAdmin(prefs, notifier);
+      return;
+    }
+
+    await notifier.fetchProfile();
+    if (notifier.profile.firstName.isNotEmpty) {
+      if (notifier.profile is Dealer) {
+        if (!(notifier.profile as Dealer).active) {
+          showSnackBar('Your account is disabled', context);
+          await Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (builder) => const UserTypeSelectPage(),
+            ),
+          );
+          return;
+        }
+      }
+      const snackBar = SnackBar(content: Text("Welcome Back!"));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (builder) => const HomePage(),
+        ),
+      );
+    } else {
+      showSnackBar('Get Started', context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (builder) => ProfilePage(
+            mode: ProfilePageMode.registration,
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> postLoginRoutineForAdmin(
+    SharedPreferences prefs,
+    ProfileChangeNotifier notifier,
+  ) async {
+    await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
+    notifier.changeUserType(
+      UserTypes.admin,
+      FirebaseAuth.instance.currentUser!.uid,
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (builder) => const HomePage()),
+    );
+  }
+
+  Padding getOtpButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.65,
+          child: Container(
+            decoration: const BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromARGB(255, 133, 128, 119),
+                  blurRadius: 15,
+                  spreadRadius: 1, //New
+                ),
+              ],
+            ),
+            child: FloatingActionButton.extended(
+              backgroundColor: const Color(0xff03dac6),
+              foregroundColor: Colors.black,
+              onPressed: () async {
+                verifyPhone();
+              },
+              label: !isLoading
+                  ? const Text(
+                      'Get otp',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    )
+                  : const CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container phoneInputField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: IntlPhoneField(
+        showCountryFlag: true,
+        showDropdownIcon: true,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          counter: Container(),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          hintText: '00000-00000',
+          hintStyle: TextStyle(
+            color: Colors.white.withOpacity(0.4),
+            fontSize: 16,
+          ),
+        ),
+        initialCountryCode: 'IN',
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+        onChanged: (phoneNumber) {
+          setState(() {
+            phone = phoneNumber.completeNumber;
+          });
+        },
+      ),
+    );
+  }
+
+  Column otpTextField(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -137,11 +279,6 @@ class _LogInScreenState extends State<LogInScreen> {
           ),
           child: !otpLoading
               ? OTPTextField(
-                  onChanged: (string) {
-                    setState(() {
-                      otp = string;
-                    });
-                  },
                   outlineBorderRadius: 25,
                   keyboardType: TextInputType.number,
                   otpFieldStyle: OtpFieldStyle(
@@ -173,66 +310,6 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  /// Fetches data and navigates user to the next screen after logging in
-  Future<void> _postLoginSubRoutine() async {
-    const snackBar = SnackBar(content: Text("Login Success"));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('login', true);
-    var notifier = Provider.of<ProfileChangeNotifier>(context, listen: false);
-    if (phone == "+911111111111") {
-      await _postLoginRoutineForAdmin(prefs, notifier);
-      return;
-    }
-
-    await notifier.fetchProfile();
-    if (notifier.profile.firstName.isNotEmpty) {
-      if (notifier.profile is Dealer) {
-        if (!(notifier.profile as Dealer).active) {
-          showSnackBar('Your account is disabled', context);
-          await Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (builder) => const UserTypeSelectPage(),
-            ),
-          );
-        }
-      }
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (builder) => const HomePage(),
-        ),
-      );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (builder) => ProfilePage(
-            mode: ProfilePageMode.registration,
-          ),
-        ),
-      );
-    }
-  }
-
-  Future<void> _postLoginRoutineForAdmin(
-    SharedPreferences prefs,
-    ProfileChangeNotifier notifier,
-  ) async {
-    await prefs.setString(SharedPreferencesKeys.userTypeKey, UserTypes.admin);
-    notifier.changeUserType(
-      UserTypes.admin,
-      FirebaseAuth.instance.currentUser!.uid,
-    );
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (builder) => const HomePage()),
-    );
-
-    return;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -258,7 +335,11 @@ class _LogInScreenState extends State<LogInScreen> {
           height: MediaQuery.of(context).size.height,
           margin: const EdgeInsets.only(left: 20, right: 20),
           child: codeSent
-              ? _otpTextField(context)
+              ? profile.loadStatus == LoadStatus.loading || isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : otpTextField(context)
               : Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -294,82 +375,12 @@ class _LogInScreenState extends State<LogInScreen> {
                     const SizedBox(
                       height: 30,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: IntlPhoneField(
-                        showCountryFlag: true,
-                        showDropdownIcon: true,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          counter: Container(),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          hintText: '00000-00000',
-                          hintStyle: TextStyle(
-                            color: Colors.white.withOpacity(0.4),
-                            fontSize: 16,
-                          ),
-                        ),
-                        initialCountryCode: 'IN',
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                        onChanged: (phoneNumber) {
-                          setState(() {
-                            phone = phoneNumber.completeNumber;
-                          });
-                        },
-                      ),
-                    ),
+                    phoneInputField(),
                   ],
                 ),
         ),
       ),
-      floatingActionButton: codeSent
-          ? null
-          : Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.65,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromARGB(255, 133, 128, 119),
-                          blurRadius: 15,
-                          spreadRadius: 1, //New
-                        ),
-                      ],
-                    ),
-                    child: FloatingActionButton.extended(
-                      backgroundColor: const Color(0xff03dac6),
-                      foregroundColor: Colors.black,
-                      onPressed: () async {
-                        verifyPhone();
-                      },
-                      label: !isLoading
-                          ? const Text(
-                              'Get otp',
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            )
-                          : const CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+      floatingActionButton: codeSent ? null : getOtpButton(context),
     );
   }
 }

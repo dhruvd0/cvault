@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:cvault/providers/notification_bloc/notification_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:http/http.dart';
 
 import 'package:cvault/models/home_state.dart';
@@ -85,6 +86,12 @@ class QuoteProvider extends LoadStatusNotifier {
 
     notifyListeners();
 
+    var quoteDataFromTransactions = _quoteDataFromTransactions(
+          profileChangeNotifier.authInstance.currentUser!.uid,
+        );
+    var jsonEncode2 = jsonEncode(
+        quoteDataFromTransactions,
+      );
     final response = await post(
       Uri.parse(
         "https://cvault-backend.herokuapp.com/transaction/post-transaction",
@@ -93,11 +100,7 @@ class QuoteProvider extends LoadStatusNotifier {
         "Content-Type": "application/json",
         "Authorization": 'Bearer ${profileChangeNotifier.token}',
       },
-      body: jsonEncode(
-        _quoteDataFromTransactions(
-          profileChangeNotifier.authInstance.currentUser!.uid,
-        ),
-      ),
+      body: jsonEncode2,
     );
 
     if (response.statusCode == 201) {
@@ -105,16 +108,18 @@ class QuoteProvider extends LoadStatusNotifier {
       String title = 'Quote Received';
       String body =
           '${transaction.transactionType} | ${transaction.cryptoType} | ${transaction.price} ${transaction.currency} | ${transaction.quantity} ${transaction.cryptoType}';
-      NotificationCubit.sendNotificationToUser(
-        'Quote Sent',
-        body,
-        FirebaseAuth.instance.currentUser!.uid,
-      );
-      NotificationCubit.sendNotificationToUser(
-        title,
-        body,
-        decodedBody['recieverUID'],
-      );
+      if (Firebase.apps.isNotEmpty) {
+        NotificationCubit.sendNotificationToUser(
+          'Quote Sent',
+          body,
+          FirebaseAuth.instance.currentUser!.uid,
+        );
+        NotificationCubit.sendNotificationToUser(
+          title,
+          body,
+          decodedBody['recieverUID'],
+        );
+      }
 
       loadStatus = LoadStatus.done;
 

@@ -203,6 +203,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
       emit(cachedProfile);
       loadStatus = LoadStatus.done;
       notifyListeners();
+      return;
     }
 
     if (token.isEmpty) {
