@@ -147,5 +147,6 @@ class TransactionsProvider extends LoadStatusNotifier {
     print(visible);
   }
 
+  @override
   notifyListeners();
 }

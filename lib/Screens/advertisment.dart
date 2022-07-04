@@ -34,7 +34,7 @@ class _AdvertismentState extends State<Advertisment> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
         title: const Text("Advertisment"),
         centerTitle: true,

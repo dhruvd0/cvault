@@ -101,24 +101,24 @@ class TransactionTile extends StatelessWidget {
           ),
           children: [
             Container(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     transaction.sender.firstName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         "Price",
                         style: TextStyle(
                           color: Colors.white,
@@ -135,7 +135,7 @@ class TransactionTile extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Text(
+                      const Text(
                         "Currecncy",
                         style: TextStyle(
                           color: Colors.white,
@@ -143,7 +143,7 @@ class TransactionTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -151,14 +151,13 @@ class TransactionTile extends StatelessWidget {
                     children: [
                       Text(
                         transaction.price.toStringAsFixed(2),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        transaction.cryptoType.toUpperCase() +
-                            "${transaction.quantity.toStringAsFixed(5)}",
-                        style: TextStyle(
+                        "${transaction.cryptoType.toUpperCase()}${transaction.quantity.toStringAsFixed(5)}",
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),

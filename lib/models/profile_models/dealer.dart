@@ -54,7 +54,11 @@ class Dealer extends Profile {
       transactions: json['transactions'] == null
           ? []
           : List<Transaction>.from(
-              json["transactions"].map((x) => Transaction.fromJson(x)),
+              json["transactions"].map(
+                (x) => Transaction.fromJson(
+                  x is Map<String, dynamic> ? x : {"_id": x},
+                ),
+              ),
             ),
     );
   }

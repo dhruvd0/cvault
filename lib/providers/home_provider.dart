@@ -45,11 +45,12 @@ class HomeStateNotifier extends ChangeNotifier {
   ///
   /// Also starts a websocket listener for wazirX api
   Future<void> getCryptoDataFromAPIs() async {
-    await fetchExchangeRate();
     _emit(state.copyWith(loadStatus: LoadStatus.loading));
+    await fetchExchangeRate();
 
-    await fetchCurrencyDataFromWazirX();
-    await fetchCurrencyDataFromKraken();
+    await Future.wait(
+      [fetchCurrencyDataFromWazirX(), fetchCurrencyDataFromKraken()],
+    );
 
     _emit(state.copyWith(loadStatus: LoadStatus.done));
     if (state.cryptoCurrencies.isNotEmpty) {

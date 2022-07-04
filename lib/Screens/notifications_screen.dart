@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:cvault/Screens/transactions/widgets/transaction_tile.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/providers/profile_provider.dart';
-import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +17,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   final ScrollController _scrollController = ScrollController();
 
   void _onRefresh(context) async {
-    var provider = Provider.of<TransactionsProvider>(context, listen: false);
+    var provider = Provider.of<ProfileChangeNotifier>(context, listen: false);
     provider.changePage(1);
-    await provider.getTransactions();
+    await provider.fetchProfile();
   }
 
   @override

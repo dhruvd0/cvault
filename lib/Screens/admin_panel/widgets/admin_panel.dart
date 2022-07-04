@@ -2,7 +2,6 @@ import 'package:cvault/Screens/admin_panel/widgets/admin_panel_grid.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/transactions/widgets/transactions_page.dart';
 import 'package:cvault/constants/user_types.dart';
-import 'package:cvault/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +35,6 @@ class _AdminPanelState extends State<AdminPanel> {
           ),
         ),
         elevation: 0,
-      
       ),
       body: SingleChildScrollView(
         child: Consumer<ProfileChangeNotifier>(
