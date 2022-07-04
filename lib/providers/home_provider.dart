@@ -48,17 +48,17 @@ class HomeStateNotifier extends ChangeNotifier {
     _emit(state.copyWith(loadStatus: LoadStatus.loading));
     await fetchExchangeRate();
 
-    await Future.wait(
-      [fetchCurrencyDataFromWazirX(), fetchCurrencyDataFromKraken()],
-    );
+    await fetchCurrencyDataFromWazirX();
+    await fetchCurrencyDataFromKraken();
 
-    _emit(state.copyWith(loadStatus: LoadStatus.done));
+   
     if (state.cryptoCurrencies.isNotEmpty) {
       _calculateDifference();
     }
 
     wazirXChannel?.sink.close();
     startWazirXCryptoTicker();
+     _emit(state.copyWith(loadStatus: LoadStatus.done));
   }
 
   /// [currency] corresponds to either "inr" or "usd"
