@@ -25,6 +25,7 @@ class _AdminPanelState extends State<AdminPanel> {
     return Scaffold(
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
+        leading: null,
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: const Text(

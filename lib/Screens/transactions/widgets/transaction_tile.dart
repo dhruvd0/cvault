@@ -146,14 +146,14 @@ class TransactionTile extends StatelessWidget {
                 ),
               ),
               const Text(
-                "Currecncy",
+                "Currency",
                 style: TextStyle(
                   color: Colors.white,
                 ),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -161,14 +161,13 @@ class TransactionTile extends StatelessWidget {
             children: [
               Text(
                 transaction.price.toStringAsFixed(2),
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
               Text(
-                transaction.cryptoType.toUpperCase() +
-                    "${transaction.quantity.toStringAsFixed(5)}",
-                style: TextStyle(
+                "${transaction.cryptoType.toUpperCase()}${transaction.quantity.toStringAsFixed(5)}",
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),

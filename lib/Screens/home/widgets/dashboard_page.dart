@@ -340,7 +340,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                             ],
                                           ),
                                         )
-                                      : SizedBox.shrink(),
+                                      : const SizedBox.shrink(),
                             ],
                           ),
                         ),

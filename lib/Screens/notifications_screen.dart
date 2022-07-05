@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cvault/Screens/transactions/widgets/transaction_tile.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/providers/profile_provider.dart';
@@ -76,7 +74,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   );
                 default:
                   var transactions = profileNotifier.profile.transactions;
-                  log(transactions.toString());
+
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

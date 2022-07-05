@@ -87,11 +87,11 @@ class QuoteProvider extends LoadStatusNotifier {
     notifyListeners();
 
     var quoteDataFromTransactions = _quoteDataFromTransactions(
-          profileChangeNotifier.authInstance.currentUser!.uid,
-        );
+      profileChangeNotifier.authInstance.currentUser!.uid,
+    );
     var jsonEncode2 = jsonEncode(
-        quoteDataFromTransactions,
-      );
+      quoteDataFromTransactions,
+    );
     final response = await post(
       Uri.parse(
         "https://cvault-backend.herokuapp.com/transaction/post-transaction",
