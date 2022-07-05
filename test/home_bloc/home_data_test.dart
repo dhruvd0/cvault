@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../config/mocks.dart';
 
 void main() {
-  group('Home Data Tests', () {
+  group('Home Data Tests:', () {
     test('Test to fetch data from wazirx', () async {
       final home = await _setupHomeStateNotifier();
 

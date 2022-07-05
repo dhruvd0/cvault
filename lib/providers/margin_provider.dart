@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/util/http.dart';
 
@@ -29,7 +27,7 @@ class MarginsNotifier extends LoadStatusNotifier {
         : userType == 'dealer'
             ? adminMargin.toDouble()
             : (adminMargin + dealerMargin).toDouble();
-    log(totalMargin.toString());
+
     notifyListeners();
   }
 

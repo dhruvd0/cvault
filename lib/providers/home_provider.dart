@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/Screens/home/models/crypto_currency.dart';
@@ -48,17 +47,16 @@ class HomeStateNotifier extends ChangeNotifier {
     _emit(state.copyWith(loadStatus: LoadStatus.loading));
     await fetchExchangeRate();
 
-    await Future.wait(
-      [fetchCurrencyDataFromWazirX(), fetchCurrencyDataFromKraken()],
-    );
+    await fetchCurrencyDataFromWazirX();
+    await fetchCurrencyDataFromKraken();
 
-    _emit(state.copyWith(loadStatus: LoadStatus.done));
     if (state.cryptoCurrencies.isNotEmpty) {
       _calculateDifference();
     }
 
     wazirXChannel?.sink.close();
     startWazirXCryptoTicker();
+    _emit(state.copyWith(loadStatus: LoadStatus.done));
   }
 
   /// [currency] corresponds to either "inr" or "usd"
@@ -80,7 +78,6 @@ class HomeStateNotifier extends ChangeNotifier {
     );
 
     wazirXChannel?.stream.asBroadcastStream().listen((event) async {
-      log('listening to wazirx api');
       if (event != null && event.contains('connected')) {
         wazirXChannel?.sink.add(
           jsonEncode({
@@ -93,10 +90,10 @@ class HomeStateNotifier extends ChangeNotifier {
         if (baseData.containsKey('data') && baseData['data'] is List) {
           var cryptoData = baseData['data'];
           _parseAndEmitWazirXTickerData(cryptoData);
-          fetchCurrencyDataFromKraken();
-          await marginsNotifier.getAllMargins();
         }
       }
+      fetchCurrencyDataFromKraken();
+      marginsNotifier.getAllMargins();
     });
   }
 
@@ -159,6 +156,7 @@ class HomeStateNotifier extends ChangeNotifier {
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
       usdToInrFactor = responseBody["rates"]["INR"];
+
       notifyListeners();
     } else {
       throw Exception(response.statusCode);
@@ -167,6 +165,8 @@ class HomeStateNotifier extends ChangeNotifier {
 
   ///
   Future<void> fetchCurrencyDataFromKraken() async {
+    fetchExchangeRate();
+
     String wazirXKey = state.selectedCurrencyKey;
     String krakenKey = '${wazirXKey.toUpperCase()}USD';
     final response = await get(
@@ -179,6 +179,7 @@ class HomeStateNotifier extends ChangeNotifier {
       var resultKey = body['result'].keys.first;
       var data = body['result'][resultKey];
       var first2 = data["c"].first;
+
       double krakenPrice = double.parse(first2);
       krakenPrice =
           krakenPrice - (krakenPrice * marginsNotifier.totalMargin / 100);
@@ -246,18 +247,21 @@ class HomeStateNotifier extends ChangeNotifier {
       var key = crypto['s'];
       if (cryptoKeys().contains(key.toString().replaceAll('inr', ''))) {
         var buyPrice = crypto['c'];
+
         final cryptoCurrencies = state.cryptoCurrencies.toList();
-        int index =
-            cryptoCurrencies.indexWhere((element) => element.key == key);
+        int index = cryptoCurrencies.indexWhere(
+          (element) => element.key == key.toString().replaceAll('inr', ''),
+        );
         if (index != -1) {
           var totalPrice = double.parse(buyPrice) +
               (double.parse(buyPrice) * marginsNotifier.totalMargin / 100);
           if (state.isUSD) {
-            totalPrice = totalPrice * usdToInrFactor;
+            totalPrice = totalPrice / usdToInrFactor;
           }
           cryptoCurrencies[index] = cryptoCurrencies[index].copyWith(
             wazirxBuyPrice: totalPrice,
           );
+
           _emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
           notifyListeners();
         }

@@ -40,7 +40,7 @@ class _AdvertismentState extends State<Advertisment> {
       ),
       body: GestureDetector(
         onVerticalDragDown: ((details) async {
-          await provider.listData;
+          provider.listData;
           await provider.getAd();
           setState(() {});
         }),

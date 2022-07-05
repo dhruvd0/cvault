@@ -13,8 +13,8 @@ class TransactionTile extends StatelessWidget {
       : super(key: key);
 
   final Transaction transaction;
-
-  bool isUserAReceiverDealer(ProfileChangeNotifier profileProvider) {
+  /// CTA: Call to action 
+  bool showCTAButtons(ProfileChangeNotifier profileProvider) {
     return transaction.status == 'accepted' || transaction.status == 'rejected'
         ? false
         : profileProvider.profile.userType == 'admin'
@@ -30,83 +30,76 @@ class TransactionTile extends StatelessWidget {
   Widget expansionTileContent(BuildContext context) {
     return Consumer<TransactionsProvider>(
       builder: (_, transProvider, k) {
-        return ExpansionTile(
-          trailing: null,
-          title: Container(
-            padding: const EdgeInsets.all(5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width / 3,
-                          ),
-                          child: Text(
-                            transaction.receiver.firstName,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+        return Container(
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 3,
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          (transaction.currency == 'usdt' ? '\$' : '₹') +
-                              transaction.price.toStringAsFixed(2),
+                        child: Text(
+                          transaction.receiver.firstName,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        TransactionStatusWidget(transaction: transaction),
-                        const SizedBox(
-                          height: 5,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        (transaction.currency == 'usdt' ? '\$' : '₹') +
+                            transaction.price.toStringAsFixed(2),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
-                        Text(
-                          DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY)
-                              .format(DateTime.parse(transaction.createdAt)),
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TransactionStatusWidget(transaction: transaction),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY)
+                            .format(DateTime.parse(transaction.createdAt)),
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-              ],
-            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+            ],
           ),
-          children: [
-            _additonalTrans(context),
-          ],
         );
       },
     );
   }
-//Trans more datils
 
   // ignore: long-method
   Widget _additonalTrans(BuildContext context) {
@@ -146,14 +139,14 @@ class TransactionTile extends StatelessWidget {
                 ),
               ),
               const Text(
-                "Currecncy",
+                "Currency",
                 style: TextStyle(
                   color: Colors.white,
                 ),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -161,14 +154,13 @@ class TransactionTile extends StatelessWidget {
             children: [
               Text(
                 transaction.price.toStringAsFixed(2),
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
               Text(
-                transaction.cryptoType.toUpperCase() +
-                    "${transaction.quantity.toStringAsFixed(5)}",
-                style: TextStyle(
+                "${transaction.cryptoType.toUpperCase()}${transaction.quantity.toStringAsFixed(5)}",
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
@@ -180,73 +172,71 @@ class TransactionTile extends StatelessWidget {
   }
 
   // ignore: long-method
-  List<Widget> _tileButtons(BuildContext context) {
-    return [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Consumer<ProfileChangeNotifier>(
-          builder: (_, profileProvider, __) => Row(
-            children: [
-              Expanded(child: Container()),
-              GestureDetector(
-                onTap: () {
-                  Provider.of<TransactionsProvider>(
-                    context,
-                    listen: false,
-                  ).changeTransactionStatus(
-                    transaction.id,
-                    TransactionStatus.accepted,
-                    context,
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 20,
-                  ),
-                  child: const Text('Accept'),
+  Widget _tileButtons(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Consumer<ProfileChangeNotifier>(
+        builder: (_, profileProvider, __) => Row(
+          children: [
+            Expanded(child: Container()),
+            GestureDetector(
+              onTap: () {
+                Provider.of<TransactionsProvider>(
+                  context,
+                  listen: false,
+                ).changeTransactionStatus(
+                  transaction.id,
+                  TransactionStatus.accepted,
+                  context,
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 20,
+                ),
+                child: const Text('Accept'),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            GestureDetector(
+              onTap: () async {
+                var of = Provider.of<TransactionsProvider>(
+                  context,
+                  listen: false,
+                );
+                await of.changeTransactionStatus(
+                  transaction.id,
+                  TransactionStatus.rejected,
+                  context,
+                );
+                of.deleteTransaction(transaction.id);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.red,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 20,
+                ),
+                child: const Text(
+                  'Reject',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
-              GestureDetector(
-                onTap: () async {
-                  var of = Provider.of<TransactionsProvider>(
-                    context,
-                    listen: false,
-                  );
-                  await of.changeTransactionStatus(
-                    transaction.id,
-                    TransactionStatus.rejected,
-                    context,
-                  );
-                  of.deleteTransaction(transaction.id);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.red,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 20,
-                  ),
-                  child: const Text(
-                    'Reject',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    ];
+    );
   }
 
   @override
@@ -259,18 +249,19 @@ class TransactionTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Consumer<ProfileChangeNotifier>(
-        builder: (_, profileProvider, __) =>
-            !isUserAReceiverDealer(profileProvider)
-                ? expansionTileContent(context)
-                : ExpansionTile(
-                    iconColor: Colors.white,
-                    collapsedIconColor: Colors.white,
-                    initiallyExpanded: isUserAReceiverDealer(profileProvider),
-                    title: expansionTileContent(context),
-                    children: isUserAReceiverDealer(profileProvider)
-                        ? _tileButtons(context)
-                        : [],
-                  ),
+        builder: (_, profileProvider, __) => ExpansionTile(
+          
+          iconColor: Colors.white,
+          collapsedIconColor: Colors.white,
+          initiallyExpanded: showCTAButtons(profileProvider),
+          title: expansionTileContent(context),
+          children: [
+            _additonalTrans(context),
+            showCTAButtons(profileProvider)
+                ? _tileButtons(context)
+                : SizedBox(),
+          ],
+        ),
       ),
     );
   }
