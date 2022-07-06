@@ -41,7 +41,6 @@ class _AdvertismentState extends State<Advertisment> {
       body: GestureDetector(
         onVerticalDragDown: ((details) async {
           provider.listData;
-          await provider.getAd();
           setState(() {});
         }),
         child: Container(
@@ -62,15 +61,8 @@ class _AdvertismentState extends State<Advertisment> {
                   autovalidateMode: AutovalidateMode.always,
                   textAlign: TextAlign.center,
                   inputFormatters: const [],
-                  validator: (string) {
-                    if (string == null || !validator.url(string)) {
-                      return '   Please enter a valid link';
-                    }
-                    // ignore: newline-before-return
-                    return null;
-                  },
                   onChanged: (string1) {
-                    provider.postAdd(string1);
+                    provider.postAdd(string1, provider.imageLink);
                     addLink = string1;
                     setState(() {});
                   },
@@ -95,18 +87,17 @@ class _AdvertismentState extends State<Advertisment> {
                 onPressed: () async {
                   singleImage = await provider.pickImage();
                   if (singleImage != null && singleImage!.path.isNotEmpty) {
-                    setState(() {
-                      provider.uploadImage(singleImage!);
-                      setState(() {});
-                    });
+                    provider.uploadImage(singleImage!);
+                    setState(() {});
                   }
                 },
                 child: const Text("Pick Image"),
               ),
               ElevatedButton(
                 onPressed: () {
-                  provider.deleteAdd(addLink);
+                  provider.deleteAdd(addLink, singleImage);
                   provider.DeleteImage(provider.imageLink!);
+
                   setState(() {});
                 },
                 child: const Text("Remove Add's"),
