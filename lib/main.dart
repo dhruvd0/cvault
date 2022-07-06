@@ -21,7 +21,6 @@ import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_preview/device_preview.dart';
-
 import 'providers/margin_provider.dart';
 
 Future<void> main() async {

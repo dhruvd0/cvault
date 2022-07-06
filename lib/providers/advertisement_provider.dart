@@ -46,7 +46,7 @@ class AdvertisementProvider extends ChangeNotifier {
   }
 
   /// Post Ad API
-  Future<AdModel> postAdd(String? redirectlink, String imagelink) async {
+  Future<AdModel> postAdd(String redirectlink, String imagelink) async {
     http.Response response = await http.post(
       Uri.parse(
         'https://cvault-backend.herokuapp.com/advertisment/post-link',
