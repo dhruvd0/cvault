@@ -45,7 +45,7 @@ class HomeStateNotifier extends ChangeNotifier {
   /// Also starts a websocket listener for wazirX api
   Future<void> getCryptoDataFromAPIs() async {
     _emit(state.copyWith(loadStatus: LoadStatus.loading));
-    await fetchExchangeRate();
+    // await fetchExchangeRate();
 
     await fetchCurrencyDataFromWazirX();
     await fetchCurrencyDataFromKraken();
@@ -165,7 +165,7 @@ class HomeStateNotifier extends ChangeNotifier {
 
   ///
   Future<void> fetchCurrencyDataFromKraken() async {
-    fetchExchangeRate();
+    //fetchExchangeRate();
 
     String wazirXKey = state.selectedCurrencyKey;
     String krakenKey = '${wazirXKey.toUpperCase()}USD';
