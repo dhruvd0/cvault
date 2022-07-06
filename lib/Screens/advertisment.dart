@@ -57,13 +57,12 @@ class _AdvertismentState extends State<Advertisment> {
                     color: Colors.white,
                     fontSize: 18,
                   ),
-                  autovalidateMode: AutovalidateMode.always,
                   textAlign: TextAlign.center,
                   inputFormatters: const [],
-                  onChanged: (string1) {
-                    provider.postAdd(string1, provider.imageLink);
-                    addLink = string1;
-                    setState(() {});
+                  onChanged: (string) {
+                    setState(() {
+                      addLink = string;
+                    });
                   },
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -91,6 +90,12 @@ class _AdvertismentState extends State<Advertisment> {
                   }
                 },
                 child: const Text("Pick Image"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  provider.postAdd(addLink, provider.imageLink ?? "");
+                },
+                child: const Text("Upload"),
               ),
               ElevatedButton(
                 onPressed: () {
