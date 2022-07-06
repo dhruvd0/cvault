@@ -82,7 +82,10 @@ List<SingleChildWidget> get _providers {
           MarginsNotifier(context.read<ProfileChangeNotifier>()),
     ),
     _buildQuoteChangeNotifierProvider(),
-    ChangeNotifierProvider.value(value: DealersProvider()),
+    ChangeNotifierProvider(
+      lazy: false,
+      create: (_) => DealersProvider(),
+    ),
     ChangeNotifierProvider(
       lazy: false,
       create: (context) => TransactionsProvider(
