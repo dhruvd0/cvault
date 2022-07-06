@@ -1,3 +1,4 @@
+import 'package:cvault/models/profile_models/get_advertisement_model.dart';
 import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:cvault/Screens/settings/settting.dart';
 import 'package:cvault/providers/home_provider.dart';
@@ -11,6 +12,8 @@ import 'package:cvault/widgets/usd_inr_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../drawer.dart';
 
@@ -33,17 +36,23 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> imageSet() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    Provider.of<AdvertisementProvider>(context, listen: false).imageLink =
-        pref.getString("noteData");
-    setState(() {});
+    Provider.of<AdvertisementProvider>(context, listen: true).listData;
+    Provider.of<AdvertisementProvider>(context, listen: true).getAd();
+    setState(() {
+      Provider.of<AdvertisementProvider>(context, listen: true).listData;
+      print(
+        "${Provider.of<AdvertisementProvider>(context, listen: true).listData[0].redirectLink}",
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    final provider = Provider.of<AdvertisementProvider>(context);
-
+    final provider = Provider.of<AdvertisementProvider>(
+      context,
+    );
+    //var url = Uri.parse(provider.listData[0].insertLink.redirectLink);
     // ignore: newline-before-return
     return Scaffold(
       drawerEnableOpenDragGesture: false,
@@ -113,10 +122,9 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       body: GestureDetector(
         onVerticalDragDown: (details) {
-          setState(() {
-            print(Provider.of<AdvertisementProvider>(context, listen: false)
-                .imageLink);
-          });
+          // setState(() {
+          //   provider.listData;
+          // });
         },
         child: Consumer<ProfileChangeNotifier>(
           builder: (context, profileNotifier, _) {
@@ -134,246 +142,198 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: Padding(
                           key: UniqueKey(),
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              border: Border.all(
-                                width: 0.5,
-                                color: const Color.fromARGB(255, 165, 231, 243),
-                              ),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const SizedBox(
-                                  height: 25,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  border: Border.all(
+                                    width: 0.5,
+                                    color: const Color.fromARGB(
+                                        255, 165, 231, 243),
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
+                                    const SizedBox(
+                                      height: 25,
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CircleAvatar(
+                                              radius: 25,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                child: Image.network(
+                                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoG97VgQYJGXN8kDJkOMvh79mgLvO5iEfVWA&usqp=CAU",
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const Settings(),
+                                                  ),
+                                                );
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsetsDirectional
+                                                        .fromSTEB(
+                                                  5,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                ),
+                                                child: Text(
+                                                  '1 ${state.selectedCurrencyKey.toUpperCase()}',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const USDToINRToggle(),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      userType == UserTypes.admin
+                                          ? 'Local price (Wazirx)'
+                                          : 'Buy Price',
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    homeStateNotifier.state is HomeInitial
+                                        ? const Text("Loading")
+                                        : Text(
+                                            state.cryptoCurrencies.isEmpty
+                                                ? ''
+                                                : (state.isUSD
+                                                    ? '\$${homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toStringAsFixed(2)}'
+                                                    : '₹${homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toStringAsFixed(2)}'),
+                                            textAlign: TextAlign.start,
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.white,
+                                              fontSize: 32,
+                                            ),
+                                          ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        CircleAvatar(
-                                          radius: 25,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                            child: Image.network(
-                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoG97VgQYJGXN8kDJkOMvh79mgLvO5iEfVWA&usqp=CAU",
-                                            ),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const Settings(),
-                                              ),
-                                            );
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(
-                                              5,
-                                              0,
-                                              0,
-                                              0,
-                                            ),
-                                            child: Text(
-                                              '1 ${state.selectedCurrencyKey.toUpperCase()}',
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              userType == UserTypes.admin
+                                                  ? 'Global price (Kraken)'
+                                                  : 'Sell Price',
+                                              textAlign: TextAlign.start,
                                               style: const TextStyle(
-                                                color: Colors.white,
                                                 fontFamily: 'Poppins',
                                                 fontSize: 20,
-                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const USDToINRToggle(),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  userType == UserTypes.admin
-                                      ? 'Local price (Wazirx)'
-                                      : 'Buy Price',
-                                  textAlign: TextAlign.start,
-                                  style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                homeStateNotifier.state is HomeInitial
-                                    ? const Text("Loading")
-                                    : Text(
-                                        state.cryptoCurrencies.isEmpty
-                                            ? ''
-                                            : (state.isUSD
-                                                ? '\$${homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toStringAsFixed(2)}'
-                                                : '₹${homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toStringAsFixed(2)}'),
-                                        textAlign: TextAlign.start,
-                                        style: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          color: Colors.white,
-                                          fontSize: 32,
-                                        ),
-                                      ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          userType == UserTypes.admin
-                                              ? 'Global price (Kraken)'
-                                              : 'Sell Price',
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        homeStateNotifier.state is HomeInitial
-                                            ? const Text("Loading")
-                                            : Text(
-                                                state.cryptoCurrencies.isEmpty
-                                                    ? ''
-                                                    : (state.isUSD)
-                                                        ? '\$${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}'
-                                                        : '₹${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}',
-                                                textAlign: TextAlign.start,
-                                                style: const TextStyle(
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.white,
-                                                  fontSize: 32,
-                                                ),
-                                              ),
-                                      ],
-                                    ),
-                                    userType == UserTypes.admin
-                                        ? Column(
-                                            children: [
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  const Text(
-                                                    'Difference',
-                                                    style: TextStyle(
-                                                      fontFamily: 'Poppins',
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    "${homeStateNotifier.state.difference.toStringAsFixed(2)}%",
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            homeStateNotifier.state
+                                                    is HomeInitial
+                                                ? const Text("Loading")
+                                                : Text(
+                                                    state.cryptoCurrencies
+                                                            .isEmpty
+                                                        ? ''
+                                                        : (state.isUSD)
+                                                            ? '\$${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}'
+                                                            : '₹${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}',
+                                                    textAlign: TextAlign.start,
                                                     style: const TextStyle(
                                                       fontFamily: 'Poppins',
-                                                      fontSize: 16,
                                                       color: Colors.white,
+                                                      fontSize: 32,
                                                     ),
                                                   ),
+                                          ],
+                                        ),
+                                        userType == UserTypes.admin
+                                            ? Column(
+                                                children: [
+                                                  Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      const Text(
+                                                        'Difference',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          color: Colors.white,
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        "${homeStateNotifier.state.difference.toStringAsFixed(2)}%",
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize: 16,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ],
-                                              ),
-                                            ],
-                                          )
+                                              )
+                                            : Container(),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    userType == UserTypes.admin
+                                        ? const MarginSelector()
                                         : Container(),
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                userType == UserTypes.admin
-                                    ? const MarginSelector()
-                                    : Container(),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                userType == UserTypes.admin
-                                    ? Container()
-                                    : provider.imageLink != null
-                                        ? GestureDetector(
-                                            onTap: () {
-                                              if (provider
-                                                  .listData.isNotEmpty) {
-                                                provider.urlLauncher(Uri.parse(
-                                                  provider.listData[0].link,
-                                                ));
-                                              } else {
-                                                print("try again");
-                                              }
-                                            },
-                                            child: Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.50,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                vertical: 5,
-                                                horizontal: 10,
-                                              ),
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.85,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                color: Colors.white,
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  const Text('AD'),
-                                                  SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.60,
-                                                    child: Center(
-                                                      child: Image.network(
-                                                        provider.imageLink
-                                                            .toString(),
-                                                        fit: BoxFit.contain,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const Text('AD'),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        : SizedBox.shrink(),
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              userType == UserTypes.admin ? Container() : Add(),
+                            ],
                           ),
                         ),
                       );
@@ -385,3 +345,76 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 }
+
+class Add extends StatefulWidget {
+  const Add({Key? key}) : super(key: key);
+
+  @override
+  State<Add> createState() => _AddState();
+}
+
+class _AddState extends State<Add> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<AdvertisementProvider>(
+      context,
+    );
+    // ignore: newline-before-return
+    return Container(
+      height: MediaQuery.of(context).size.width * 0.20,
+      margin: const EdgeInsets.symmetric(
+        vertical: 5,
+        horizontal: 10,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Text('AD'),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.75,
+            child: Container(
+                child: Image.network(
+              "${provider.listData[0].imageLink.toString()}",
+              fit: BoxFit.fitWidth,
+            )),
+          ),
+          const Text('AD'),
+        ],
+      ),
+    );
+  }
+}
+
+// class Texting extends StatefulWidget {
+//   const Texting({Key? key}) : super(key: key);
+
+//   @override
+//   State<Texting> createState() => _TextingState();
+  
+// }
+
+// class _TextingState extends State<Texting> {
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//   }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child:FutureBuilder(
+//         future: _future,,
+//         builder: ,)
+//     );
+//   }
+// }
