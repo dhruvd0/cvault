@@ -13,7 +13,8 @@ class TransactionTile extends StatelessWidget {
       : super(key: key);
 
   final Transaction transaction;
-  /// CTA: Call to action 
+
+  /// CTA: Call to action
   bool showCTAButtons(ProfileChangeNotifier profileProvider) {
     return transaction.status == 'accepted' || transaction.status == 'rejected'
         ? false
@@ -250,7 +251,6 @@ class TransactionTile extends StatelessWidget {
       ),
       child: Consumer<ProfileChangeNotifier>(
         builder: (_, profileProvider, __) => ExpansionTile(
-          
           iconColor: Colors.white,
           collapsedIconColor: Colors.white,
           initiallyExpanded: showCTAButtons(profileProvider),
@@ -259,7 +259,7 @@ class TransactionTile extends StatelessWidget {
             _additonalTrans(context),
             showCTAButtons(profileProvider)
                 ? _tileButtons(context)
-                : SizedBox(),
+                : const SizedBox(),
           ],
         ),
       ),

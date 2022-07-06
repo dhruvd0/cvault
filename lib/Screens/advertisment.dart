@@ -1,7 +1,6 @@
 import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:regexed_validator/regexed_validator.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Advertisment extends StatefulWidget {

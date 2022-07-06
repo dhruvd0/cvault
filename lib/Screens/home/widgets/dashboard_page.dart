@@ -1,4 +1,3 @@
-import 'package:cvault/models/profile_models/get_advertisement_model.dart';
 import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:cvault/Screens/settings/settting.dart';
 import 'package:cvault/providers/home_provider.dart';
@@ -11,9 +10,6 @@ import 'package:cvault/widgets/usd_inr_toggle.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/link.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../drawer.dart';
 
@@ -32,18 +28,6 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    imageSet();
-  }
-
-  Future<void> imageSet() async {
-    Provider.of<AdvertisementProvider>(context, listen: true).listData;
-    Provider.of<AdvertisementProvider>(context, listen: true).getAd();
-    setState(() {
-      Provider.of<AdvertisementProvider>(context, listen: true).listData;
-      print(
-        "${Provider.of<AdvertisementProvider>(context, listen: true).listData[0].redirectLink}",
-      );
-    });
   }
 
   @override
@@ -150,7 +134,11 @@ class _DashboardPageState extends State<DashboardPage> {
                                   border: Border.all(
                                     width: 0.5,
                                     color: const Color.fromARGB(
-                                        255, 165, 231, 243),
+                                      255,
+                                      165,
+                                      231,
+                                      243,
+                                    ),
                                   ),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
@@ -329,10 +317,12 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ],
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 40,
                               ),
-                              userType == UserTypes.admin ? Container() : Add(),
+                              userType == UserTypes.admin
+                                  ? Container()
+                                  : const Add(),
                             ],
                           ),
                         ),
@@ -380,13 +370,14 @@ class _AddState extends State<Add> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text('AD'),
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width * 0.75,
             child: Container(
-                child: Image.network(
-              "${provider.listData[0].imageLink.toString()}",
-              fit: BoxFit.fitWidth,
-            )),
+              child: Image.network(
+                provider.listData[0].imageLink.toString(),
+                fit: BoxFit.fitWidth,
+              ),
+            ),
           ),
           const Text('AD'),
         ],
@@ -400,7 +391,7 @@ class _AddState extends State<Add> {
 
 //   @override
 //   State<Texting> createState() => _TextingState();
-  
+
 // }
 
 // class _TextingState extends State<Texting> {

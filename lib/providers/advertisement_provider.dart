@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -15,6 +16,12 @@ class AdvertisementProvider extends ChangeNotifier {
   List<AdModel> listData = [];
   String? imageLink;
   bool? loading;
+
+  AdvertisementProvider() {
+    Timer.periodic(const Duration(seconds: 1), (_) {
+      getAd();
+    });
+  }
   Future<List> getAd() async {
     http.Response response;
     response = await http.get(
@@ -134,6 +141,3 @@ class AdvertisementProvider extends ChangeNotifier {
 }
 
 //
-
-
-
