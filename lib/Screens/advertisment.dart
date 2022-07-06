@@ -93,7 +93,20 @@ class _AdvertismentState extends State<Advertisment> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  provider.postAdd(addLink, provider.imageLink ?? "");
+                  if (addLink != null && provider.imageLink != null) {
+                    provider.postAdd(addLink, provider.imageLink ?? "");
+                  } else {
+                    final snackBar = SnackBar(
+                      content: const Text('Yay! A SnackBar!'),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () {},
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+
+                  setState(() {});
                 },
                 child: const Text("Upload"),
               ),
