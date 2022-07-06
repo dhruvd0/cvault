@@ -35,6 +35,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final provider = Provider.of<AdvertisementProvider>(
       context,
+      listen: true,
     );
     //var url = Uri.parse(provider.listData[0].insertLink.redirectLink);
     // ignore: newline-before-return
@@ -321,7 +322,21 @@ class _DashboardPageState extends State<DashboardPage> {
                                 height: 40,
                               ),
                               userType == UserTypes.admin
-                                  ? Container()
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        provider.urlLauncher(
+                                          provider.listData[0].redirectLink
+                                              .toString(),
+                                        );
+                                      },
+                                      child: Container(
+                                        child: Image.network(
+                                          provider.listData[0].imageLink
+                                              .toString(),
+                                          fit: BoxFit.fitWidth,
+                                        ),
+                                      ),
+                                    )
                                   : const Add(),
                             ],
                           ),

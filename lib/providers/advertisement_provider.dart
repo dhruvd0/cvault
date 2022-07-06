@@ -46,7 +46,7 @@ class AdvertisementProvider extends ChangeNotifier {
   }
 
   /// Post Ad API
-  Future<AdModel> postAdd(redirectlink, imagelink) async {
+  Future<AdModel> postAdd(String redirectlink, String imagelink) async {
     http.Response response = await http.post(
       Uri.parse(
         'https://cvault-backend.herokuapp.com/advertisment/post-link',
@@ -65,7 +65,7 @@ class AdvertisementProvider extends ChangeNotifier {
   }
 // delete add
 
-  Future<void> deleteAdd(redirectlink, imagelink) async {
+  Future<void> deleteAdd(String redirectlink, imagelink) async {
     loading = true;
     AdModel? postAdMode;
     http.Response response = await http.delete(
@@ -118,8 +118,8 @@ class AdvertisementProvider extends ChangeNotifier {
   }
 
   //void _launchUrl() async {
-  Future<void> urlLauncher() async {
-    String url = "https://www.youtube.com/watch?v=R6mA6_GRMZQ";
+  Future<void> urlLauncher(url) async {
+    // String url = "https://www.youtube.com/watch?v=R6mA6_GRMZQ";
     if (await canLaunch(url)) {
       await launch(url, forceSafariVC: false);
     } else {

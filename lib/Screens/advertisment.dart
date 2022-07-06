@@ -57,13 +57,12 @@ class _AdvertismentState extends State<Advertisment> {
                     color: Colors.white,
                     fontSize: 18,
                   ),
-                  autovalidateMode: AutovalidateMode.always,
                   textAlign: TextAlign.center,
                   inputFormatters: const [],
-                  onChanged: (string1) {
-                    provider.postAdd(string1, provider.imageLink);
-                    addLink = string1;
-                    setState(() {});
+                  onChanged: (string) {
+                    setState(() {
+                      addLink = string;
+                    });
                   },
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -91,6 +90,25 @@ class _AdvertismentState extends State<Advertisment> {
                   }
                 },
                 child: const Text("Pick Image"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (addLink != null && provider.imageLink != null) {
+                    provider.postAdd(addLink, provider.imageLink ?? "");
+                  } else {
+                    final snackBar = SnackBar(
+                      content: const Text('Yay! A SnackBar!'),
+                      action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed: () {},
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+
+                  setState(() {});
+                },
+                child: const Text("Upload"),
               ),
               ElevatedButton(
                 onPressed: () {
