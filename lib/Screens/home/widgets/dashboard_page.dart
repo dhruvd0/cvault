@@ -33,10 +33,10 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    final provider = Provider.of<AdvertisementProvider>(
-      context,
-      listen: true,
-    );
+    // final provider = Provider.of<AdvertisementProvider>(
+    //   context,
+    //   listen: false,
+    // );
     //var url = Uri.parse(provider.listData[0].insertLink.redirectLink);
     // ignore: newline-before-return
     return Scaffold(
@@ -106,11 +106,7 @@ class _DashboardPageState extends State<DashboardPage> {
         ],
       ),
       body: GestureDetector(
-        onVerticalDragDown: (details) {
-          // setState(() {
-          //   provider.listData;
-          // });
-        },
+        onVerticalDragDown: (details) {},
         child: Consumer<ProfileChangeNotifier>(
           builder: (context, profileNotifier, _) {
             var userType = profileNotifier.profile.userType;
@@ -322,20 +318,28 @@ class _DashboardPageState extends State<DashboardPage> {
                                 height: 40,
                               ),
                               userType == UserTypes.admin
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        provider.urlLauncher(
-                                          provider.listData[0].redirectLink
-                                              .toString(),
+                                  ? Consumer<AdvertisementProvider>(
+                                      builder: (
+                                        context,
+                                        provider,
+                                        child,
+                                      ) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            provider.urlLauncher(
+                                              provider.listData[0].redirectLink
+                                                  .toString(),
+                                            );
+                                          },
+                                          child: Container(
+                                            child: Image.network(
+                                              provider.listData[0].imageLink
+                                                  .toString(),
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          ),
                                         );
                                       },
-                                      child: Container(
-                                        child: Image.network(
-                                          provider.listData[0].imageLink
-                                              .toString(),
-                                          fit: BoxFit.fitWidth,
-                                        ),
-                                      ),
                                     )
                                   : const Add(),
                             ],
