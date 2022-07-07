@@ -16,12 +16,16 @@ class AdvertisementProvider extends ChangeNotifier {
   List<AdModel> listData = [];
   String? imageLink;
   bool? loading;
-
+  String? addLink;
   AdvertisementProvider() {
     Timer.periodic(const Duration(seconds: 1), (_) {
       getAd();
+      listData;
+      print(listData[0].imageLink);
+      notifyListeners();
     });
   }
+
   Future<List> getAd() async {
     http.Response response;
     response = await http.get(

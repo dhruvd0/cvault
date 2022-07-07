@@ -21,8 +21,8 @@ class _AdvertismentState extends State<Advertisment> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AdvertisementProvider>(context, listen: false);
-    String addLink = "";
+    final provider = Provider.of<AdvertisementProvider>(context, listen: true);
+
     // ignore: newline-before-return
     return Scaffold(
       backgroundColor: const Color(0xff1E2224),
@@ -60,9 +60,7 @@ class _AdvertismentState extends State<Advertisment> {
                   textAlign: TextAlign.center,
                   inputFormatters: const [],
                   onChanged: (string) {
-                    setState(() {
-                      addLink = string;
-                    });
+                    provider.addLink = string;
                   },
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -93,17 +91,25 @@ class _AdvertismentState extends State<Advertisment> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  if (addLink != null && provider.imageLink != null) {
-                    provider.postAdd(addLink, provider.imageLink ?? "");
+                  print(provider.addLink);
+                  if (provider.addLink != null) {
+                    provider
+                        .postAdd(
+                          provider.addLink ?? "",
+                          provider.imageLink ?? "",
+                        )
+                        .then(
+                          (value) => ScaffoldMessenger.of(context)
+                              .showSnackBar(snackBar),
+                        );
                   } else {
-                    final snackBar = SnackBar(
-                      content: const Text('Yay! A SnackBar!'),
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text('cheack url and image once again'),
                       action: SnackBarAction(
                         label: 'Undo',
                         onPressed: () {},
                       ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    ));
                   }
 
                   setState(() {});
@@ -112,7 +118,7 @@ class _AdvertismentState extends State<Advertisment> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  provider.deleteAdd(addLink, singleImage);
+                  provider.deleteAdd(provider.addLink ?? "", singleImage);
                   provider.DeleteImage(provider.imageLink!);
 
                   setState(() {});
@@ -126,3 +132,11 @@ class _AdvertismentState extends State<Advertisment> {
     );
   }
 }
+
+final snackBar = SnackBar(
+  content: const Text('successfully upload'),
+  action: SnackBarAction(
+    label: 'Undo',
+    onPressed: () {},
+  ),
+);
