@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cvault/models/Notification.dart';
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/profile_provider.dart';
@@ -82,9 +83,12 @@ class CustomerProvider extends LoadStatusNotifier {
       pageData[page] = temp;
 
       _customers.addAll(temp);
+      print(temp.toString() + "hey");
       notifyListeners();
     } else {
       throw Exception(response.statusCode);
     }
   }
+
+  Future<void> fetchNotification() async {}
 }

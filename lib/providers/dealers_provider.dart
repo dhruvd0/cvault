@@ -1,15 +1,18 @@
 import 'dart:convert';
 
+import 'package:cvault/models/NonAcceptDealer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
-
 import 'package:http/http.dart' as http;
+import 'package:http/retry.dart';
 
 /// Notifier to fetch dealers or fetch all dealers
 ///
 /// Also used to change the active status of a particular dealer
 class DealersProvider extends LoadStatusNotifier {
   List<Dealer> _dealers = [];
+  String? stringRespone;
+  List<nonAcceptdealer> listData = [];
 
   ///
   bool get isDealersLoaded {
@@ -50,8 +53,8 @@ class DealersProvider extends LoadStatusNotifier {
       );
 
       if (response.statusCode == 200) {
+        getNonAcceptDealer();
         List<Dealer> dealers = [];
-
         final data = jsonDecode(response.body);
         for (var dt in data['docs']) {
           dealers.add(
@@ -67,5 +70,22 @@ class DealersProvider extends LoadStatusNotifier {
     } catch (error) {
       rethrow;
     }
+  }
+
+  Future getNonAcceptDealer() async {
+    http.Response response;
+    response = await http.get(Uri.parse(
+      "https://cvault-backend.herokuapp.com/admin/nonAcceptedDealers",
+    ));
+    if (response.statusCode == 200) {
+      stringRespone = response.body;
+      List<dynamic> mapResponse = jsonDecode(response.body);
+      for (var e in mapResponse) {
+        nonAcceptdealer model = nonAcceptdealer.fromJson(e);
+        listData.add(model);
+        print(listData[0].active);
+      }
+    }
+    return listData;
   }
 }

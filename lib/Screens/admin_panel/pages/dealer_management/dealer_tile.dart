@@ -18,6 +18,10 @@ class _DealerTileState extends State<DealerTile> {
   bool toggle = true;
   @override
   Widget build(BuildContext context) {
+    Future<bool> success = Provider.of<DealersProvider>(
+      context,
+      listen: false,
+    ).changeDealerActiveState(widget.dealer.dealerId);
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -125,8 +129,11 @@ class _DealerTileState extends State<DealerTile> {
                 onChanged: (value) {
                   setState(() {
                     toggle = value;
+
+                    success;
                   });
-                  _changeActiveStatus(context);
+
+                  // _changeActiveStatus(context);
                 },
               ),
             ],

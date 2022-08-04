@@ -174,6 +174,8 @@ class _SettingsState extends State<Settings> {
     );
   }
 
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -194,155 +196,160 @@ class _SettingsState extends State<Settings> {
         centerTitle: true,
         title: const Text("Settings"),
       ),
-      body: Consumer<HomeStateNotifier>(
-        builder: (context, homeStateNotifier, _) {
-          final state = homeStateNotifier.state;
-// ignore: newline-before-return
-          return state.loadStatus == LoadStatus.loading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : SingleChildScrollView(
-                  child: SafeArea(
-                    bottom: true,
-                    top: true,
-                    child: Consumer<ProfileChangeNotifier>(
-                      builder: (context, profileNotifier, _) {
-                        final state = profileNotifier.profile;
-                        final userType = state.userType;
-
-                        return Container(
-                          margin: const EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                            top: 25,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              userType == UserTypes.admin
-                                  ? tickerSelectors()
-                                  : Container(),
-                              const SizedBox(height: 25),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Consumer<HomeStateNotifier>(
-                                    builder: (context, homeNotifier, _) {
-                                      return Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Text(
-                                            "Crypto Currency",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          homeNotifier.state is HomeInitial
-                                              ? const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                )
-                                              : Flexible(
-                                                  child: homeNotifier
-                                                          .state
-                                                          .cryptoCurrencies
-                                                          .isEmpty
-                                                      ? const SizedBox()
-                                                      : const SizedBox(
-                                                          width: 120,
-                                                          child:
-                                                              CryptoDropdownButton(),
-                                                        ),
-                                                ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                  userType == UserTypes.customer
-                                      ? Container()
-                                      : const EnterMarginField(),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              userType == UserTypes.admin
-                                  ? applyMarginToggle()
-                                  : Container(),
-                              const SizedBox(
-                                height: 100,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (builder) => ProfilePage(),
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  "Manage Profile",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              const Text(
-                                "Change password",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              const SizedBox(height: 40),
-                              InkWell(
-                                onTap: () async {
-                                  Provider.of<HomeStateNotifier>(
-                                    context,
-                                    listen: false,
-                                  ).logout(context);
-
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (builder) =>
-                                          const UserTypeSelectPage(),
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  "Logout",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                );
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
         },
+        child: Consumer<HomeStateNotifier>(
+          builder: (context, homeStateNotifier, _) {
+            final state = homeStateNotifier.state;
+            // ignore: newline-before-return
+            return state.loadStatus == LoadStatus.loading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : SingleChildScrollView(
+                    child: SafeArea(
+                      bottom: true,
+                      top: true,
+                      child: Consumer<ProfileChangeNotifier>(
+                        builder: (context, profileNotifier, _) {
+                          final state = profileNotifier.profile;
+                          final userType = state.userType;
+
+                          return Container(
+                            margin: const EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              top: 25,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                userType == UserTypes.admin
+                                    ? tickerSelectors()
+                                    : Container(),
+                                const SizedBox(height: 25),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Consumer<HomeStateNotifier>(
+                                      builder: (context, homeNotifier, _) {
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Text(
+                                              "Crypto Currency",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            homeNotifier.state is HomeInitial
+                                                ? const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  )
+                                                : Flexible(
+                                                    child: homeNotifier
+                                                            .state
+                                                            .cryptoCurrencies
+                                                            .isEmpty
+                                                        ? const SizedBox()
+                                                        : const SizedBox(
+                                                            width: 120,
+                                                            child:
+                                                                CryptoDropdownButton(),
+                                                          ),
+                                                  ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                    userType == UserTypes.customer
+                                        ? Container()
+                                        : const EnterMarginField(),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 25,
+                                ),
+                                userType == UserTypes.admin
+                                    ? applyMarginToggle()
+                                    : Container(),
+                                const SizedBox(
+                                  height: 100,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (builder) => ProfilePage(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Manage Profile",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                const Text(
+                                  "Change password",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                const SizedBox(height: 40),
+                                InkWell(
+                                  onTap: () async {
+                                    Provider.of<HomeStateNotifier>(
+                                      context,
+                                      listen: false,
+                                    ).logout(context);
+
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (builder) =>
+                                            const UserTypeSelectPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Logout",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+          },
+        ),
       ),
     );
   }

@@ -2,8 +2,10 @@ import 'package:cvault/Screens/admin_panel/pages/customer_management/customer_ma
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_management_page.dart';
 import 'package:cvault/Screens/reporting_screen.dart';
 import 'package:cvault/Screens/advertisment.dart';
+import 'package:cvault/providers/dealers_provider.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AdminPanelGrid extends StatelessWidget {
   const AdminPanelGrid({
@@ -12,6 +14,7 @@ class AdminPanelGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<DealersProvider>(context);
     return Column(
       children: [
         Row(
@@ -167,7 +170,10 @@ class AdminPanelGrid extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {
+              onTap: () async {
+                await provider.getNonAcceptDealer();
+                print(provider.listData);
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -1,7 +1,9 @@
 import 'package:cvault/Screens/notifications_screen.dart';
 import 'package:cvault/Screens/settings/settting.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
+import 'package:cvault/providers/NotificationApiProvider.dart';
 import 'package:cvault/providers/home_provider.dart';
+import 'package:cvault/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +19,9 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<NotificationApi>(
+      context,
+    );
     return Drawer(
       backgroundColor: Colors.green,
       child: Container(
@@ -98,6 +103,12 @@ class _MyDrawerState extends State<MyDrawer> {
                 ),
               ),
               onTap: () {
+                setState(() async {
+                  await provider.GetAllNotification(
+                    Provider.of<ProfileChangeNotifier>(context, listen: false)
+                        .token,
+                  );
+                });
                 Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -1,3 +1,4 @@
+import 'package:cvault/Screens/home/widgets/dashboard_page.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
@@ -23,6 +24,16 @@ class ProfilePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return HomePage();
+                },
+              ));
+            },
+            icon: Icon(Icons.arrow_back_ios),
+          ),
           centerTitle: true,
           title: Title(
             color: Colors.white,

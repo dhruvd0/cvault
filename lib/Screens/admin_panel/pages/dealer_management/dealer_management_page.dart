@@ -23,6 +23,8 @@ class DealerManagementPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<DealersProvider>(context).getNonAcceptDealer();
+    // ignore: newline-before-return
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -117,7 +119,7 @@ class DealerManagementPage extends StatelessWidget {
                     child: FloatingActionButton.extended(
                       backgroundColor: const Color(0xff03dac6),
                       foregroundColor: Colors.black,
-                      onPressed: () async {
+                      onPressed: () {
                         /// TODO: Toggle all
                       },
                       label: const Text(

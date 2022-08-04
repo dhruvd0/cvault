@@ -1,3 +1,4 @@
+import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/util/http.dart';
 
@@ -9,6 +10,7 @@ import 'package:http/http.dart' as http;
 class MarginsNotifier extends LoadStatusNotifier {
   double adminMargin = 0;
   double dealerMargin = 0;
+  double localeMargin = 0;
   final ProfileChangeNotifier profileChangeNotifier;
   MarginsNotifier(this.profileChangeNotifier) {
     profileChangeNotifier.addListener(() {

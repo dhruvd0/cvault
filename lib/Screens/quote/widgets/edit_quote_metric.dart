@@ -1,6 +1,8 @@
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/transaction/transaction.dart';
+import 'package:cvault/providers/margin_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
+import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +14,7 @@ class EditQuoteMetric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: newline-before-return
     return Consumer<QuoteProvider>(
       builder: (_, quoteProvider, __) => Column(
         children: [
@@ -42,14 +45,14 @@ class EditQuoteMetric extends StatelessWidget {
               child: Center(
                 child: TextFormField(
                   initialValue: quoteProvider.quoteMode == QuoteMode.Quantity
-                      ? quoteProvider.transaction.price.toString()
+                      ? quoteProvider.transaction.price.toStringAsFixed(2)
                       : quoteProvider.transaction.quantity.toString(),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                   ),
                   textAlign: TextAlign.center,
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (string) {
                     double? q = double.tryParse(string);
                     if (q != null) {
