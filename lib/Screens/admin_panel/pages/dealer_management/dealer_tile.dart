@@ -1,4 +1,3 @@
-import 'package:cvault/Screens/admin_panel/pages/dealer_management/customer_list.dart';
 import 'package:cvault/Screens/reporting_screen.dart';
 import 'package:cvault/constants/theme.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
@@ -88,11 +87,6 @@ class _DealerTileState extends State<DealerTile> {
           Column(
             children: [
               GestureDetector(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const CustomerList(),
-                  ),
-                ),
                 child: const Icon(
                   Icons.person,
                   color: ThemeColors.lightGreenAccentColor,

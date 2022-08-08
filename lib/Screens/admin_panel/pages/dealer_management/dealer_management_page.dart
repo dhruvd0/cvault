@@ -1,14 +1,35 @@
 import 'package:cvault/Screens/admin_panel/pages/dealer_management/dealer_tile.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/dealers_provider.dart';
+import 'package:cvault/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class DealerManagementPage extends StatelessWidget {
+class DealerManagementPage extends StatefulWidget {
   const DealerManagementPage({Key? key}) : super(key: key);
+
+  @override
+  State<DealerManagementPage> createState() => _DealerManagementPageState();
+}
+
+class _DealerManagementPageState extends State<DealerManagementPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  void _onRefresh(context) async {
+    // monitor network fetch
+    var provider = Provider.of<DealersProvider>(
+      context,
+      listen: false,
+    );
+    provider.changePage(1);
+    await provider.fetchAndSetDealers(
+      Provider.of<ProfileChangeNotifier>(context, listen: false).token,
+    );
+  }
 
   Widget _buildListView(List<Dealer> dealers) {
     return ListView.builder(
+      controller: _scrollController,
       itemCount: dealers.length,
       itemBuilder: (BuildContext context, int index) {
         return DealerTile(dealer: dealers[index]);
@@ -16,9 +37,28 @@ class DealerManagementPage extends StatelessWidget {
     );
   }
 
-  void _onRefresh(context) async {
-    // monitor network fetch
-    Provider.of<DealersProvider>(context, listen: false).fetchAndSetDealers();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final provider = Provider.of<DealersProvider>(context, listen: false);
+
+      _scrollController.addListener(() {
+        if (!_scrollController.hasClients) {
+          return;
+        }
+
+        if (_scrollController.offset ==
+                _scrollController.position.maxScrollExtent &&
+            !(provider.loadStatus == LoadStatus.loading)) {
+          provider.incrementPage();
+          provider.fetchAndSetDealers(
+            Provider.of<ProfileChangeNotifier>(context, listen: false).token,
+          );
+        }
+      });
+    });
   }
 
   @override
@@ -84,31 +124,10 @@ class DealerManagementPage extends StatelessWidget {
                   Flexible(
                     child: (dealerProvider.isDealersLoaded)
                         ? _buildListView(dealerProvider.dealers)
-                        : FutureBuilder(
-                            future: dealerProvider.fetchAndSetDealers(),
-                            builder: (context, snapshot) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.none:
-                                case ConnectionState.active:
-                                case ConnectionState.waiting:
-                                  return const Center(
-                                    child: CircularProgressIndicator(
-                                      color: Color(0xff03dac6),
-                                    ),
-                                  );
-                                case ConnectionState.done:
-                                  if (snapshot.hasError) {
-                                    return const Center(
-                                      child: Text(
-                                        "An error has occurred!",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    );
-                                  }
-
-                                  return _buildListView(dealerProvider.dealers);
-                              }
-                            },
+                        : const Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0xff03dac6),
+                            ),
                           ),
                   ),
                   const SizedBox(
