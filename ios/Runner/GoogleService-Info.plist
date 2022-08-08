@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>377759081959-3bvkuhj5g5pt8eka93sd2r1vn0legah8.apps.googleusercontent.com</string>
+	<string>377759081959-qbnj9ipvrdjdl78ao4un5009qk842193.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.377759081959-3bvkuhj5g5pt8eka93sd2r1vn0legah8</string>
+	<string>com.googleusercontent.apps.377759081959-qbnj9ipvrdjdl78ao4un5009qk842193</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>377759081959-14652pmvi14t9lg8s0khoak7825jni49.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.cvault.app2</string>
+	<string>com.cvault.devlopment</string>
 	<key>PROJECT_ID</key>
 	<string>cvault-2f761</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:377759081959:ios:8ae629c8378bc10bab0942</string>
+	<string>1:377759081959:ios:babf255cd6adfd1bab0942</string>
 </dict>
 </plist>

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/services.dart';
 
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/profile_provider.dart';
@@ -13,8 +14,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:otp_text_field/otp_field.dart';
-import 'package:otp_text_field/otp_field_style.dart';
-import 'package:otp_text_field/style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,9 +34,32 @@ class _LogInScreenState extends State<LogInScreen> {
   bool otpLoading = false;
   late String phone;
   late String verId;
+  late String otp;
+  bool _isLoading = false;
+  bool _isOtpLogin = false;
+
+  number() async {
+    await Future.delayed(Duration(seconds: 30));
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Newotp() async {
+    await Future.delayed(Duration(seconds: 40));
+    setState(() {
+      _isOtpLogin = false;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Try Again"),
+        ),
+      );
+    });
+  }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  OtpFieldController otpController = OtpFieldController();
   Future<void> verifyPhone() async {
     setState(() {
       isLoading = true;
@@ -180,9 +202,13 @@ class _LogInScreenState extends State<LogInScreen> {
               backgroundColor: const Color(0xff03dac6),
               foregroundColor: Colors.black,
               onPressed: () async {
+                setState(() {
+                  _isLoading = true;
+                  number();
+                });
                 verifyPhone();
               },
-              label: !isLoading
+              label: _isLoading == false
                   ? const Text(
                       'Get otp',
                       style: TextStyle(
@@ -199,6 +225,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
+  // ignore: long-method
   Container phoneInputField() {
     return Container(
       decoration: BoxDecoration(
@@ -235,6 +262,51 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
+  Widget submitButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.65,
+          child: Container(
+            decoration: const BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromARGB(255, 133, 128, 119),
+                  blurRadius: 15,
+                  spreadRadius: 1, //New
+                ),
+              ],
+            ),
+            child: FloatingActionButton.extended(
+              backgroundColor: const Color(0xff03dac6),
+              foregroundColor: Colors.black,
+              onPressed: () async {
+                setState(() {
+                  _isOtpLogin == true;
+                  Newotp();
+                });
+                verifyPin(otp);
+              },
+              label: _isOtpLogin == false
+                  ? const Text(
+                      'Submit',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    )
+                  : const CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ignore: long-method
   Column otpTextField(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -277,35 +349,35 @@ class _LogInScreenState extends State<LogInScreen> {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.white),
           ),
-          child: !otpLoading
-              ? OTPTextField(
-                  outlineBorderRadius: 25,
-                  keyboardType: TextInputType.number,
-                  otpFieldStyle: OtpFieldStyle(
-                    errorBorderColor: Colors.black,
-                    borderColor: Colors.black,
-                    enabledBorderColor: Colors.black,
-                    disabledBorderColor: Colors.black,
-                    focusBorderColor: Colors.black,
-                  ),
-                  length: 6,
-                  width: MediaQuery.of(context).size.width,
-                  fieldWidth: 20,
-                  style: const TextStyle(
-                    fontSize: 17,
+          padding: EdgeInsets.only(left: 15),
+          child: Center(
+            child: !otpLoading
+                ? TextFormField(
+                    inputFormatters: [
+                      new LengthLimitingTextInputFormatter(6),
+                    ],
+                    autofocus: true,
+                    keyboardType: TextInputType.number,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    decoration: InputDecoration.collapsed(
+                      hintText: "   Enter Otp",
+                      hintStyle: TextStyle(fontSize: 16, color: Colors.white),
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (value) {
+                      otp = value;
+                    },
+                  )
+                : const CircularProgressIndicator(
+                    backgroundColor: Colors.black,
                     color: Colors.white,
                   ),
-                  textFieldAlignment: MainAxisAlignment.spaceAround,
-                  fieldStyle: FieldStyle.underline,
-                  onCompleted: (pin) {
-                    verifyPin(pin);
-                  },
-                )
-              : const CircularProgressIndicator(
-                  backgroundColor: Colors.black,
-                  color: Colors.white,
-                ),
+          ),
         ),
+        SizedBox(
+          height: 50,
+        ),
+        submitButton(context),
       ],
     );
   }
@@ -313,6 +385,7 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
@@ -330,54 +403,59 @@ class _LogInScreenState extends State<LogInScreen> {
           icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
-      body: Consumer<ProfileChangeNotifier>(
-        builder: (_, profile, __) => Container(
-          height: MediaQuery.of(context).size.height,
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          child: codeSent
-              ? profile.loadStatus == LoadStatus.loading || isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : otpTextField(context)
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Enter your \nmobile number",
-                      style: GoogleFonts.lato(
-                        textStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w600,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Consumer<ProfileChangeNotifier>(
+          builder: (_, profile, __) => Container(
+            height: MediaQuery.of(context).size.height,
+            margin: const EdgeInsets.only(left: 20, right: 20),
+            child: codeSent
+                ? profile.loadStatus == LoadStatus.loading || isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : otpTextField(context)
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Enter your \nmobile number",
+                        style: GoogleFonts.lato(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      "we will send you a confirmation code",
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
-                          fontSize: 14,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w600,
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        "we will send you a confirmation code",
+                        style: GoogleFonts.lato(
+                          textStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.7),
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    phoneInputField(),
-                  ],
-                ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      phoneInputField(),
+                    ],
+                  ),
+          ),
         ),
       ),
       floatingActionButton: codeSent ? null : getOtpButton(context),

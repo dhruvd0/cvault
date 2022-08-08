@@ -163,8 +163,9 @@ class QuoteProvider extends LoadStatusNotifier {
       case TransactionProps.price:
         transaction = transaction.copyWith(price: data);
         transaction = transaction.copyWith(
-          quantity: transaction.costPrice / transaction.price,
+          quantity: transaction.price / transaction.costPrice,
         );
+
         break;
 
       case TransactionProps.quantity:
@@ -172,6 +173,7 @@ class QuoteProvider extends LoadStatusNotifier {
         transaction = transaction.copyWith(
           price: transaction.costPrice * transaction.quantity,
         );
+
         break;
       default:
     }

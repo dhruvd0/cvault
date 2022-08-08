@@ -9,6 +9,7 @@ import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/widgets/usd_inr_toggle.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../drawer.dart';
@@ -31,6 +32,8 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   @override
+  var formatter = NumberFormat('#,###');
+
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     // final provider = Provider.of<AdvertisementProvider>(
@@ -45,6 +48,7 @@ class _DashboardPageState extends State<DashboardPage> {
       endDrawer: const MyDrawer(),
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         toolbarHeight: 100,
@@ -57,7 +61,9 @@ class _DashboardPageState extends State<DashboardPage> {
             }
 
             return Text(
-              "Hello, ${profileNotifier.profile.firstName.isEmpty ? 'User' : profileNotifier.profile.firstName}.\n Welcome to ${userType[0].toUpperCase() + userType.substring(1)} Dashboard",
+              userType == UserTypes.customer
+                  ? "Hello, ${profileNotifier.profile.firstName.isEmpty ? 'User' : profileNotifier.profile.firstName}"
+                  : "Hello, ${profileNotifier.profile.firstName.isEmpty ? 'User' : profileNotifier.profile.firstName}.\n Welcome to ${userType[0].toUpperCase() + userType.substring(1)} Dashboard",
               textAlign: TextAlign.center,
               maxLines: 3,
               style: const TextStyle(
@@ -67,28 +73,6 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             );
           },
-        ),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (builder) => ProfilePage()),
-            );
-          },
-          child: Container(
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.white, width: 1.5),
-              shape: BoxShape.circle,
-            ),
-            child: const CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.transparent,
-              foregroundImage: NetworkImage(
-                "https://cdn.pixabay.com/photo/2020/06/01/22/23/eye-5248678__340.jpg",
-              ),
-            ),
-          ),
         ),
         actions: [
           Builder(
@@ -156,16 +140,6 @@ class _DashboardPageState extends State<DashboardPage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            CircleAvatar(
-                                              radius: 25,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                child: Image.network(
-                                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoG97VgQYJGXN8kDJkOMvh79mgLvO5iEfVWA&usqp=CAU",
-                                                ),
-                                              ),
-                                            ),
                                             GestureDetector(
                                               onTap: () {
                                                 Navigator.push(
@@ -185,13 +159,33 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   0,
                                                   0,
                                                 ),
-                                                child: Text(
-                                                  '1 ${state.selectedCurrencyKey.toUpperCase()}',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'Poppins',
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w600,
+                                                child: Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                      25,
+                                                    ),
+                                                    border: Border.all(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                        255,
+                                                        165,
+                                                        231,
+                                                        243,
+                                                      ),
+                                                      width: 1,
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                    '1 ${state.selectedCurrencyKey.toUpperCase()}',
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Poppins',
+                                                      fontSize: 25,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -222,8 +216,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                             state.cryptoCurrencies.isEmpty
                                                 ? ''
                                                 : (state.isUSD
-                                                    ? '\$${homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toStringAsFixed(2)}'
-                                                    : '₹${homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toStringAsFixed(2)}'),
+                                                    ? '\$${formatter.format(homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toInt())}'
+                                                        .replaceAll(',', ',')
+                                                    : '₹${formatter.format(homeStateNotifier.currentCryptoCurrency().wazirxBuyPrice.toInt())}'
+                                                        .replaceAll(',', ',')),
                                             textAlign: TextAlign.start,
                                             style: const TextStyle(
                                               fontFamily: 'Poppins',
@@ -264,8 +260,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                                             .isEmpty
                                                         ? ''
                                                         : (state.isUSD)
-                                                            ? '\$${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}'
-                                                            : '₹${homeStateNotifier.currentCryptoCurrency().krakenPrice.toStringAsFixed(2)}',
+                                                            ? '\$${formatter.format(homeStateNotifier.currentCryptoCurrency().krakenPrice.toInt())}'
+                                                                .replaceAll(
+                                                                    ',', ',')
+                                                            : '₹${formatter.format(homeStateNotifier.currentCryptoCurrency().krakenPrice.toInt())}'
+                                                                .replaceAll(
+                                                                ',',
+                                                                ',',
+                                                              ),
                                                     textAlign: TextAlign.start,
                                                     style: const TextStyle(
                                                       fontFamily: 'Poppins',
@@ -326,18 +328,18 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ) {
                                         return GestureDetector(
                                           onTap: () {
-                                            provider.urlLauncher(
-                                              provider.listData[0].redirectLink
-                                                  .toString(),
-                                            );
+                                            // provider.urlLauncher(
+                                            //   provider.listData[0].redirectLink
+                                            //       .toString(),
+                                            // );
                                           },
                                           child: Container(
-                                            child: Image.network(
-                                              provider.listData[0].imageLink
-                                                  .toString(),
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                          ),
+                                              // child: Image.network(
+                                              //   provider.listData[0].imageLink
+                                              //       .toString(),
+                                              //   fit: BoxFit.fitWidth,
+                                              // ),
+                                              ),
                                         );
                                       },
                                     )
@@ -375,32 +377,47 @@ class _AddState extends State<Add> {
       context,
     );
     // ignore: newline-before-return
-    return Container(
-      height: MediaQuery.of(context).size.width * 0.20,
-      margin: const EdgeInsets.symmetric(
-        vertical: 5,
-        horizontal: 10,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const Text('AD'),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.75,
-            child: Container(
-              child: Image.network(
-                provider.listData[0].imageLink.toString(),
-                fit: BoxFit.fitWidth,
-              ),
+    return Consumer<AdvertisementProvider>(
+      builder: (
+        context,
+        provider,
+        child,
+      ) {
+        return GestureDetector(
+          onTap: () {
+            provider.urlLauncher(
+              provider.listData[0].redirectLink.toString(),
+            );
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.width * 0.20,
+            margin: const EdgeInsets.symmetric(
+              vertical: 5,
+              horizontal: 10,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text('AD'),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.75,
+                  child: Container(
+                    child: Image.network(
+                      provider.listData[0].imageLink.toString(),
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                ),
+                const Text('AD'),
+              ],
             ),
           ),
-          const Text('AD'),
-        ],
-      ),
+        );
+      },
     );
   }
 }

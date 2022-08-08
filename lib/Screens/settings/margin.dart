@@ -65,7 +65,7 @@ class MarginInputTextField extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
             ),
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             decoration: const InputDecoration(
               border: InputBorder.none,
             ),

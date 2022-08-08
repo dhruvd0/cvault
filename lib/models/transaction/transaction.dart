@@ -28,6 +28,7 @@ class Transaction extends Equatable {
     required this.status,
     required this.transactionType,
     this.createdAt = '',
+    required this.localMargin,
   });
 
   ///
@@ -47,6 +48,7 @@ class Transaction extends Equatable {
       status: map['status'] ?? '',
       createdAt: map['createdAt'] ?? '',
       margin: map['margin']?.toDouble() ?? 0,
+      localMargin: map["localMargin"]?.toDouble() ?? 0,
     );
   }
 
@@ -88,6 +90,9 @@ class Transaction extends Equatable {
   /// can be "buy" or "sell"
   final String transactionType;
 
+  //local margin
+  final double localMargin;
+
   final String createdAt;
 
   @override
@@ -104,6 +109,7 @@ class Transaction extends Equatable {
       quantity,
       status,
       margin,
+      localMargin,
     ];
   }
 
@@ -123,6 +129,7 @@ class Transaction extends Equatable {
         "quantity": quantity,
         "status": status,
         "margin": margin,
+        "localMargin": localMargin,
       };
 
   ///
@@ -139,6 +146,7 @@ class Transaction extends Equatable {
       'cryptoType': 'btcinr',
       'quantity': 1,
       'margin': 5,
+      "localMargin": 0,
     });
   }
 
@@ -156,6 +164,7 @@ class Transaction extends Equatable {
     String? status,
     String? transactionType,
     String? timestamps,
+    double? localMargin,
   }) {
     return Transaction(
       costPrice: costPrice ?? this.costPrice,
@@ -170,6 +179,7 @@ class Transaction extends Equatable {
       status: status ?? this.status,
       transactionType: transactionType ?? this.transactionType,
       createdAt: timestamps ?? createdAt,
+      localMargin: localMargin ?? this.localMargin,
     );
   }
 }
@@ -207,5 +217,8 @@ enum TransactionProps {
   status,
 
   ///
-  margin
+  margin,
+
+  ///
+  localMargin,
 }

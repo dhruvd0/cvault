@@ -79,7 +79,7 @@ class TransactionTile extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        DateFormat(DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY)
+                        DateFormat('yyyy-MM-dd \nH:m:s')
                             .format(DateTime.parse(transaction.createdAt)),
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -115,6 +115,22 @@ class TransactionTile extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
             ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Phone: ${transaction.sender.phone}",
+                style: TextStyle(color: Colors.white),
+              ),
+              Text(
+                "Margin: ${transaction.margin}",
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              ),
+            ],
           ),
           const SizedBox(
             height: 10,

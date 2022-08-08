@@ -21,7 +21,7 @@ class AdvertisementProvider extends ChangeNotifier {
     Timer.periodic(const Duration(seconds: 1), (_) {
       getAd();
       listData;
-      print(listData[0].imageLink);
+      //print(listData[0].imageLink);
       notifyListeners();
     });
   }

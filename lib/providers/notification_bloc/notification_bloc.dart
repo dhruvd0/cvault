@@ -19,6 +19,7 @@ class NotificationCubit extends Cubit<NotificationState> {
       }
     });
   }
+  // ignore: long-method
   static NotificationDetails _initLocalNotification() {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('ic_launcher');
@@ -49,7 +50,9 @@ class NotificationCubit extends Cubit<NotificationState> {
     );
 
     const IOSNotificationDetails iosNotificationDetails =
-        IOSNotificationDetails();
+        IOSNotificationDetails(
+      threadIdentifier: 'thread_id',
+    );
 
     const NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,

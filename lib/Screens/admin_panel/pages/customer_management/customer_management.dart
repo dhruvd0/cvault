@@ -1,3 +1,5 @@
+import 'package:cvault/Screens/home/widgets/dashboard_page.dart';
+import 'package:cvault/home_page.dart';
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/Screens/admin_panel/pages/customer_management/customer_tile.dart';
 import 'package:cvault/providers/customer_provider.dart';
@@ -70,7 +72,10 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
           },
           icon: const Icon(
             Icons.arrow_back,

@@ -5,6 +5,7 @@ import 'package:cvault/constants/user_types.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../home_page.dart';
 import '../pages/customer_management/customer_management.dart';
 
 class AdminPanel extends StatefulWidget {
@@ -25,7 +26,16 @@ class _AdminPanelState extends State<AdminPanel> {
     return Scaffold(
       backgroundColor: const Color(0xff1E2224),
       appBar: AppBar(
-        leading: null,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return HomePage();
+              },
+            ));
+          },
+          icon: Icon(Icons.arrow_back_ios),
+        ),
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: const Text(

@@ -4,7 +4,9 @@ import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/quote_provider.dart';
+import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 /// Has phone number text field, send quote button
@@ -20,6 +22,7 @@ class SendQuoteBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var formatter = NumberFormat('#,###');
     return Consumer<QuoteProvider>(
       builder: (_, quoteProvider, __) => Container(
         padding: const EdgeInsets.all(20),
@@ -35,19 +38,25 @@ class SendQuoteBox extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               isPriceSelected
-                  ? Text(
-                      (homeNotifier.state.isUSD ? '\$' : '₹') +
-                          quoteProvider.transaction.price.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ? Consumer<TransactionsProvider>(
+                      builder: (s, context, u) {
+                        return Text(
+                          (homeNotifier.state.isUSD ? '\$' : '₹') +
+                              //quoteProvider.transaction.price.toString(),
+                              "${formatter.format(quoteProvider.transaction.price + (quoteProvider.transaction.price / 100) * context.NewMArgin.toInt())}"
+                                  .replaceAll(',', ','),
+                          style: const TextStyle(
+                            color: Colors.yellow,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        );
+                      },
                     )
                   : Text(
-                      "${quoteProvider.transaction.cryptoType.toUpperCase()} ${quoteProvider.transaction.quantity}",
+                      "${quoteProvider.transaction.cryptoType.toUpperCase()} ${quoteProvider.transaction.quantity.toStringAsFixed(8)}",
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.blue,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),

@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 class TransactionsProvider extends LoadStatusNotifier {
   final ProfileChangeNotifier profileChangeNotifier;
   List<Transaction> _transactions = [];
+  double NewMArgin = 0.0;
   bool visible = false;
   TransactionsProvider(this.profileChangeNotifier) {
     profileChangeNotifier.addListener(() async {

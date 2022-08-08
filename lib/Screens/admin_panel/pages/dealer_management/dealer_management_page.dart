@@ -63,6 +63,8 @@ class _DealerManagementPageState extends State<DealerManagementPage> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<DealersProvider>(context).getNonAcceptDealer();
+    // ignore: newline-before-return
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -136,7 +138,7 @@ class _DealerManagementPageState extends State<DealerManagementPage> {
                     child: FloatingActionButton.extended(
                       backgroundColor: const Color(0xff03dac6),
                       foregroundColor: Colors.black,
-                      onPressed: () async {
+                      onPressed: () {
                         /// TODO: Toggle all
                       },
                       label: const Text(
