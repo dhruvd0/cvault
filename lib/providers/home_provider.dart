@@ -65,7 +65,7 @@ class HomeStateNotifier extends ChangeNotifier {
         'sol',
         'eth',
         'matic',
-        'ada',
+        'usdt',
         'shib',
       ];
 

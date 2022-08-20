@@ -47,8 +47,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0xff252836),
         centerTitle: true,
         title: const Text(
           "Transactions",
@@ -59,65 +60,69 @@ class _TransactionsPageState extends State<TransactionsPage> {
         ),
         elevation: 0,
       ),
-      backgroundColor: const Color(0xff1E2224),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          _onRefresh(context);
-        },
-        child: Consumer<TransactionsProvider>(
-          builder: (context, transactionsProvider, __) {
-            switch (transactionsProvider.loadStatus) {
-              case LoadStatus.error:
-                return const Center(
-                  child: Text(
-                    "An error has occurred!",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              default:
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: transactionsProvider.transactions.isEmpty &&
-                              transactionsProvider.loadStatus ==
-                                  LoadStatus.loading
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : GestureDetector(
-                              onTap: () {
-                                transactionsProvider.Expand();
-                              },
-                              child: ListView.builder(
-                                itemCount:
-                                    transactionsProvider.transactions.length,
-                                controller: _scrollController,
-                                itemBuilder: (BuildContext context, int index) {
-                                  // var transaction = Transaction.mock();
-                                  return TransactionTile(
-                                    transaction: transactionsProvider
-                                        .transactions[index],
-                                  );
-                                },
-                              ),
-                            ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    transactionsProvider.loadStatus == LoadStatus.loading &&
-                            transactionsProvider.transactions.isNotEmpty
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: ThemeColors.lightGreenAccentColor,
-                            ),
-                          )
-                        : const SizedBox(),
-                  ],
-                );
-            }
+      backgroundColor: const Color(0xff1F1D2B),
+      body: SafeArea(
+        top: true,
+        bottom: true,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            _onRefresh(context);
           },
+          child: Consumer<TransactionsProvider>(
+            builder: (context, transactionsProvider, __) {
+              switch (transactionsProvider.loadStatus) {
+                case LoadStatus.error:
+                  return const Center(
+                    child: Text(
+                      "An error has occurred!",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                default:
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: transactionsProvider.transactions.isEmpty &&
+                                transactionsProvider.loadStatus ==
+                                    LoadStatus.loading
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  transactionsProvider.Expand();
+                                },
+                                child: ListView.builder(
+                                  itemCount:
+                                      transactionsProvider.transactions.length,
+                                  controller: _scrollController,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    // var transaction = Transaction.mock();
+                                    return TransactionTile(
+                                      transaction: transactionsProvider
+                                          .transactions[index],
+                                    );
+                                  },
+                                ),
+                              ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      transactionsProvider.loadStatus == LoadStatus.loading &&
+                              transactionsProvider.transactions.isNotEmpty
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: ThemeColors.lightGreenAccentColor,
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
+                  );
+              }
+            },
+          ),
         ),
       ),
     );

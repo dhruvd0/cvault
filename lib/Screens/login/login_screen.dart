@@ -122,6 +122,7 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   /// Fetches data and navigates user to the next screen after logging in
+  // ignore: long-method
   Future<void> postLoginSubRoutine() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -181,6 +182,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
+  // ignore: long-method
   Padding getOtpButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 20),
@@ -262,8 +264,11 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
+  // ignore: long-method
   Widget submitButton(BuildContext context) {
+
     return Padding(
+      
       padding: const EdgeInsets.only(left: 20),
       child: Align(
         alignment: Alignment.bottomCenter,

@@ -35,6 +35,8 @@ class _SettingsState extends State<Settings> {
   String? wazirxApiName;
 
   Container applyMarginToggle() {
+    var userType = Provider.of<ProfileChangeNotifier>(context).profile.userType;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -42,7 +44,11 @@ class _SettingsState extends State<Settings> {
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
           width: 1.5,
-          color: const Color.fromARGB(255, 165, 231, 243),
+          color: userType == UserTypes.customer
+              ?const Color(0xffE47331)
+              : userType == UserTypes.dealer
+                  ?const Color(0xff566749)
+                  :const Color(0xff0CFEBC),
         ),
       ),
       child: Row(
@@ -111,7 +117,7 @@ class _SettingsState extends State<Settings> {
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
               width: 1.5,
-              color: const Color.fromARGB(255, 165, 231, 243),
+              color: Color(0xff0CFEBC),
             ),
           ),
           child: _globalTickerDropdown(),
@@ -125,7 +131,7 @@ class _SettingsState extends State<Settings> {
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
               width: 1.5,
-              color: const Color.fromARGB(255, 165, 231, 243),
+              color: Color(0xff0CFEBC),
             ),
           ),
           child: _localTickerDropdown(),
@@ -179,9 +185,10 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff1E2224),
+      backgroundColor: const Color(0xff1F1D2B),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0xff252836),
+        toolbarHeight: 70,
         elevation: 0,
         automaticallyImplyLeading: false,
         leading: Padding(
@@ -208,145 +215,194 @@ class _SettingsState extends State<Settings> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : SingleChildScrollView(
-                    child: SafeArea(
-                      bottom: true,
-                      top: true,
-                      child: Consumer<ProfileChangeNotifier>(
-                        builder: (context, profileNotifier, _) {
-                          final state = profileNotifier.profile;
-                          final userType = state.userType;
+                : Consumer<ProfileChangeNotifier>(
+                    builder: (context, profileNotifier, _) {
+                      var userType = profileNotifier.profile.userType;
 
-                          return Container(
+                      return SingleChildScrollView(
+                        child: SafeArea(
+                          bottom: true,
+                          top: true,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xff252836),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                             margin: const EdgeInsets.only(
+                              top: 25,
                               left: 20,
                               right: 20,
-                              top: 25,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                userType == UserTypes.admin
-                                    ? tickerSelectors()
-                                    : Container(),
-                                const SizedBox(height: 25),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Consumer<HomeStateNotifier>(
-                                      builder: (context, homeNotifier, _) {
-                                        return Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Text(
-                                              "Crypto Currency",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 15,
-                                            ),
-                                            homeNotifier.state is HomeInitial
-                                                ? const Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  )
-                                                : Flexible(
-                                                    child: homeNotifier
-                                                            .state
-                                                            .cryptoCurrencies
-                                                            .isEmpty
-                                                        ? const SizedBox()
-                                                        : const SizedBox(
-                                                            width: 120,
-                                                            child:
-                                                                CryptoDropdownButton(),
-                                                          ),
-                                                  ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                    userType == UserTypes.customer
-                                        ? Container()
-                                        : const EnterMarginField(),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 25,
-                                ),
-                                userType == UserTypes.admin
-                                    ? applyMarginToggle()
-                                    : Container(),
-                                const SizedBox(
-                                  height: 100,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (builder) => ProfilePage(),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Manage Profile",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                const Text(
-                                  "Change password",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                const SizedBox(height: 40),
-                                InkWell(
-                                  onTap: () async {
-                                    Provider.of<HomeStateNotifier>(
-                                      context,
-                                      listen: false,
-                                    ).logout(context);
+                            child: Consumer<ProfileChangeNotifier>(
+                              builder: (context, profileNotifier, _) {
+                                final state = profileNotifier.profile;
+                                final userType = state.userType;
 
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (builder) =>
-                                            const UserTypeSelectPage(),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Logout",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                return Container(
+                                  margin: const EdgeInsets.only(
+                                    left: 20,
+                                    right: 20,
+                                    top: 25,
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                              ],
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      userType == UserTypes.admin
+                                          ? tickerSelectors()
+                                          : Container(),
+                                      const SizedBox(height: 25),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Consumer<HomeStateNotifier>(
+                                            builder:
+                                                (context, homeNotifier, _) {
+                                              return Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Text(
+                                                    "Crypto Currency",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  homeNotifier.state
+                                                          is HomeInitial
+                                                      ? const Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        )
+                                                      : Flexible(
+                                                          child: homeNotifier
+                                                                  .state
+                                                                  .cryptoCurrencies
+                                                                  .isEmpty
+                                                              ? const SizedBox()
+                                                              : SizedBox(
+                                                                  width: 120,
+                                                                  child:
+                                                                      Container(
+                                                                    width: 100,
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            10),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .circular(
+                                                                        15,
+                                                                      ),
+                                                                      gradient:
+                                                                          const LinearGradient(
+                                                                        begin: Alignment
+                                                                            .bottomLeft,
+                                                                        end: Alignment
+                                                                            .topRight,
+                                                                        colors: [
+                                                                          Color(
+                                                                              0xff1E1F20),
+                                                                          Color(
+                                                                              0xFF1E1F20),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    child:
+                                                                        CryptoDropdownButton(),
+                                                                  ),
+                                                                ),
+                                                        ),
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                          userType == UserTypes.customer
+                                              ? Container()
+                                              : const EnterMarginField(),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 25,
+                                      ),
+                                      userType == UserTypes.admin
+                                          ? applyMarginToggle()
+                                          : Container(),
+                                      const SizedBox(
+                                        height: 100,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  ProfilePage(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text(
+                                          "Manage Profile",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const Text(
+                                        "Change password",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 40),
+                                      InkWell(
+                                        onTap: () async {
+                                          Provider.of<HomeStateNotifier>(
+                                            context,
+                                            listen: false,
+                                          ).logout(context);
+
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  const UserTypeSelectPage(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text(
+                                          "Logout",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    ),
+                          ),
+                        ),
+                      );
+                    },
                   );
           },
         ),

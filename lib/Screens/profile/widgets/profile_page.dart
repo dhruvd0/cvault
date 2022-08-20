@@ -1,4 +1,5 @@
-import 'package:cvault/Screens/home/widgets/dashboard_page.dart';
+
+import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
@@ -21,192 +22,118 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     mode = mode ?? ProfilePageMode.edit;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return HomePage();
-                },
-              ));
-            },
-            icon: Icon(Icons.arrow_back_ios),
-          ),
-          centerTitle: true,
-          title: Title(
-            color: Colors.white,
-            child: Text(
-              mode == ProfilePageMode.registration
-                  ? 'Register'
-                  : 'Manage Profile',
-            ),
-          ),
-          backgroundColor: const Color(0xff202427),
+    return Scaffold(
+      
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return HomePage();
+              },
+            ));
+          },
+          icon: Icon(Icons.arrow_back_ios),
         ),
-        backgroundColor: const Color(0xff202427),
-        body: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 5,
-                ),
-                mode == ProfilePageMode.registration
-                    ? Container()
-                    : const ProfileHeader(),
-                const SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                      child: Text(
-                        "First Name",
-                        style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Roboto',
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    ProfileTextField(
-                      hintText: 'First Name',
-                      fieldName: ProfileFields.firstName,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                      child: Text(
-                        "Middle Name",
-                        style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Roboto',
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    ProfileTextField(
-                      hintText: 'Middle Name',
-                      fieldName: ProfileFields.middleName,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                      child: Text(
-                        "Last Name",
-                        style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Roboto',
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    ProfileTextField(
-                      hintText: 'Last Name',
-                      fieldName: ProfileFields.lastName,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        centerTitle: true,
+        toolbarHeight: 80,
+        title: Title(
+          color: Colors.white,
+          child: Text(
+            mode == ProfilePageMode.registration
+                ? 'Register'
+                : 'Manage Profile',
+          ),
+        ),
+        backgroundColor:  Color(0xff252836),
+        elevation: 0,
+      ),
+      backgroundColor: const Color(0xff1F1D2B),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Consumer<ProfileChangeNotifier>(
+          builder: (context, profileNotifier, _) {
+            var userType = profileNotifier.profile.userType;
+        
+              return Container(
+                margin:const EdgeInsets.only(top:20,left: 20,right: 20),
+                
+                decoration: BoxDecoration(
+                  color:const Color(0xff252836),
+                  borderRadius: BorderRadius.circular(15),),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                      child: Text(
-                        "Email",
-                        style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Roboto',
-                          fontSize: 12,
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    mode == ProfilePageMode.registration
+                        ? Container()
+                        : const ProfileHeader(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                      
+                        ProfileTextField(
+                          hintText: 'First Name',
+                          fieldName: ProfileFields.firstName,
                         ),
-                      ),
+                      ],
                     ),
-                    ProfileTextField(
-                      showVerified:
-                          mode == ProfilePageMode.registration ? false : true,
-                      hintText: 'Email',
-                      fieldName: ProfileFields.email,
+                    const SizedBox(
+                      height: 5,
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(
-                    left: 30.0,
-                    right: 30.0,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: const [
-                          SizedBox(
-                            height: 35,
-                          ),
-                          Text(
-                            '+91',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Flexible(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                              child: Text(
-                                "Phone",
-                                style: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Roboto',
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              child: ProfileTextField(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        
+                        ProfileTextField(
+                          hintText: 'Middle Name',
+                          fieldName: ProfileFields.middleName,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                      
+                        ProfileTextField(
+                          hintText: 'Last Name',
+                          fieldName: ProfileFields.lastName,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                     
+                        ProfileTextField(
+                          showVerified:
+                              mode == ProfilePageMode.registration ? false : true,
+                          hintText: 'Email',
+                          fieldName: ProfileFields.email,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                         
+                              ProfileTextField(
                                 showVerified: true,
                                 hintText: 'Phone',
                                 fieldName: ProfileFields.phone,
@@ -214,111 +141,104 @@ class ProfilePage extends StatelessWidget {
                                         .instance.currentUser?.phoneNumber ??
                                     '',
                               ),
+                            ],
+                          ),
+                    mode == ProfilePageMode.registration
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.only(left: 35.0, bottom: 8),
+                                child: Text(
+                                  "Referral",
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Roboto',
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                              ProfileTextField(
+                                hintText: 'Referral Code',
+                                fieldName: ProfileFields.referalCode,
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20,bottom: 10),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.65,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                mode == ProfilePageMode.registration
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(left: 35.0, bottom: 8),
-                            child: Text(
-                              "Referral",
-                              style: TextStyle(
-                                fontStyle: FontStyle.normal,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Roboto',
-                                fontSize: 12,
+                            child: FloatingActionButton.extended(
+                              backgroundColor:userType==UserTypes.customer? const Color(0xffE47331):userType==UserTypes.dealer?Color(0xff566749):Color(0xff0EE7AD),
+                              
+                              onPressed: () async {
+                                if (mode == ProfilePageMode.registration) {
+                                  if (_formKey.currentState!.validate()) {
+                                    await Provider.of<ProfileChangeNotifier>(
+                                      context,
+                                      listen: false,
+                                    ).createNewProfile();
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const HomePage(),
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  if (_formKey.currentState!.validate()) {
+                                    final bool? result =
+                                        await Provider.of<ProfileChangeNotifier>(
+                                      context,
+                                      listen: false,
+                                    ).updateProfile();
+                                    if (result ?? false) {
+                                      showSnackBar('Profile Updated', context);
+                                    }
+                                  }
+                                }
+                              },
+                              label: Consumer<ProfileChangeNotifier>(
+                                builder: ((context, notifier, child) =>
+                                    notifier.loadStatus == LoadStatus.loading
+                                        ? const CircularProgressIndicator(
+                                            color: Colors.black,
+                                          )
+                                        : Text(
+                                            mode == ProfilePageMode.registration
+                                                ? "Submit"
+                                                : "Save",
+                                            style:  TextStyle(
+                                              fontSize: 18,
+                                              color:userType==UserTypes.admin? Colors.black :Colors.white,
+        
+                                            ),
+                                          )),
                               ),
                             ),
-                          ),
-                          ProfileTextField(
-                            hintText: 'Referral Code',
-                            fieldName: ProfileFields.referalCode,
-                          ),
-                        ],
-                      )
-                    : Container(),
-                const SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.65,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 133, 128, 119),
-                              blurRadius: 15,
-                              spreadRadius: 1, //New
-                            ),
-                          ],
-                        ),
-                        child: FloatingActionButton.extended(
-                          backgroundColor: const Color(0xff03dac6),
-                          foregroundColor: Colors.black,
-                          onPressed: () async {
-                            if (mode == ProfilePageMode.registration) {
-                              if (_formKey.currentState!.validate()) {
-                                await Provider.of<ProfileChangeNotifier>(
-                                  context,
-                                  listen: false,
-                                ).createNewProfile();
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomePage(),
-                                  ),
-                                );
-                              }
-                            } else {
-                              if (_formKey.currentState!.validate()) {
-                                final bool? result =
-                                    await Provider.of<ProfileChangeNotifier>(
-                                  context,
-                                  listen: false,
-                                ).updateProfile();
-                                if (result ?? false) {
-                                  showSnackBar('Profile Updated', context);
-                                }
-                              }
-                            }
-                          },
-                          label: Consumer<ProfileChangeNotifier>(
-                            builder: ((context, notifier, child) =>
-                                notifier.loadStatus == LoadStatus.loading
-                                    ? const CircularProgressIndicator(
-                                        color: Colors.black,
-                                      )
-                                    : Text(
-                                        mode == ProfilePageMode.registration
-                                            ? "Submit"
-                                            : "Save",
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                        ),
-                                      )),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),

@@ -21,12 +21,13 @@ class _DealerTileState extends State<DealerTile> {
       context,
       listen: false,
     ).changeDealerActiveState(widget.dealer.dealerId);
+
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.grey[850],
+        color: Color(0xff0CFEBC),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -43,7 +44,7 @@ class _DealerTileState extends State<DealerTile> {
                 Text(
                   "Name: ${widget.dealer.firstName}",
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
                   ),
@@ -53,8 +54,7 @@ class _DealerTileState extends State<DealerTile> {
                 ),
                 Text(
                   "Email: ${widget.dealer.email}",
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: const TextStyle(color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -65,7 +65,7 @@ class _DealerTileState extends State<DealerTile> {
                 Text(
                   "Mobile: ${widget.dealer.phone}",
                   style: const TextStyle(
-                    color: Colors.white,
+                color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -76,7 +76,7 @@ class _DealerTileState extends State<DealerTile> {
                 Text(
                   "ID: ${widget.dealer.dealerId}",
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -89,7 +89,7 @@ class _DealerTileState extends State<DealerTile> {
               GestureDetector(
                 child: const Icon(
                   Icons.person,
-                  color: ThemeColors.lightGreenAccentColor,
+                  color: Color.fromARGB(255, 15, 18, 18),
                   size: 30,
                 ),
               ),
@@ -107,7 +107,7 @@ class _DealerTileState extends State<DealerTile> {
                 },
                 child: const Icon(
                   Icons.document_scanner,
-                  color: ThemeColors.lightGreenAccentColor,
+                  color: Color.fromARGB(255, 9, 10, 10),
                   size: 30,
                 ),
               ),

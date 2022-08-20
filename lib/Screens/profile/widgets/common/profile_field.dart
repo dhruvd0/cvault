@@ -41,79 +41,93 @@ class ProfileTextField extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 8),
       decoration: const BoxDecoration(
-        color: Colors.black,
+        
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Consumer<ProfileChangeNotifier>(
-          builder: (context, profileNotifier, _) {
-            final state = profileNotifier.profile;
-            List<ProfileFields> uncheckedFIelds = [
-              ProfileFields.phone,
-              ProfileFields.referalCode,
-              ProfileFields.middleName,
-            ];
+      child: Consumer<ProfileChangeNotifier>(
+        builder: (context, profileNotifier, _) {
+          final state = profileNotifier.profile;
+          List<ProfileFields> uncheckedFIelds = [
+            ProfileFields.phone,
+            ProfileFields.referalCode,
+            ProfileFields.middleName,
+          ];
 
-            return TextFormField(
-              initialValue: fixedValue ?? getInitialValueFromFieldName(state),
-              onChanged: (string) {
-                Provider.of<ProfileChangeNotifier>(context, listen: false)
-                    .changeProfileField(string, fieldName);
-              },
-              validator: (string) {
-                if (uncheckedFIelds.contains(fieldName)) {
-                  return null;
-                }
-                if (string == null) {
-                  return 'This should not be empty.';
-                }
-                if (string.isEmpty) {
-                  return 'This should not be empty.';
-                }
-                if (fieldName == ProfileFields.email) {
-                  return validator.email(string) ? null : 'Invalid email';
-                }
-
+          return TextFormField(
+            initialValue: fixedValue ?? getInitialValueFromFieldName(state),
+            onChanged: (string) {
+              Provider.of<ProfileChangeNotifier>(context, listen: false)
+                  .changeProfileField(string, fieldName);
+            },
+            validator: (string) {
+              if (uncheckedFIelds.contains(fieldName)) {
                 return null;
-              },
-              autocorrect: false,
-              readOnly: fixedValue != null,
-              style: const TextStyle(
-                color: Colors.white,
-                fontStyle: FontStyle.normal,
-                fontFamily: 'Roboto',
-                fontSize: 12,
-              ),
-              decoration: InputDecoration(
-                border: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-                focusedBorder: InputBorder.none,
-                hintText: hintText,
-                suffixIconColor: Colors.white,
-                suffixStyle: const TextStyle(color: Colors.white, fontSize: 20),
-                suffixIcon: !(showVerified ?? false)
-                    ? null
-                    : IconButton(
-                        icon: const Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        onPressed: () {
-                          /// TODO: on press
-                        },
+              }
+              if (string == null) {
+                return 'This should not be empty.';
+              }
+              if (string.isEmpty) {
+                return 'This should not be empty.';
+              }
+              if (fieldName == ProfileFields.email) {
+                return validator.email(string) ? null : 'Invalid email';
+              }
+
+              return null;
+            },
+            autocorrect: false,
+            readOnly: fixedValue != null,
+            style: const TextStyle(
+              color: Colors.white,
+              fontStyle: FontStyle.normal,
+              fontFamily: 'Roboto',
+              fontSize: 12,
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor:const Color(0xff1F1D2B),
+              enabledBorder:const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                          ),
+                          borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 2,
+                          ),
                       ),
-                hintStyle: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white.withOpacity(0.7),
-                  fontWeight: FontWeight.w400,
-                ),
+                      focusedBorder:const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                          ),
+                          borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 2,
+                          ),
+                      ),
+             
+              hintText: hintText,
+              suffixIconColor: Colors.white,
+              suffixStyle: const TextStyle(color: Colors.white, fontSize: 20),
+              suffixIcon: !(showVerified ?? false)
+                  ? null
+                  : IconButton(
+                      icon: const Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      onPressed: () {
+                        /// TODO: on press
+                      },
+                    ),
+              hintStyle: TextStyle(
+                fontSize: 14,
+                color: Colors.white.withOpacity(0.7),
+                fontWeight: FontWeight.w400,
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

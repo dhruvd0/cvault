@@ -98,6 +98,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
         child: Consumer<CustomerProvider>(
           builder: (context, customerProvider, __) {
             return Container(
+              
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

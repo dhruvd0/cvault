@@ -54,7 +54,9 @@ class MarginPercentageField extends StatelessWidget {
                             color: Colors.transparent,
                             border: Border.all(
                               width: 1.5,
-                              color: const Color.fromARGB(255, 165, 231, 243),
+                              color: userType == UserTypes.customer
+                                        ? Color(0xffE47331)
+                                        : Color(0xff70755F),
                             ),
                             borderRadius: BorderRadius.circular(15),
                           ),

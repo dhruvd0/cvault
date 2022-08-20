@@ -13,7 +13,6 @@ import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 /// Notifier to fetch dealers or fetch all dealers
 ///
 /// Also used to change the active status of a particular dealer
@@ -62,28 +61,27 @@ class DealersProvider extends LoadStatusNotifier {
       notifyListeners();
     }
 
-     // if (response.statusCode == 200) {
-       // getNonAcceptDealer();
-       // List<Dealer> dealers = [];
-       // final data = jsonDecode(response.body);
-        // for (var dt in data['docs']) {
-       //   dealers.add(
-          //  Dealer.fromJson('dealer', dt),
-         // );
-       // }
+    // if (response.statusCode == 200) {
+    // getNonAcceptDealer();
+    // List<Dealer> dealers = [];
+    // final data = jsonDecode(response.body);
+    // for (var dt in data['docs']) {
+    //   dealers.add(
+    //  Dealer.fromJson('dealer', dt),
+    // );
+    // }
 
-   // if (userType != 'admin') {
-     // return;
-   // }
-  //  correctPageNumber();
+    // if (userType != 'admin') {
+    // return;
+    // }
+    //  correctPageNumber();
 
-   // final response = await http.get(
-    //  Uri.parse(
-      //  "https://cvault-backend.herokuapp.com/dealer/getAllDealer?page=$page",
-    //  ),
-    //  headers: defaultAuthenticatedHeader(token),
-  //  );
-
+    final response = await http.get(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/dealer/getAllDealer?page=$page",
+      ),
+      headers: defaultAuthenticatedHeader(token),
+    );
 
     if (response.statusCode == 200) {
       List<Dealer> dealers = [];

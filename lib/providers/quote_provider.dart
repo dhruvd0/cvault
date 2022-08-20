@@ -2,11 +2,12 @@
 // ignore_for_file: public_member_api_docs
 
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:cvault/providers/notification_bloc/notification_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:cvault/models/home_state.dart';
 import 'package:cvault/models/profile_models/profile.dart';
@@ -14,6 +15,7 @@ import 'package:cvault/models/transaction/transaction.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
+import 'package:intl_phone_field/phone_number.dart';
 
 enum QuoteMode {
   Price,
@@ -21,6 +23,8 @@ enum QuoteMode {
 }
 
 class QuoteProvider extends LoadStatusNotifier {
+  dynamic _id="";
+  var phoneNumber="";
   Transaction transaction =
       Transaction.fromJson({TransactionProps.transactionType.name: 'buy'});
   final HomeStateNotifier homeStateNotifier;
@@ -92,7 +96,7 @@ class QuoteProvider extends LoadStatusNotifier {
     var jsonEncode2 = jsonEncode(
       quoteDataFromTransactions,
     );
-    final response = await post(
+    final response = await http.post(
       Uri.parse(
         "https://cvault-backend.herokuapp.com/transaction/post-transaction",
       ),
@@ -105,10 +109,13 @@ class QuoteProvider extends LoadStatusNotifier {
 
     if (response.statusCode == 201) {
       var decodedBody = jsonDecode(response.body);
+      _id = decodedBody["data"]["_id"];
+      print(_id);
       String title = 'Quote Received';
       String body =
           '${transaction.transactionType} | ${transaction.cryptoType} | ${transaction.price} ${transaction.currency} | ${transaction.quantity} ${transaction.cryptoType}';
       if (Firebase.apps.isNotEmpty) {
+        print(decodedBody);
         NotificationCubit.sendNotificationToUser(
           'Quote Sent',
           body,
@@ -136,6 +143,30 @@ class QuoteProvider extends LoadStatusNotifier {
     }
   }
 
+  //send notification
+
+  // ignore: long-method
+  Future<void> SendNotifiaction(
+    phone,
+  ) async {
+    if (_id != null) {
+      final response = await http.post(
+        Uri.parse(
+          "https://cvault-backend.herokuapp.com/notification/addNotification",
+        ),
+        body: {
+          "phone": phone,
+          "transactionId": _id,
+        },
+      );
+      print(response.body);
+      print("hey");
+    } else {
+      print("_id null");
+    }
+  }
+
+//send notification
   Map<String, dynamic> _quoteDataFromTransactions(String sendersID) {
     return {
       "transactionType": transaction.transactionType,

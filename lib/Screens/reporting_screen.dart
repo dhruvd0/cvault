@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:cvault/models/Notification.dart';
 import 'package:cvault/providers/dealers_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,11 +10,11 @@ class Reporting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff1E2224),
+      backgroundColor: const Color(0xff1F1D2B),
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor:const Color(0xff252836),
         title: const Text(
           "New Dealers",
           style: TextStyle(
@@ -36,7 +35,7 @@ class Reporting extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Colors.white70,
+                          color: Color(0xff0CFEBC),
                         ),
                         width: MediaQuery.of(context).size.width,
                         child: Column(
@@ -59,7 +58,7 @@ class Reporting extends StatelessWidget {
                                   ),
                                   TextSpan(
                                     text: " ${dealer.listData[index].lastName}",
-                                    style: TextStyle(
+                                    style:const TextStyle(
                                       fontWeight: FontWeight.w800,
                                     ),
                                   ),

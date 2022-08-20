@@ -1,3 +1,5 @@
+
+
 import 'package:cvault/Screens/admin_panel/widgets/admin_panel_grid.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/transactions/widgets/transactions_page.dart';
@@ -24,8 +26,9 @@ class _AdminPanelState extends State<AdminPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff1E2224),
+      backgroundColor:  Colors.transparent,
       appBar: AppBar(
+        toolbarHeight: 70,
         leading: IconButton(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(
@@ -34,9 +37,9 @@ class _AdminPanelState extends State<AdminPanel> {
               },
             ));
           },
-          icon: Icon(Icons.arrow_back_ios),
+          icon:const Icon(Icons.arrow_back_ios),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0xff252836),
         centerTitle: true,
         title: const Text(
           "Administration Panel",
@@ -71,22 +74,14 @@ class _AdminPanelState extends State<AdminPanel> {
                     },
                     child: Column(
                       children: [
-                        const Text(
-                          "View Transactions",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 19,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
+                        
                         const SizedBox(height: 10),
                         Container(
-                          height: 150,
-                          padding: const EdgeInsets.all(10),
+                          
+                          
                           width: MediaQuery.of(context).size.width * 0.85,
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.4),
@@ -96,14 +91,16 @@ class _AdminPanelState extends State<AdminPanel> {
                               ),
                             ],
                             borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                              width: 1.5,
-                              color: const Color.fromARGB(255, 165, 231, 243),
-                            ),
+                            
                           ),
-                          child: Image.asset(
-                            "assets/money.png",
-                            scale: 0.5,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset(
+                             userType == UserTypes.admin
+                      ?  "assets/trans.jpeg":"assets/Card.jpg",
+                          fit: BoxFit.fitWidth,
+                              
+                            ),
                           ),
                         ),
                       ],
@@ -122,49 +119,39 @@ class _AdminPanelState extends State<AdminPanel> {
                               ),
                             );
                           },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text(
-                                "Customer\nManagement",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Container(
-                                padding: const EdgeInsets.all(25),
-                                height: 150,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.4),
-                                      blurRadius: 10,
-                                      spreadRadius: 1,
-                                      offset: const Offset(4, 4),
-                                    ),
-                                  ],
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                    width: 1.5,
-                                    color: const Color.fromARGB(
-                                      255,
-                                      165,
-                                      231,
-                                      243,
+                          child: Container(
+                             padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                
+                                const SizedBox(height: 10),
+                                Container(
+                                
+                                  
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.4),
+                                        blurRadius: 10,
+                                        spreadRadius: 1,
+                                        offset: const Offset(4, 4),
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(15),
+                                   
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Image.asset(
+                                      "assets/Card-2.jpg",
+                                      fit: BoxFit.fitWidth,
                                     ),
                                   ),
                                 ),
-                                child: Image.asset(
-                                  "assets/user.png",
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                 ],

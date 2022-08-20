@@ -1,7 +1,10 @@
-import 'package:cvault/Screens/transactions/widgets/transaction_tile.dart';
-import 'package:cvault/constants/theme.dart';
+import 'dart:ui';
+
+import 'package:cvault/providers/NotificationApiProvider.dart';
 import 'package:cvault/providers/profile_provider.dart';
+import 'package:cvault/providers/transactions_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -14,35 +17,31 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   final ScrollController _scrollController = ScrollController();
 
-  void _onRefresh(context) async {
-    var provider = Provider.of<ProfileChangeNotifier>(context, listen: false);
-    provider.changePage(1);
-    await provider.fetchProfile();
-  }
-
+  List transactions = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _scrollController.addListener(() {
-        if (!_scrollController.hasClients) {
-          return;
-        }
-        // final provider =
-        //     Provider.of<TransactionsProvider>(context, listen: false);
-        // if (_scrollController.offset ==
-        //         _scrollController.position.maxScrollExtent &&
-        //     !(provider.loadStatus == LoadStatus.loading)) {
-        //   provider.incrementPage();
-        //   provider.getTransactions();
-        // }
-      });
-    });
+
+    getMytrans();
+  }
+
+  getMytrans() async {
+    final data = Provider.of<NotificationProvider>(context, listen: false);
+
+    final token =
+        Provider.of<ProfileChangeNotifier>(context, listen: false).token;
+
+    transactions = await data.getAllNotification(token);
   }
 
   @override
   Widget build(BuildContext context) {
+    String token = Provider.of<ProfileChangeNotifier>(context)
+        .authInstance
+        .currentUser!
+        .uid;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -57,62 +56,154 @@ class _NotificationScreenState extends State<NotificationScreen> {
         elevation: 0,
       ),
       backgroundColor: const Color(0xff1E2224),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          _onRefresh(context);
-        },
-        child: GestureDetector(
-          child: Consumer<ProfileChangeNotifier>(
-            builder: (context, profileNotifier, __) {
-              switch (profileNotifier.loadStatus) {
-                case LoadStatus.error:
-                  return const Center(
-                    child: Text(
-                      "An error has occurred!",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  );
-                default:
-                  var transactions = profileNotifier.profile.transactions;
-
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: transactions.isEmpty &&
-                                profileNotifier.loadStatus == LoadStatus.loading
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : ListView.builder(
-                                itemCount: transactions.length,
-                                controller: _scrollController,
-                                itemBuilder: (BuildContext context, int index) {
-                                  // var transaction = Transaction.mock();
-                                  return TransactionTile(
-                                    transaction: transactions[index],
-                                  );
-                                },
-                              ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      profileNotifier.loadStatus == LoadStatus.loading &&
-                              transactions.isNotEmpty
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: ThemeColors.lightGreenAccentColor,
-                              ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  );
-              }
-            },
-          ),
+      body: GestureDetector(
+        child: Consumer<NotificationProvider>(
+          builder: (kk, contexts, ll) {
+            return transactions.isNotEmpty
+                ? ListView.builder(
+                    itemCount: transactions.length,
+                    itemBuilder: (context, index) {
+                      return _notificationTile(context, index,token);
+                    },
+                  )
+                :const CircularProgressIndicator();
+          },
         ),
       ),
     );
   }
+
+  // ignore: long-method
+  Widget _notificationTile(BuildContext context, index,token) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom:10,left: 10,right: 10),
+      child: Consumer<NotificationProvider>(
+        builder: (ss,contexts,k) {
+          return Container(
+           
+            decoration: BoxDecoration(
+               color:transactions[index]["Status"]=="Reject"? Color(0xffEA4B63):transactions[index]["Status"]=="Accept"? Color(0xff35E065):transactions[index]["Transactiontype"]=="buy"?Color(0xff4895EF):transactions[index]["Transactiontype"]=="sell"?Color(0xffFFD44F):Color(0xff),
+              borderRadius: BorderRadius.circular(15),),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: ExpansionTile(
+                iconColor: Colors.white,
+                collapsedIconColor: Colors.white,
+                backgroundColor:transactions[index]["Status"]=="Reject"? Color(0xffEA4B63):transactions[index]["Status"]=="Accept"? Color(0xff35E065):transactions[index]["Transactiontype"]=="buy"?Color(0xff4895EF):transactions[index]["Transactiontype"]=="sell"?Color(0xffFFD44F):Color(0xff),
+               
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      transactions[index]["FirstName"] +
+                          " " +
+                          transactions[index]["LastName"],
+                          style: TextStyle(color: Colors.white,fontSize: 15),
+                    ),
+                    Text(
+                      transactions[index]["Status"].toString(),
+                      style: TextStyle(color: Colors.white,fontSize: 15),
+                    ),
+                     
+                  ],
+                ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 20,),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(transactions[index]["Price"].toString(),
+                      style: TextStyle(color: Colors.white,fontSize: 15),),
+                      Text(
+                        DateFormat('yyyy-MM-dd \nH:m:s')
+                            .format(DateTime.parse(transactions[index]["createdAt"])),
+                            style: TextStyle(color: Colors.white,fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left:15,right: 15),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Price",
+                            style: TextStyle(color: Colors.white,fontSize: 15),),
+                            Text(transactions[index]["Transactiontype"],
+                            style: TextStyle(color: Colors.white,fontSize: 15),),
+                            Text("Currency",
+                            style: TextStyle(color: Colors.white,fontSize: 15),),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top:10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(transactions[index]["Price"].toString(),
+                              style: TextStyle(color: Colors.white,fontSize: 15),),
+                              Text(transactions[index]["cryptoType"]+":"+" "+transactions[index]["Quantity"].toString(),
+                              style: TextStyle(color: Colors.white,fontSize: 15),),
+                            ],
+                          ),
+                        ),
+                       const SizedBox(height: 20,),
+                        SizedBox(
+                     child:transactions[index]["Status"]=="Recieved"?   Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+            ElevatedButton(onPressed: ()async{
+              await contexts
+                       .updateNotifiaction(token, "Accept");
+            },child:const Text("Accept"),),
+           const SizedBox(width: 20,),
+            ElevatedButton(onPressed: ()async{
+              await contexts
+                       .updateNotifiaction(token, "Rejecion");
+            },child:const Text("Reject"),),
+                        ],):Container(),
+                      ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
+// Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+                            // children: [
+                            //   Text("Name: " +
+                            //       transactions[index]["FirstName"] +
+                            //       transactions[index]["LastName"]),
+                            //   Text("phone: " +
+                            //       transactions[index]["Phone"].toString()),
+                            //   Text("Email: " +
+                            //       transactions[index]["Email"].toString()),
+                            //   Text("Price: " +
+                            //       transactions[index]["Price"].toString()),
+                            //   Text("Status: " +
+                            //       transactions[index]["Status"].toString()),
+                            //   Text("Quantity: " +
+                            //       transactions[index]["Quantity"].toString()),
+                            //   Text("Margin: " +
+                            //       transactions[index]["Margin"].toString()),
+                            //   // ElevatedButton(
+                            //   //   child: Text(""),
+                            //   //   onPressed: () async {
+                            //   //     await contexts
+                            //   //         .updateNotifiaction(token, "Rejecion");
+                            //   //   },
+                            //   // ),
+                            // ],
+//                          ),

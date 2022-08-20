@@ -1,4 +1,5 @@
 import 'package:cvault/constants/user_types.dart';
+import 'package:cvault/providers/NotificationApiProvider.dart';
 import 'package:cvault/providers/customer_provider.dart';
 import 'package:cvault/providers/advertisement_provider.dart';
 import 'package:cvault/providers/notification_bloc/notification_bloc.dart';
@@ -75,6 +76,10 @@ List<SingleChildWidget> get _providers {
     ChangeNotifierProvider(
       lazy: false,
       create: ((context) => AdvertisementProvider()),
+    ),
+     ChangeNotifierProvider(
+      lazy: false,
+      create: ((context) =>NotificationProvider()),
     ),
     ChangeNotifierProvider(
       lazy: false,

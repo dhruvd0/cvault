@@ -11,62 +11,71 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          margin: const EdgeInsets.all(10.0),
-          width: 120.0,
-          height: 120.0,
-          decoration: BoxDecoration(
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0xff131618),
-                offset: Offset(-6, -5),
-                spreadRadius: 0,
-                blurRadius: 45.0,
+        Row(
+          children: [
+            Container(
+              margin: const EdgeInsets.all(10.0),
+              width: 120.0,
+              height: 120.0,
+              decoration: BoxDecoration(
+                
+                
+                
+                borderRadius: BorderRadius.circular(40),
               ),
-            ],
-            border: Border.all(
-              width: 10,
-              color: const Color(0xff1C1F22),
+              child:const CircleAvatar(
+                backgroundColor: Color(0xff1F1D2B),
+                child: Icon(Icons.person,size: 55),
+              ),
             ),
-            // color: Color(0xff1E2022),
-            borderRadius: BorderRadius.circular(40),
-          ),
-          child: CircleAvatar(
-            child: Consumer<ProfileChangeNotifier>(
+            Consumer<ProfileChangeNotifier>(
               builder: (context, profileNotifier, _) {
                 var state = profileNotifier.profile;
-                if (state.firstName.isEmpty) {
-                  return const Text('AB');
-                }
 
-                return Text(state.firstName[0]);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 10,),
+                    Container(
+                      width: 200,
+                      child: Text(
+                        state.firstName.isEmpty
+                            ? 'Name'
+                            : '${state.firstName} ${state.middleName} ${state.lastName}',
+                        style: const TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    
+                  ],
+                );
               },
             ),
-          ),
+          ],
         ),
+       const SizedBox(height: 10,),
         Consumer<ProfileChangeNotifier>(
-          builder: (context, profileNotifier, _) {
-            var state = profileNotifier.profile;
+              builder: (context, profileNotifier, _) {
+                var states = profileNotifier.profile;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  state.firstName.isEmpty
-                      ? 'Name'
-                      : '${state.firstName} ${state.middleName} ${state.lastName}',
-                  style: const TextStyle(color: Colors.white, fontSize: 25),
+                Padding(
+                  padding: const EdgeInsets.only(left:30),
+                  child: Text(
+                                'Referral Code: ${states.referalCode}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Referral Code: ${state.referalCode}',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
+                            IconButton(onPressed:(){},icon:const Icon(Icons.copy,color: Colors.white,size: 20,),),
+                             IconButton(onPressed:(){},icon:const Icon(Icons.share,color: Colors.white,size: 20,),),
               ],
             );
           },

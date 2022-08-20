@@ -1,4 +1,5 @@
 import 'package:cvault/constants/user_types.dart';
+import 'package:cvault/providers/NotificationApiProvider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/providers/transactions_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,72 +32,77 @@ class TransactionTile extends StatelessWidget {
   Widget expansionTileContent(BuildContext context) {
     return Consumer<TransactionsProvider>(
       builder: (_, transProvider, k) {
-        return Container(
-          padding: const EdgeInsets.all(5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        return Consumer<NotificationProvider>(
+          builder: (ss, contexts, t) {
+            return Container(
+              
+              padding: const EdgeInsets.all(5),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width / 3,
-                        ),
-                        child: Text(
-                          transaction.receiver.firstName,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width / 3,
+                            ),
+                            child: Text(
+                              transaction.receiver.firstName,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            (transaction.currency == 'usdt' ? '\$' : '₹') +
+                                transaction.price.toStringAsFixed(2),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        (transaction.currency == 'usdt' ? '\$' : '₹') +
-                            transaction.price.toStringAsFixed(2),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TransactionStatusWidget(transaction: transaction),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            DateFormat('yyyy-MM-dd \nH:m:s')
+                                .format(DateTime.parse(transaction.createdAt)),
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      TransactionStatusWidget(transaction: transaction),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        DateFormat('yyyy-MM-dd \nH:m:s')
-                            .format(DateTime.parse(transaction.createdAt)),
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(
+                    height: 5,
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 5,
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -105,6 +111,7 @@ class TransactionTile extends StatelessWidget {
   // ignore: long-method
   Widget _additonalTrans(BuildContext context) {
     return Container(
+      
       padding: const EdgeInsets.all(15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -149,7 +156,7 @@ class TransactionTile extends StatelessWidget {
                     " order".toUpperCase(),
                 style: TextStyle(
                   color: transaction.transactionType == "buy"
-                      ? Colors.blue
+                      ? Colors.black
                       : Colors.green,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -193,76 +200,92 @@ class TransactionTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Consumer<ProfileChangeNotifier>(
-        builder: (_, profileProvider, __) => Row(
-          children: [
-            Expanded(child: Container()),
-            GestureDetector(
-              onTap: () {
-                Provider.of<TransactionsProvider>(
-                  context,
-                  listen: false,
-                ).changeTransactionStatus(
-                  transaction.id,
-                  TransactionStatus.accepted,
-                  context,
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 20,
-                ),
-                child: const Text('Accept'),
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            GestureDetector(
-              onTap: () async {
-                var of = Provider.of<TransactionsProvider>(
-                  context,
-                  listen: false,
-                );
-                await of.changeTransactionStatus(
-                  transaction.id,
-                  TransactionStatus.rejected,
-                  context,
-                );
-                of.deleteTransaction(transaction.id);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.red,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 20,
-                ),
-                child: const Text(
-                  'Reject',
-                  style: TextStyle(color: Colors.white),
+        builder: (_, profileProvider, __) {
+          String token = profileProvider.authInstance.currentUser!.uid;
+
+        return  Row(
+            children: [
+              Expanded(child: Container()),
+              GestureDetector(
+                onTap: () {
+                  Provider.of<TransactionsProvider>(
+                    context,
+                    listen: false,
+                  ).changeTransactionStatus(
+                    transaction.id,
+                    TransactionStatus.accepted,
+                    context,
+                  );
+                  Provider.of<NotificationProvider>(
+                    context,
+                    listen: false,
+                  ).updateNotifiaction(token, "Accept");
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 20,
+                  ),
+                  child: const Text('Accept'),
                 ),
               ),
-            ),
-          ],
-        ),
+              const SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                onTap: () async {
+                  var of = Provider.of<TransactionsProvider>(
+                    context,
+                    listen: false,
+                  );
+                  await of.changeTransactionStatus(
+                    transaction.id,
+                    TransactionStatus.rejected,
+                    context,
+                  );
+                  of.deleteTransaction(transaction.id);
+                   Provider.of<NotificationProvider>(
+                    context,
+                    listen: false,
+                  ).updateNotifiaction(token, "Reject");
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.red,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 20,
+                  ),
+                  child: const Text(
+                    'Reject',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    
+   
     return Container(
+    
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Colors.grey[850],
+       //color: transaction.transactionType=="buy"?Color(0xff4895EF):transaction.transactionType=="sell"?Color(0xffFFD44F):transaction.status=="Accept"?Color(0xff35E065):Color(0xffEA4B63),
+        color: transaction.status=="accepted"?Color(0xff35E065):transaction.transactionType=="buy"?Color(0xff4895EF):transaction.transactionType=="sell"?Color(0xffFFD44F):Color(0xffFFFFF),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Consumer<ProfileChangeNotifier>(
@@ -301,19 +324,28 @@ class TransactionStatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      getStatus,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        color: getStatus == 'rejected'
-            ? Colors.red
-            : getStatus == 'Sent'
-                ? Colors.blue
-                : getStatus == 'Received'
-                    ? Colors.yellow
-                    : Colors.green,
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
+    return Container(
+      padding:const EdgeInsets.only(right:15,left: 15,top: 5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.black,
+      ),
+      child: Center(
+        child: Text(
+          getStatus,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: getStatus == 'rejected'
+                ? Colors.red
+                : getStatus == 'Sent'
+                    ? Colors.blue
+                    : getStatus == 'Received'
+                        ? Colors.yellow
+                        : Colors.green,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
     );
   }
