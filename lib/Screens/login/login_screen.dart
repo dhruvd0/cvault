@@ -45,13 +45,14 @@ class _LogInScreenState extends State<LogInScreen> {
     });
   }
 
-  Newotp() async {
-    await Future.delayed(Duration(seconds: 40));
+ Newotp() async {
+    await Future.delayed(const Duration(seconds: 40));
     setState(() {
       _isOtpLogin = false;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+
+       const SnackBar(
           content: Text("Try Again"),
         ),
       );
@@ -60,7 +61,10 @@ class _LogInScreenState extends State<LogInScreen> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   OtpFieldController otpController = OtpFieldController();
+
+  // ignore: long-method
   Future<void> verifyPhone() async {
+
     setState(() {
       isLoading = true;
     });
@@ -392,7 +396,7 @@ class _LogInScreenState extends State<LogInScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
-      backgroundColor: const Color(0xff1E2224),
+      backgroundColor: const Color(0xff1F1D2B),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
