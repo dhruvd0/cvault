@@ -118,8 +118,8 @@ class _QuoteState extends State<Quote> {
                                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
                                                                                color: quoteProvider.quoteMode ==
                                                       QuoteMode.Price
-                                                  ? 
-                                                  userType ==UserTypes.customer? const Color(0xffE47331):Color(0xff566749):Colors.white,
+                                                  ?
+                                                                               Colors.white:userType ==UserTypes.customer? const Color(0xffE47331):Color(0xff566749),
                                               ),
              
                                               child: Center(
@@ -129,8 +129,8 @@ class _QuoteState extends State<Quote> {
                                                     color:
                                                         quoteProvider.quoteMode ==
                                                                 QuoteMode.Price
-                                                            ? Colors.white
-                                                            : Colors.black,
+                                                            ? Colors.black
+                                                            : Colors.white,
                                                     fontSize: 22,
                                                     fontWeight: FontWeight.w600,
                                                   ),
@@ -141,15 +141,16 @@ class _QuoteState extends State<Quote> {
                                           InkWell(
                                             onTap: () {
                                               quoteProvider.changeQuoteMode(
-                                                QuoteMode.Quantity,
+                                                QuoteMode.Quantity
                                               );
+                                              print(quoteProvider.quoteMode);
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
                                                   color: quoteProvider.quoteMode ==
                                                       QuoteMode.Quantity
-                                                  ? 
-                                                  userType ==UserTypes.customer? const Color(0xffE47331):const Color(0xff566749):Colors.white,
+                                                  ?
+                                                  Colors.white:userType ==UserTypes.customer? const Color(0xffE47331):const Color(0xff566749),
                                               ),
                                           
                                               width: MediaQuery.of(context)
@@ -164,8 +165,8 @@ class _QuoteState extends State<Quote> {
                                                     color:
                                                         quoteProvider.quoteMode ==
                                                                 QuoteMode.Quantity
-                                                            ? Colors.white
-                                                            : Colors.black,
+                                                            ? Colors.black
+                                                            : Colors.white,
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.w600,
                                                   ),

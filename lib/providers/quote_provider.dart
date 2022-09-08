@@ -89,7 +89,7 @@ class QuoteProvider extends LoadStatusNotifier {
   // ignore: long-method
   Future<bool?> sendQuote() async {
     loadStatus = LoadStatus.loading;
-
+print(quoteMode);
     notifyListeners();
 
     var quoteDataFromTransactions = _quoteDataFromTransactions(
@@ -180,17 +180,19 @@ class QuoteProvider extends LoadStatusNotifier {
 
     var sellFinalQunatity = transaction.price / sellQuantity;
 
+
     return {
       "transactionType": transaction.transactionType,
       "cryptoType": transaction.cryptoType,
-      "price": transaction.transactionType == "buy"
+      "price":quoteMode==QuoteMode.Price? transaction.transactionType == "buy"
           ? transaction.price + (transaction.price / 100) * finalMargin
-          : transaction.price - (transaction.price / 100) * finalMargin,
+    : transaction.price - (transaction.price / 100) * finalMargin:transaction.price,
       "costPrice": transaction.costPrice,
       "currency": transaction.currency,
-      "quantity": transaction.status == "sell"
-          ? sellFinalQunatity.toStringAsFixed(8)
-          : finalQuantity.toStringAsFixed(8),
+
+      "quantity":quoteMode==QuoteMode.Quantity? transaction.status == "sell"
+    ? sellFinalQunatity.toStringAsFixed(8)
+         : finalQuantity.toStringAsFixed(8):transaction.quantity,
       "timestamps": DateTime.now().toIso8601String(),
       "receiversPhone": transaction.receiver.phone,
       "sendersID": sendersID,

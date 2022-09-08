@@ -54,8 +54,8 @@ class _UserTypeSelectPageState extends State<UserTypeSelectPage> {
             return Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.6,
-                margin: const EdgeInsets.only(left: 10, right: 10),
+                height: MediaQuery.of(context).size.height,
+                margin: const EdgeInsets.only(left: 10, right: 10,top: 100),
                 decoration: const BoxDecoration(
                   color: Color(0xff252836),
                   borderRadius: BorderRadius.only(
@@ -106,15 +106,9 @@ class _UserTypeSelectPageState extends State<UserTypeSelectPage> {
                       margin: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         children: [
-                          InkWell(
-                            onTap: () {
-                              print("hey");
-                              
-                            },
-                            child:  UserTypeButton(
-                              userType: UserTypes.dealer,
-                              image: image1,
-                            ),
+                          UserTypeButton(
+                            userType: UserTypes.dealer,
+                            image: image1,
                           ),
                           const SizedBox(
                             width: 20,
