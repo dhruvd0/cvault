@@ -1,4 +1,4 @@
-import 'package:cvault/models/transaction/transaction.dart';
+
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/util/http.dart';
 

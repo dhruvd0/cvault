@@ -26,7 +26,7 @@ class Quote extends StatefulWidget {
 class _QuoteState extends State<Quote> {
   @override
   Widget build(BuildContext context) {
-    var formatter = NumberFormat('#,###');
+    var formatter = NumberFormat('##,##,###');
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     // ignore: newline-before-return
@@ -82,7 +82,7 @@ class _QuoteState extends State<Quote> {
 
                             return Container(
                               margin: const EdgeInsets.only(top:20,left: 20,right: 20),
-                              padding: EdgeInsets.only(top:30,left: 20,right: 20,bottom: 30),
+                              padding:const EdgeInsets.only(top:30,left: 20,right: 20,bottom: 30),
                               
                               
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),

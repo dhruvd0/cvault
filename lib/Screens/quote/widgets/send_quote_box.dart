@@ -24,13 +24,12 @@ class SendQuoteBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var formatter = NumberFormat('#,###');
+    var formatter = NumberFormat('##,##,###');
     final myController = TextEditingController();
-
 
     return Consumer<QuoteProvider>(
       builder: (_, quoteProvider, __) => Consumer<ProfileChangeNotifier>(
-        builder: (kk,profileNotifier,ss) {
+        builder: (kk, profileNotifier, ss) {
           var userType = profileNotifier.profile.userType;
 
           return Container(
@@ -40,14 +39,25 @@ class SendQuoteBox extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: userType == UserTypes.customer
-                                              ? Color(0xffE47331)
-                                              : Color(0xff566749),
+                    ? Color(0xffE47331)
+                    : Color(0xff566749),
               ),
             ),
             child: Consumer<HomeStateNotifier>(
               builder: (_, homeNotifier, __) => Consumer<NotificationProvider>(
                 builder: (ss, notifiaction, k) {
-                  
+                  var quantity = quoteProvider.transaction.costPrice +
+                      (quoteProvider.transaction.costPrice / 100) *
+                          quoteProvider.finalMargin;
+                  var finalQuantity =
+                      quoteProvider.transaction.price / quantity;
+
+                  var sellQuantity = quoteProvider.transaction.costPrice -
+                      (quoteProvider.transaction.costPrice / 100) *
+                          quoteProvider.finalMargin;
+
+                  var sellFinalQunatity =
+                      quoteProvider.transaction.price / sellQuantity;
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -56,24 +66,44 @@ class SendQuoteBox extends StatelessWidget {
                           ? Consumer<TransactionsProvider>(
                               builder: (s, context, u) {
                                 return Text(
-                                  (homeNotifier.state.isUSD ? '\$' : '₹') +
-                                      //quoteProvider.transaction.price.toString(),
-                                      "${formatter.format(quoteProvider.transaction.price + (quoteProvider.transaction.price / 100) * context.NewMArgin.toInt())}"
+                                  quoteProvider.transaction.transactionType ==
+                                          "sell"
+                                      ? (homeNotifier.state.isUSD
+                                              ? '\$'
+                                              : '₹') +
+                                          "${formatter.format(quoteProvider.transaction.price - (quoteProvider.transaction.price / 100) * context.NewMArgin.toInt())}"
+                                              .replaceAll(',', ',')
+                                      : "${formatter.format(quoteProvider.transaction.price + (quoteProvider.transaction.price / 100) * context.NewMArgin.toInt())}"
                                           .replaceAll(',', ','),
-                                  style: const TextStyle(
-                                    color: Colors.yellow,
+                                  style: TextStyle(
+                                    color: quoteProvider
+                                                .transaction.transactionType ==
+                                            "sell"
+                                        ? Colors.yellow
+                                        : Colors.green,
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 );
                               },
                             )
-                          : Text(
-                              "${quoteProvider.transaction.cryptoType.toUpperCase()} ${quoteProvider.transaction.quantity.toStringAsFixed(8)}",
-                              style: const TextStyle(
-                                color: Colors.blue,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
+                          : RichText(
+                              text: TextSpan(
+                                text:
+                                    "${quoteProvider.transaction.cryptoType.toUpperCase()}",
+                                style: const TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: quoteProvider.transaction.status ==
+                                            "sell"
+                                        ? sellFinalQunatity.toStringAsFixed(8)
+                                        : finalQuantity.toStringAsFixed(8),
+                                  ),
+                                ],
                               ),
                             ),
                       const SizedBox(
@@ -85,52 +115,68 @@ class SendQuoteBox extends StatelessWidget {
                                 color: ThemeColors.lightGreenAccentColor,
                               ),
                             )
-                          : SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              child: Consumer<ProfileChangeNotifier>(
-              builder: (context, profileNotifier, _) {
-                var userType = profileNotifier.profile.userType;
-                
-                                  return ElevatedButton(
-                                    onPressed: () async {
-                                      print(quoteProvider.phoneNumber);
-                                      final success = await quoteProvider.sendQuote();
+                          : Consumer<TransactionsProvider>(
+                              builder: (s, contexts, u) {
+                                return SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  child: Consumer<ProfileChangeNotifier>(
+                                    builder: (context, profileNotifier, _) {
+                                      var userType =
+                                          profileNotifier.profile.userType;
 
-                                      var snackBarText = '';
+                                      return ElevatedButton(
+                                        onPressed: () async {
+                                          print(quoteProvider.phoneNumber);
+                                          final success =
+                                              await quoteProvider.sendQuote();
 
-                                      if (success == null) {
-                                        snackBarText = "Something Went Wrong";
-                                      } else if (success) {
-                                        snackBarText = 'Quote Sent';
-                                      } else {
-                                        snackBarText = 'This User does not exist';
-                                      }
+                                          var snackBarText = '';
 
-                                      var snackBar = SnackBar(
-                                        content: Text(
-                                          snackBarText,
+                                          if (success == null) {
+                                            snackBarText =
+                                                "Something Went Wrong";
+                                          } else if (success) {
+                                            snackBarText = 'Quote Sent';
+                                          } else {
+                                            snackBarText =
+                                                'This User does not exist';
+                                          }
+
+                                          var snackBar = SnackBar(
+                                            content: Text(
+                                              snackBarText,
+                                            ),
+                                          );
+                                          // ScaffoldMessenger.of(context)
+                                          //     .showSnackBar(snackBar);
+                                          quoteProvider.SendNotifiaction().then(
+                                            (value) =>
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar),
+                                          );
+                                          print(quoteProvider
+                                              .transaction.quantity.toString()+"hey");
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          primary:
+                                              userType == UserTypes.customer
+                                                  ? Color(0xffE47331)
+                                                  : Color(0xff566749),
+                                          elevation: 10,
+                                          shape: const StadiumBorder(),
+                                        ),
+                                        child: const Text(
+                                          "Send Quote",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                          ),
                                         ),
                                       );
-                                      quoteProvider.SendNotifiaction(quoteProvider.phoneNumber).then(
-                                          (value) => ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar),);
                                     },
-                                    style: ElevatedButton.styleFrom(
-                                      primary:userType == UserTypes.customer
-                                              ? Color(0xffE47331)
-                                              : Color(0xff566749),
-                                      elevation: 10,
-                                      shape: const StadiumBorder(),
-                                    ),
-                                    child: const Text(
-                                      "Send Quote",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                                  ),
+                                );
+                              },
                             ),
                       const SizedBox(height: 10),
                       const Text(
@@ -146,8 +192,8 @@ class SendQuoteBox extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
                               color: userType == UserTypes.customer
-                                              ? Color(0xffE47331)
-                                              : Color(0xff566749),
+                                  ? Color(0xffE47331)
+                                  : Color(0xff566749),
                               width: 1,
                             ),
                           ),
@@ -170,7 +216,6 @@ class SendQuoteBox extends StatelessWidget {
                                 ),
                               );
                               quoteProvider.phoneNumber = "+91$string";
-                              
                             },
                             decoration: const InputDecoration(
                               border: InputBorder.none,

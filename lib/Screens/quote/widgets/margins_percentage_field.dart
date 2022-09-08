@@ -25,13 +25,8 @@ class MarginPercentageField extends StatelessWidget {
         // ignore: newline-before-return
         return Consumer<QuoteProvider>(
           builder: (j, quoteProvider, n) {
-            var provider = Provider.of<MarginsNotifier>(context, listen: true)
-                .localeMargin as double;
-
-            var provider1 =
-                Provider.of<TransactionsProvider>(context, listen: true)
-                    .NewMArgin as double;
-            // ignore: newline-before-return
+            
+            
             return userType == UserTypes.customer
                 ? Container()
                 : Column(
@@ -66,22 +61,20 @@ class MarginPercentageField extends StatelessWidget {
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true),
+                                keyboardType:const TextInputType.numberWithOptions(
+                                    decimal: true,),
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
                                 ),
                                 textAlign: TextAlign.center,
                                 onChanged: (string) {
-                                  context.NewMArgin = double.parse(string);
-                                  if (string.isNotEmpty) {
-                                    provider = double.parse(string);
-                                  } else {
-                                    provider = 0.0;
-                                  }
-
-                                  print(provider);
-                                  print(provider1);
+                                  if(double.parse(string)>=0){context.NewMArgin = double.parse(string);
+                          quoteProvider.finalMargin= double.parse(string);}else{
+                            context.NewMArgin = 0.0;
+                          quoteProvider.finalMargin= 0.0;
+                            
+                          }
+                                  
                                 },
                               );
                             },

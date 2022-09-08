@@ -52,7 +52,7 @@ class nonAcceptdealer {
     iV = json['__v'];
     active = json['active'];
     margin = json['margin'].toDouble() ?? "";
-    notifications = json['notifications'].cast<String>();
+    notifications = json['notifications'];
     dealerAcceptance = json['dealerAcceptance'];
   }
 

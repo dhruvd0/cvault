@@ -20,7 +20,6 @@ class NotificationProvider extends ChangeNotifier {
       headers: header,
     );
     if (response.statusCode == 200) {
-      
       _transactions = _parseTransactionsFromJsonData(response);
 
       notifyListeners();
@@ -42,42 +41,35 @@ class NotificationProvider extends ChangeNotifier {
   }
 
 // ignore: long-parameter-list
-Future<void> addNotification(token,transactionId,FirstName,LastName,Phone,Email,Transactiontype,cryptoType,Price,Quantity,Status)async{
+
+  Future<void> updateNotifiaction(token,id, ) async {
+    
     Map<String, String>? header = {
       "Authorization": 'Bearer $token',
     };
-    final response = await http.post(
+    final response = await http.patch(
       Uri.parse(
-          "https://cvault-backend.herokuapp.com/notification/addNotification",),
+          "https://cvault-backend.herokuapp.com/transaction/changeStatus"),
       headers: header,
       body: {
-        "transactionId":transactionId,
-        "FirstName":FirstName,
-        "LastName":LastName,
-        "Phone":Phone,
-        "Email":Email,
-        "Transactiontype":Transactiontype,
-        "cryptoType":cryptoType,
-        "Price":Price,
-        "Quantity":Quantity,
-        "Status":Status,
+        "transID": id,
+        "status": "accepted",
       },
-      
     );
-}
+    print(response.body);
+  }
 
-  Future<void> updateNotifiaction(token,data)async{
-     Map<String, String>? header = {
-      "Authorization": 'Bearer ${token}',
-    };
-    final response = await http.post(
+  Future<void> DeleteNotification(token, id) async {
+    final response = await http.delete(
       Uri.parse(
-          "https://cvault-backend.herokuapp.com/notification/updateNotification/62d13b6786211b819bc902b6"),
-      headers: header,
-      body: {
-        "Status":data,
+        "https://cvault-backend.herokuapp.com/transaction/deleteTrans",
+      ),
+      headers: {
+        "Authorization": 'Bearer $token',
       },
-      
+      body: {
+        "transID": id,
+      },
     );
     print(response.body);
   }

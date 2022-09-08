@@ -62,7 +62,7 @@ class BuySellToggle extends StatelessWidget {
                 width: 70.0,
                 height: 30.0,
                 
-                toggleSize: 45.0,
+                toggleSize: 25.0,
                 value: quoteProvider.transaction.transactionType == 'buy'
                 ? false
                 : true,

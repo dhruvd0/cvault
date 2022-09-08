@@ -23,8 +23,10 @@ enum QuoteMode {
 }
 
 class QuoteProvider extends LoadStatusNotifier {
-  dynamic _id="";
-  var phoneNumber="";
+  dynamic _id = "";
+  var phoneNumber = "";
+  double finalMargin = 0.0;
+
   Transaction transaction =
       Transaction.fromJson({TransactionProps.transactionType.name: 'buy'});
   final HomeStateNotifier homeStateNotifier;
@@ -113,7 +115,7 @@ class QuoteProvider extends LoadStatusNotifier {
       print(_id);
       String title = 'Quote Received';
       String body =
-          '${transaction.transactionType} | ${transaction.cryptoType} | ${transaction.price} ${transaction.currency} | ${transaction.quantity} ${transaction.cryptoType}';
+          '${transaction.transactionType} | ${transaction.cryptoType} |  ${transaction.transactionType == "buy" ? transaction.price + (transaction.price / 100) * finalMargin : transaction.price - (transaction.price / 100) * finalMargin} ${transaction.currency} | ${transaction.quantity} ${transaction.cryptoType}';
       if (Firebase.apps.isNotEmpty) {
         print(decodedBody);
         NotificationCubit.sendNotificationToUser(
@@ -146,20 +148,18 @@ class QuoteProvider extends LoadStatusNotifier {
   //send notification
 
   // ignore: long-method
-  Future<void> SendNotifiaction(
-    phone,
-  ) async {
+  Future<void> SendNotifiaction() async {
     if (_id != null) {
       final response = await http.post(
         Uri.parse(
           "https://cvault-backend.herokuapp.com/notification/addNotification",
         ),
         body: {
-          "phone": phone,
           "transactionId": _id,
         },
       );
       print(response.body);
+
       print("hey");
     } else {
       print("_id null");
@@ -167,18 +167,35 @@ class QuoteProvider extends LoadStatusNotifier {
   }
 
 //send notification
+//new field
+
+//new filed
   Map<String, dynamic> _quoteDataFromTransactions(String sendersID) {
+    var quantity =
+        transaction.costPrice + (transaction.costPrice / 100) * finalMargin;
+    var finalQuantity = transaction.price / quantity;
+
+    var sellQuantity =
+        transaction.costPrice - (transaction.costPrice / 100) * finalMargin;
+
+    var sellFinalQunatity = transaction.price / sellQuantity;
+
     return {
       "transactionType": transaction.transactionType,
       "cryptoType": transaction.cryptoType,
-      "price": transaction.price,
+      "price": transaction.transactionType == "buy"
+          ? transaction.price + (transaction.price / 100) * finalMargin
+          : transaction.price - (transaction.price / 100) * finalMargin,
       "costPrice": transaction.costPrice,
       "currency": transaction.currency,
-      "quantity": transaction.quantity,
+      "quantity": transaction.status == "sell"
+          ? sellFinalQunatity.toStringAsFixed(8)
+          : finalQuantity.toStringAsFixed(8),
       "timestamps": DateTime.now().toIso8601String(),
       "receiversPhone": transaction.receiver.phone,
       "sendersID": sendersID,
       'dealerMargin': homeStateNotifier.marginsNotifier.dealerMargin,
+      "margin":finalMargin,
     };
   }
 
@@ -195,6 +212,7 @@ class QuoteProvider extends LoadStatusNotifier {
         transaction = transaction.copyWith(price: data);
         transaction = transaction.copyWith(
           quantity: transaction.price / transaction.costPrice,
+          //quantity: ,
         );
 
         break;

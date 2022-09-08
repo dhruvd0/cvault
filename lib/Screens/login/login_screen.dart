@@ -45,14 +45,13 @@ class _LogInScreenState extends State<LogInScreen> {
     });
   }
 
- Newotp() async {
+  Newotp() async {
     await Future.delayed(const Duration(seconds: 40));
     setState(() {
       _isOtpLogin = false;
 
       ScaffoldMessenger.of(context).showSnackBar(
-
-       const SnackBar(
+        const SnackBar(
           content: Text("Try Again"),
         ),
       );
@@ -64,7 +63,6 @@ class _LogInScreenState extends State<LogInScreen> {
 
   // ignore: long-method
   Future<void> verifyPhone() async {
-
     setState(() {
       isLoading = true;
     });
@@ -187,207 +185,270 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   // ignore: long-method
-  Padding getOtpButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.65,
-          child: Container(
-            decoration: const BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromARGB(255, 133, 128, 119),
-                  blurRadius: 15,
-                  spreadRadius: 1, //New
-                ),
-              ],
-            ),
-            child: FloatingActionButton.extended(
-              backgroundColor: const Color(0xff03dac6),
-              foregroundColor: Colors.black,
-              onPressed: () async {
-                setState(() {
-                  _isLoading = true;
-                  number();
-                });
-                verifyPhone();
-              },
-              label: _isLoading == false
-                  ? const Text(
-                      'Get otp',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    )
-                  : const CircularProgressIndicator(
-                      color: Colors.white,
+  Consumer<ProfileChangeNotifier> getOtpButton(BuildContext context) {
+    return Consumer<ProfileChangeNotifier>(
+      builder: (context, profileNotifier, _) {
+        var userType = profileNotifier.Role;
+
+        return Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.65,
+              height: 50,
+              child: Container(
+                decoration: const BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 133, 128, 119),
+                      blurRadius: 15,
+                      spreadRadius: 1, //New
                     ),
+                  ],
+                ),
+                child: SizedBox(
+                  height: 45,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          userType == "Dealer"
+                              ?const Color(0xff70755F)
+                              : const Color(0xffE47331),),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        _isLoading = true;
+                        number();
+                      });
+                      verifyPhone();
+                    },
+                    child: _isLoading == false
+                        ? const Text(
+                            'Get otp',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          )
+                        :const Center(
+                          child:  CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                        ),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   // ignore: long-method
-  Container phoneInputField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: IntlPhoneField(
-        showCountryFlag: true,
-        showDropdownIcon: true,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          counter: Container(),
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          hintText: '00000-00000',
-          hintStyle: TextStyle(
-            color: Colors.white.withOpacity(0.4),
-            fontSize: 16,
+  Consumer<ProfileChangeNotifier> phoneInputField() {
+    return Consumer<ProfileChangeNotifier>(
+      builder: (context, profileNotifier, _) {
+        var userType = profileNotifier.Role;
+
+        return Container(
+          decoration: BoxDecoration(
+            color: Color(0xff1F1D2B),
+            borderRadius: BorderRadius.circular(25),
           ),
-        ),
-        initialCountryCode: 'IN',
-        style: const TextStyle(
-          color: Colors.white,
-        ),
-        onChanged: (phoneNumber) {
-          setState(() {
-            phone = phoneNumber.completeNumber;
-          });
-        },
-      ),
+          child: IntlPhoneField(
+            showCountryFlag: true,
+            autofocus: false,
+            showDropdownIcon: true,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              focusColor:
+                  userType == "dealer" ? Color(0xff70755F) : Color(0xffE47331),
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+              counter: Container(),
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              hintText: '00000-00000',
+              hintStyle: TextStyle(
+                color: Colors.white.withOpacity(0.4),
+                fontSize: 16,
+              ),
+            ),
+            initialCountryCode: 'IN',
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
+            onChanged: (phoneNumber) {
+              setState(() {
+                phone = phoneNumber.completeNumber;
+              });
+            },
+          ),
+        );
+      },
     );
   }
 
   // ignore: long-method
   Widget submitButton(BuildContext context) {
+    return Consumer<ProfileChangeNotifier>(
+      builder: (context, profileNotifier, _) {
+        var userType = profileNotifier.Role;
 
-    return Padding(
-      
-      padding: const EdgeInsets.only(left: 20),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.65,
-          child: Container(
-            decoration: const BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromARGB(255, 133, 128, 119),
-                  blurRadius: 15,
-                  spreadRadius: 1, //New
-                ),
-              ],
-            ),
-            child: FloatingActionButton.extended(
-              backgroundColor: const Color(0xff03dac6),
-              foregroundColor: Colors.black,
-              onPressed: () async {
-                setState(() {
-                  _isOtpLogin == true;
-                  Newotp();
-                });
-                verifyPin(otp);
-              },
-              label: _isOtpLogin == false
-                  ? const Text(
-                      'Submit',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    )
-                  : const CircularProgressIndicator(
-                      color: Colors.white,
+        return Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.65,
+            child: Container(
+              decoration: const BoxDecoration(),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      userType =="dealer"
+                          ? Color(0xff70755F)
+                          : Color(0xffE47331)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
+                  ),
+                ),
+                onPressed: () async {
+                  setState(() {
+                    _isOtpLogin == true;
+                    Newotp();
+                  });
+                  verifyPin(otp);
+                },
+                child: _isOtpLogin == false
+                    ? const Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      )
+                    : const CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   // ignore: long-method
-  Column otpTextField(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        Text(
-          "Enter code sent \nto your number",
-          style: GoogleFonts.lato(
-            textStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w600,
+  Consumer<ProfileChangeNotifier> otpTextField(BuildContext context) {
+    return Consumer<ProfileChangeNotifier>(
+      builder: (context, profileNotifier, _) {
+        var userType = profileNotifier.Role;
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(
+              height: 20,
             ),
-          ),
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Text(
-          "we sent it to the number $phone",
-          style: GoogleFonts.lato(
-            textStyle: TextStyle(
-              color: Colors.white.withOpacity(0.7),
-              fontSize: 14,
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w600,
+            Text(
+              "Enter code sent \nto your number",
+              style: GoogleFonts.lato(
+                textStyle: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
-          ),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        Container(
-          height: 55,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white),
-          ),
-          padding: EdgeInsets.only(left: 15),
-          child: Center(
-            child: !otpLoading
-                ? TextFormField(
-                    inputFormatters: [
-                      new LengthLimitingTextInputFormatter(6),
-                    ],
-                    autofocus: true,
-                    keyboardType: TextInputType.number,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                    decoration: InputDecoration.collapsed(
-                      hintText: "   Enter Otp",
-                      hintStyle: TextStyle(fontSize: 16, color: Colors.white),
-                      border: InputBorder.none,
+            const SizedBox(
+              height: 15,
+            ),
+            Text(
+              "we sent it to the number $phone",
+              style: GoogleFonts.lato(
+                textStyle: TextStyle(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 14,
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xff252836),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    height: 55,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                          color: userType == "dealer"
+                              ? Color(0xff70755F)
+                              : Color(0xffE47331),),
                     ),
-                    onChanged: (value) {
-                      otp = value;
-                    },
-                  )
-                : const CircularProgressIndicator(
-                    backgroundColor: Colors.black,
-                    color: Colors.white,
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Center(
+                      child: !otpLoading
+                          ? TextFormField(
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(6),
+                              ],
+                              autofocus: true,
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16),
+                              decoration: const InputDecoration.collapsed(
+                                hintText: "   Enter Otp",
+                                hintStyle: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                                border: InputBorder.none,
+                              ),
+                              onChanged: (value) {
+                                otp = value;
+                              },
+                            )
+                          : const Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.black,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
                   ),
-          ),
-        ),
-        SizedBox(
-          height: 50,
-        ),
-        submitButton(context),
-      ],
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  submitButton(context),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -426,48 +487,114 @@ class _LogInScreenState extends State<LogInScreen> {
                         child: CircularProgressIndicator(),
                       )
                     : otpTextField(context)
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Enter your \nmobile number",
-                        style: GoogleFonts.lato(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w600,
+                : Consumer<ProfileChangeNotifier>(
+                    builder: (_, profileNotifier, __) {
+                      var userType = profileNotifier.Role;
+
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(
+                            height: 20,
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        "we will send you a confirmation code",
-                        style: GoogleFonts.lato(
-                          textStyle: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
-                            fontSize: 14,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w600,
+                          Text(
+                            "Enter your \nmobile number",
+                            style: GoogleFonts.lato(
+                              textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      phoneInputField(),
-                    ],
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            "we will send you a confirmation code",
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                color: Colors.white.withOpacity(0.7),
+                                fontSize: 14,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(25),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color(0xff252836),
+                            ),
+                            child: Column(
+                              children: [
+                                phoneInputField(),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                  height: 45,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        Colors.white,
+                                      ),
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                        userType == "dealer"
+                                            ? Color(0xff70755F)
+                                            : Color(0xffE47331),
+                                      ),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      setState(() {
+                                        _isLoading = true;
+                                        number();
+                                      });
+                                      verifyPhone();
+                                      print(profileNotifier.Role);
+                                    },
+                                    child: _isLoading == false
+                                        ? const Text(
+                                            'Get otp',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                            ),
+                                          )
+                                        :const Center(
+                                          child:  CircularProgressIndicator(
+                                              color: Colors.white,
+                                            ),
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
           ),
         ),
       ),
-      floatingActionButton: codeSent ? null : getOtpButton(context),
+      //floatingActionButton: codeSent ? null : getOtpButton(context),
     );
   }
 }

@@ -3,14 +3,12 @@ import 'dart:convert';
 import 'package:cvault/models/NonAcceptDealer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:http/retry.dart';
 
 import 'package:cvault/util/http.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
-
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Notifier to fetch dealers or fetch all dealers
@@ -20,11 +18,16 @@ class DealersProvider extends LoadStatusNotifier {
   DealersProvider() {
     fetchAndSetDealers('');
   }
+  //fetchdealers
   List<Dealer> _dealers = [];
   String? stringRespone;
+  //non accept dealer
   List<nonAcceptdealer> listData = [];
+  List<nonAcceptdealer> _Data = [];
 
   ///
+  List<nonAcceptdealer> tempnonAccept = [];
+  List<Dealer> allDealer = [];
   bool get isDealersLoaded {
     return _dealers.isNotEmpty;
   }
@@ -51,6 +54,7 @@ class DealersProvider extends LoadStatusNotifier {
   }
 
   /// Fetches all dealers
+  // ignore: long-method
   Future<void> fetchAndSetDealers(String token) async {
     String userType = (await SharedPreferences.getInstance())
         .get(SharedPreferencesKeys.userTypeKey)
@@ -96,26 +100,71 @@ class DealersProvider extends LoadStatusNotifier {
       pageData[page] = dealers;
 
       _dealers.addAll(dealers);
+      allDealer.addAll(dealers.where((element) =>
+          element.phone == FirebaseAuth.instance.currentUser!.phoneNumber));
+
       notifyListeners();
     } else {
       throw Exception(response.statusCode);
     }
   }
 
-  Future getNonAcceptDealer() async {
+  Future<List<nonAcceptdealer>> getNonAcceptDealer() async {
     http.Response response;
     response = await http.get(Uri.parse(
       "https://cvault-backend.herokuapp.com/admin/nonAcceptedDealers",
     ));
     if (response.statusCode == 200) {
       stringRespone = response.body;
-      List<dynamic> mapResponse = jsonDecode(response.body);
+      var mapResponse = jsonDecode(response.body);
       for (var e in mapResponse) {
         nonAcceptdealer model = nonAcceptdealer.fromJson(e);
+
+        
         listData.add(model);
-        print(listData[0].active);
+        print(listData.length);
+        tempnonAccept.addAll(listData.where((element) =>
+            element.phone == FirebaseAuth.instance.currentUser!.phoneNumber));
+            notifyListeners();
       }
     }
+    notifyListeners();
     return listData;
+  }
+
+  Future acceptDealer(token, id) async {
+    http.Response response;
+    response = await http.post(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/admin/acceptDealer",
+      ),
+      headers: {
+        "Authorization": 'Bearer ${token}',
+      },
+      body: {
+        "dealerId": id,
+      },
+      
+    );
+    notifyListeners();
+    print(response.body);
+  }
+
+  Future deleteDealer(token, id) async {
+    http.Response response;
+    response = await http.delete(
+      Uri.parse(
+        "https://cvault-backend.herokuapp.com/dealer/deleteDealer",
+      ),
+      headers: {
+        "Authorization": 'Bearer ${token}',
+      },
+      body: {
+        "id": id,
+      },
+    );
+      notifyListeners();
+
+    print(response.body);
   }
 }

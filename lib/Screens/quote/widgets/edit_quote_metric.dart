@@ -59,7 +59,7 @@ class EditQuoteMetric extends StatelessWidget {
                         fontSize: 18,
                       ),
                       textAlign: TextAlign.center,
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:const TextInputType.numberWithOptions(decimal: true),
                       onChanged: (string) {
                         double? q = double.tryParse(string);
                         if (q != null) {
@@ -67,7 +67,12 @@ class EditQuoteMetric extends StatelessWidget {
                                   .profileChangeNotifier.profile.userType ==
                               UserTypes.customer) {
                             if (quoteProvider.quoteMode == QuoteMode.Quantity) {
-                              return;
+                              return  quoteProvider.changeTransactionField(
+                            quoteProvider.quoteMode == QuoteMode.Quantity
+                                ? TransactionProps.price
+                                : TransactionProps.quantity,
+                            q,
+                          );
                             }
                           }
                           quoteProvider.changeTransactionField(

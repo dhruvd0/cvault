@@ -46,7 +46,7 @@ class AdminPanelGrid extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image.asset(
-                    "assets/trans1.png",
+                    "assets/trans1.jpeg",
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -124,7 +124,7 @@ class AdminPanelGrid extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image.asset(
-                    "assets/trans3.png",
+                    "assets/trans3.jpeg",
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -132,44 +132,50 @@ class AdminPanelGrid extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const Reporting(),
+        Consumer<DealersProvider>(
+          builder: (s, dealer, k) {
+            return GestureDetector(
+              onTap: () {
+                dealer.listData.clear();
+                dealer.getNonAcceptDealer();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Reporting(),
+                  ),
+                );
+              },
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                          offset: const Offset(4, 4),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Image.asset(
+                        "assets/trans4.jpeg",
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           },
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.85,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
-                      blurRadius: 10,
-                      spreadRadius: 1,
-                      offset: const Offset(4, 4),
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
-                    "assets/trans4.png",
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ],
     );

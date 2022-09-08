@@ -105,7 +105,7 @@ class USDToINRToggle extends StatelessWidget {
                 width: 70.0,
                 height: 30.0,
                 
-                toggleSize: 45.0,
+                toggleSize: 25.0,
                 value: !homeStateNotifier.state.isUSD,
                 borderRadius: 30.0,
                

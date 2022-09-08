@@ -130,7 +130,7 @@ class TransactionTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Phone: ${transaction.sender.phone}",
+                "Phone: ${transaction.receiver.phone}",
                 style: TextStyle(color: Colors.white),
               ),
               Text(
@@ -216,10 +216,7 @@ class TransactionTile extends StatelessWidget {
                     TransactionStatus.accepted,
                     context,
                   );
-                  Provider.of<NotificationProvider>(
-                    context,
-                    listen: false,
-                  ).updateNotifiaction(token, "Accept");
+                  
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -248,10 +245,7 @@ class TransactionTile extends StatelessWidget {
                     context,
                   );
                   of.deleteTransaction(transaction.id);
-                   Provider.of<NotificationProvider>(
-                    context,
-                    listen: false,
-                  ).updateNotifiaction(token, "Reject");
+                  
                 },
                 child: Container(
                   decoration: BoxDecoration(

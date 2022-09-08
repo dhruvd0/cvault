@@ -77,9 +77,9 @@ List<SingleChildWidget> get _providers {
       lazy: false,
       create: ((context) => AdvertisementProvider()),
     ),
-     ChangeNotifierProvider(
+    ChangeNotifierProvider(
       lazy: false,
-      create: ((context) =>NotificationProvider()),
+      create: ((context) => NotificationProvider()),
     ),
     ChangeNotifierProvider(
       lazy: false,
@@ -128,9 +128,25 @@ class CVaultApp extends StatefulWidget {
 }
 
 class _CVaultAppState extends State<CVaultApp> {
+  late Image image1;
+  late Image image2;
+  late Image image3;
+  late Image image4;
+  late Image image5;
+  late Image image6;
+
   @override
+  // ignore: long-method
   void initState() {
     super.initState();
+
+    callDealer();
+    image1 = Image.asset("assets/dealer.png");
+    image2 = Image.asset("assets/customer.png");
+    image3 = Image.asset("assets/Card.jpeg");
+    image4 = Image.asset("assets/Card-2.jpeg");
+    image5 = Image.asset("assets/trans.jpeg");
+    image6 = Image.asset("assets/trans1.jpeg");
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Widget widget = const UserTypeSelectPage();
       if (FirebaseAuth.instance.currentUser != null) {
@@ -158,6 +174,18 @@ class _CVaultAppState extends State<CVaultApp> {
         );
       }
     });
+  }
+
+  void callDealer() {
+    var data = Provider.of<DealersProvider>(context, listen: false);
+    data.getNonAcceptDealer();
+  }
+
+  @override
+  void didChangeDependencies() {
+    precacheImage(image1.image, context);
+    precacheImage(image2.image, context);
+    super.didChangeDependencies();
   }
 
   @override

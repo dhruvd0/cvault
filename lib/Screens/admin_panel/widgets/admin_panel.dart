@@ -97,7 +97,7 @@ class _AdminPanelState extends State<AdminPanel> {
                             borderRadius: BorderRadius.circular(15),
                             child: Image.asset(
                              userType == UserTypes.admin
-                      ?  "assets/trans.jpeg":"assets/Card.jpg",
+                      ?  "assets/trans.jpeg":"assets/Card.jpeg",
                           fit: BoxFit.fitWidth,
                               
                             ),
@@ -145,7 +145,7 @@ class _AdminPanelState extends State<AdminPanel> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
                                     child: Image.asset(
-                                      "assets/Card-2.jpg",
+                                      "assets/Card-2.jpeg",
                                       fit: BoxFit.fitWidth,
                                     ),
                                   ),
