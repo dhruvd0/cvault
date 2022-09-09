@@ -1,4 +1,3 @@
-
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/providers/profile_provider.dart';
@@ -23,18 +22,8 @@ class ProfilePage extends StatelessWidget {
     mode = mode ?? ProfilePageMode.edit;
 
     return Scaffold(
-      
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return HomePage();
-              },
-            ));
-          },
-          icon: Icon(Icons.arrow_back_ios),
-        ),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         toolbarHeight: 80,
         title: Title(
@@ -45,7 +34,7 @@ class ProfilePage extends StatelessWidget {
                 : 'Manage Profile',
           ),
         ),
-        backgroundColor:  Color(0xff252836),
+        backgroundColor: Color(0xff252836),
         elevation: 0,
       ),
       backgroundColor: const Color(0xff1F1D2B),
@@ -53,15 +42,15 @@ class ProfilePage extends StatelessWidget {
         child: Form(
           key: _formKey,
           child: Consumer<ProfileChangeNotifier>(
-          builder: (context, profileNotifier, _) {
-            var userType = profileNotifier.profile.userType;
-        
+            builder: (context, profileNotifier, _) {
+              var userType = profileNotifier.profile.userType;
+
               return Container(
-                margin:const EdgeInsets.only(top:20,left: 20,right: 20),
-                
+                margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
                 decoration: BoxDecoration(
-                  color:const Color(0xff252836),
-                  borderRadius: BorderRadius.circular(15),),
+                  color: const Color(0xff252836),
+                  borderRadius: BorderRadius.circular(15),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -77,7 +66,6 @@ class ProfilePage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                      
                         ProfileTextField(
                           hintText: 'First Name',
                           fieldName: ProfileFields.firstName,
@@ -90,7 +78,6 @@ class ProfilePage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        
                         ProfileTextField(
                           hintText: 'Middle Name',
                           fieldName: ProfileFields.middleName,
@@ -103,7 +90,6 @@ class ProfilePage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                      
                         ProfileTextField(
                           hintText: 'Last Name',
                           fieldName: ProfileFields.lastName,
@@ -116,10 +102,10 @@ class ProfilePage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                     
                         ProfileTextField(
-                          showVerified:
-                              mode == ProfilePageMode.registration ? false : true,
+                          showVerified: mode == ProfilePageMode.registration
+                              ? false
+                              : true,
                           hintText: 'Email',
                           fieldName: ProfileFields.email,
                         ),
@@ -129,20 +115,19 @@ class ProfilePage extends StatelessWidget {
                       height: 20,
                     ),
                     Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                         
-                              ProfileTextField(
-                                showVerified: true,
-                                hintText: 'Phone',
-                                fieldName: ProfileFields.phone,
-                                fixedValue: FirebaseAuth
-                                        .instance.currentUser?.phoneNumber ??
-                                    '',
-                              ),
-                            ],
-                          ),
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ProfileTextField(
+                          showVerified: true,
+                          hintText: 'Phone',
+                          fieldName: ProfileFields.phone,
+                          fixedValue:
+                              FirebaseAuth.instance.currentUser?.phoneNumber ??
+                                  '',
+                        ),
+                      ],
+                    ),
                     mode == ProfilePageMode.registration
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,18 +156,19 @@ class ProfilePage extends StatelessWidget {
                       height: 20,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 20,bottom: 10),
+                      padding: const EdgeInsets.only(left: 20, bottom: 10),
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.65,
                           child: Container(
-                            decoration: const BoxDecoration(
-                              
-                            ),
+                            decoration: const BoxDecoration(),
                             child: FloatingActionButton.extended(
-                              backgroundColor:userType==UserTypes.customer? const Color(0xffE47331):userType==UserTypes.dealer?Color(0xff566749):Color(0xff0EE7AD),
-                              
+                              backgroundColor: userType == UserTypes.customer
+                                  ? const Color(0xffE47331)
+                                  : userType == UserTypes.dealer
+                                      ? Color(0xff566749)
+                                      : Color(0xff0EE7AD),
                               onPressed: () async {
                                 if (mode == ProfilePageMode.registration) {
                                   if (_formKey.currentState!.validate()) {
@@ -199,8 +185,8 @@ class ProfilePage extends StatelessWidget {
                                   }
                                 } else {
                                   if (_formKey.currentState!.validate()) {
-                                    final bool? result =
-                                        await Provider.of<ProfileChangeNotifier>(
+                                    final bool? result = await Provider.of<
+                                        ProfileChangeNotifier>(
                                       context,
                                       listen: false,
                                     ).updateProfile();
@@ -220,10 +206,11 @@ class ProfilePage extends StatelessWidget {
                                             mode == ProfilePageMode.registration
                                                 ? "Submit"
                                                 : "Save",
-                                            style:  TextStyle(
+                                            style: TextStyle(
                                               fontSize: 18,
-                                              color:userType==UserTypes.admin? Colors.black :Colors.white,
-        
+                                              color: userType == UserTypes.admin
+                                                  ? Colors.black
+                                                  : Colors.white,
                                             ),
                                           )),
                               ),

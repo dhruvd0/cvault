@@ -399,33 +399,35 @@ class _AddState extends State<Add> {
               provider.listData[0].redirectLink.toString(),
             );
           },
-          child: Container(
-            height: MediaQuery.of(context).size.width * 0.20,
-            margin: const EdgeInsets.symmetric(
-              vertical: 5,
-              horizontal: 10,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.white,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(' AD'),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.75,
-                  child: Container(
-                    child: Image.network(
-                      provider.listData[0].imageLink.toString(),
-                      fit: BoxFit.fitWidth,
-                    ),
+          child: provider.listData.isNotEmpty
+              ? Container(
+                  height: MediaQuery.of(context).size.width * 0.20,
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 10,
                   ),
-                ),
-                const Text('AD  '),
-              ],
-            ),
-          ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(' AD'),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        child: Container(
+                          child: Image.network(
+                            provider.listData[0].imageLink.toString(),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                      const Text('AD  '),
+                    ],
+                  ),
+                )
+              : SizedBox(),
         );
       },
     );

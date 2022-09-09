@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 import 'package:flutter/services.dart';
 
 import 'package:cvault/models/profile_models/dealer.dart';
@@ -66,6 +67,7 @@ class _LogInScreenState extends State<LogInScreen> {
     setState(() {
       isLoading = true;
     });
+
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phone,
       verificationCompleted: (PhoneAuthCredential credential) async {
@@ -209,16 +211,16 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
                 child: SizedBox(
                   height: 45,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.5,
                   child: ElevatedButton(
                     style: ButtonStyle(
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
                       backgroundColor: MaterialStateProperty.all<Color>(
-                          userType == "Dealer"
-                              ?const Color(0xff70755F)
-                              : const Color(0xffE47331),),
+                        userType == "Dealer"
+                            ? const Color(0xff70755F)
+                            : const Color(0xffE47331),
+                      ),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -239,11 +241,11 @@ class _LogInScreenState extends State<LogInScreen> {
                               fontSize: 18,
                             ),
                           )
-                        :const Center(
-                          child:  CircularProgressIndicator(
+                        : const Center(
+                            child: CircularProgressIndicator(
                               color: Colors.white,
                             ),
-                        ),
+                          ),
                   ),
                 ),
               ),
@@ -270,6 +272,7 @@ class _LogInScreenState extends State<LogInScreen> {
             autofocus: false,
             showDropdownIcon: true,
             decoration: InputDecoration(
+              labelStyle: TextStyle(color: Colors.white),
               border: InputBorder.none,
               focusedBorder: InputBorder.none,
               focusColor:
@@ -318,7 +321,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   foregroundColor:
                       MaterialStateProperty.all<Color>(Colors.white),
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      userType =="dealer"
+                      userType == "dealer"
                           ? Color(0xff70755F)
                           : Color(0xffE47331)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -406,9 +409,10 @@ class _LogInScreenState extends State<LogInScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                          color: userType == "dealer"
-                              ? Color(0xff70755F)
-                              : Color(0xffE47331),),
+                        color: userType == "dealer"
+                            ? Color(0xff70755F)
+                            : Color(0xffE47331),
+                      ),
                     ),
                     padding: const EdgeInsets.only(left: 15),
                     child: Center(
@@ -577,11 +581,11 @@ class _LogInScreenState extends State<LogInScreen> {
                                               fontSize: 18,
                                             ),
                                           )
-                                        :const Center(
-                                          child:  CircularProgressIndicator(
+                                        : const Center(
+                                            child: CircularProgressIndicator(
                                               color: Colors.white,
                                             ),
-                                        ),
+                                          ),
                                   ),
                                 ),
                               ],

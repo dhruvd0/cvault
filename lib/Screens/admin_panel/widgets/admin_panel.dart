@@ -1,5 +1,3 @@
-
-
 import 'package:cvault/Screens/admin_panel/widgets/admin_panel_grid.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/transactions/widgets/transactions_page.dart';
@@ -26,19 +24,9 @@ class _AdminPanelState extends State<AdminPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  Colors.transparent,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         toolbarHeight: 70,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return HomePage();
-              },
-            ));
-          },
-          icon:const Icon(Icons.arrow_back_ios),
-        ),
         backgroundColor: Color(0xff252836),
         centerTitle: true,
         title: const Text(
@@ -74,14 +62,10 @@ class _AdminPanelState extends State<AdminPanel> {
                     },
                     child: Column(
                       children: [
-                        
                         const SizedBox(height: 10),
                         Container(
-                          
-                          
                           width: MediaQuery.of(context).size.width * 0.85,
                           decoration: BoxDecoration(
-                            
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.4),
@@ -91,15 +75,14 @@ class _AdminPanelState extends State<AdminPanel> {
                               ),
                             ],
                             borderRadius: BorderRadius.circular(15),
-                            
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: Image.asset(
-                             userType == UserTypes.admin
-                      ?  "assets/trans.jpeg":"assets/Card.jpeg",
-                          fit: BoxFit.fitWidth,
-                              
+                              userType == UserTypes.admin
+                                  ? "assets/trans.jpeg"
+                                  : "assets/Card.jpeg",
+                              fit: BoxFit.fitWidth,
                             ),
                           ),
                         ),
@@ -120,15 +103,12 @@ class _AdminPanelState extends State<AdminPanel> {
                             );
                           },
                           child: Container(
-                             padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                
                                 const SizedBox(height: 10),
                                 Container(
-                                
-                                  
                                   decoration: BoxDecoration(
                                     color: Colors.black,
                                     boxShadow: [
@@ -140,7 +120,6 @@ class _AdminPanelState extends State<AdminPanel> {
                                       ),
                                     ],
                                     borderRadius: BorderRadius.circular(15),
-                                   
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(15),

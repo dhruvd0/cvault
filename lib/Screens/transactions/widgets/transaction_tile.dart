@@ -35,7 +35,6 @@ class TransactionTile extends StatelessWidget {
         return Consumer<NotificationProvider>(
           builder: (ss, contexts, t) {
             return Container(
-              
               padding: const EdgeInsets.all(5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,8 +82,9 @@ class TransactionTile extends StatelessWidget {
                             height: 5,
                           ),
                           Text(
-                            DateFormat('yyyy-MM-dd \nH:m:s')
-                                .format(DateTime.parse(transaction.createdAt)),
+                            DateFormat('yyyy-MM-dd \nH:m:s').format(
+                                DateTime.parse(transaction.createdAt)
+                                    .toLocal()),
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               color: Colors.white,
@@ -111,7 +111,6 @@ class TransactionTile extends StatelessWidget {
   // ignore: long-method
   Widget _additonalTrans(BuildContext context) {
     return Container(
-      
       padding: const EdgeInsets.all(15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -203,7 +202,7 @@ class TransactionTile extends StatelessWidget {
         builder: (_, profileProvider, __) {
           String token = profileProvider.authInstance.currentUser!.uid;
 
-        return  Row(
+          return Row(
             children: [
               Expanded(child: Container()),
               GestureDetector(
@@ -216,7 +215,6 @@ class TransactionTile extends StatelessWidget {
                     TransactionStatus.accepted,
                     context,
                   );
-                  
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -245,7 +243,6 @@ class TransactionTile extends StatelessWidget {
                     context,
                   );
                   of.deleteTransaction(transaction.id);
-                  
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -271,15 +268,18 @@ class TransactionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-   
     return Container(
-    
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-       //color: transaction.transactionType=="buy"?Color(0xff4895EF):transaction.transactionType=="sell"?Color(0xffFFD44F):transaction.status=="Accept"?Color(0xff35E065):Color(0xffEA4B63),
-        color: transaction.status=="accepted"?Color(0xff35E065):transaction.transactionType=="buy"?Color(0xff4895EF):transaction.transactionType=="sell"?Color(0xffFFD44F):Color(0xffFFFFF),
+        //color: transaction.transactionType=="buy"?Color(0xff4895EF):transaction.transactionType=="sell"?Color(0xffFFD44F):transaction.status=="Accept"?Color(0xff35E065):Color(0xffEA4B63),
+        color: transaction.status == "accepted"
+            ? Color(0xff35E065)
+            : transaction.transactionType == "buy"
+                ? Color(0xff4895EF)
+                : transaction.transactionType == "sell"
+                    ? Color(0xffFFD44F)
+                    : Color(0xffFFFFF),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Consumer<ProfileChangeNotifier>(
@@ -319,7 +319,7 @@ class TransactionStatusWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:const EdgeInsets.only(right:15,left: 15,top: 5),
+      padding: const EdgeInsets.only(right: 15, left: 15, top: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.black,

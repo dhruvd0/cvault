@@ -176,7 +176,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             Text(
                               DateFormat('yyyy-MM-dd \nH:m:s').format(
                                   DateTime.parse(transactions[index]
-                                      ["transactionId"]["createdAt"])),
+                                          ["transactionId"]["createdAt"])
+                                      .toLocal()),
                               style:
                                   TextStyle(color: Colors.white, fontSize: 15),
                             ),
