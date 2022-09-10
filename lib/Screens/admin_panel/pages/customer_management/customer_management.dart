@@ -72,13 +72,10 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
+            Navigator.pop(context, true);
           },
           icon: const Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios,
           ),
         ),
         title: const Text(
@@ -98,7 +95,6 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
         child: Consumer<CustomerProvider>(
           builder: (context, customerProvider, __) {
             return Container(
-              
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

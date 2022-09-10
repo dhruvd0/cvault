@@ -45,10 +45,10 @@ class _SettingsState extends State<Settings> {
         border: Border.all(
           width: 1.5,
           color: userType == UserTypes.customer
-              ?const Color(0xffE47331)
+              ? const Color(0xffE47331)
               : userType == UserTypes.dealer
-                  ?const Color(0xff566749)
-                  :const Color(0xff0CFEBC),
+                  ? const Color(0xff566749)
+                  : const Color(0xff0CFEBC),
         ),
       ),
       child: Row(
@@ -167,7 +167,9 @@ class _SettingsState extends State<Settings> {
       hint: const Center(
         child: Text(
           "Select Global Ticker",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
       ),
       isExpanded: true,

@@ -35,7 +35,7 @@ enum LoadStatus {
 class ProfileChangeNotifier extends LoadStatusNotifier {
   ///
   ///
-   String Role="";
+  String Role = "";
   ProfileChangeNotifier([FirebaseAuth? mockAuth]) : super() {
     authInstance = mockAuth ?? FirebaseAuth.instance;
     authInstance.authStateChanges().asBroadcastStream().listen((event) async {

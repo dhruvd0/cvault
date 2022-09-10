@@ -41,7 +41,6 @@ class ProfileTextField extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(left: 30.0, right: 30.0, bottom: 8),
       decoration: const BoxDecoration(
-        
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Consumer<ProfileChangeNotifier>(
@@ -85,26 +84,25 @@ class ProfileTextField extends StatelessWidget {
             ),
             decoration: InputDecoration(
               filled: true,
-              fillColor:const Color(0xff1F1D2B),
-              enabledBorder:const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                          ),
-                          borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 2,
-                          ),
-                      ),
-                      focusedBorder:const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                          ),
-                          borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 2,
-                          ),
-                      ),
-             
+              fillColor: const Color(0xff1F1D2B),
+              enabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                  width: 2,
+                ),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+                borderSide: BorderSide(
+                  color: Colors.transparent,
+                  width: 2,
+                ),
+              ),
               hintText: hintText,
               suffixIconColor: Colors.white,
               suffixStyle: const TextStyle(color: Colors.white, fontSize: 20),

@@ -83,8 +83,8 @@ class TransactionTile extends StatelessWidget {
                           ),
                           Text(
                             DateFormat('yyyy-MM-dd \nH:m:s').format(
-                                DateTime.parse(transaction.createdAt)
-                                    .toLocal()),
+                              DateTime.parse(transaction.createdAt).toLocal(),
+                            ),
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               color: Colors.white,

@@ -38,7 +38,6 @@ class ProfileHeader extends StatelessWidget {
                       height: 10,
                     ),
                     Container(
-                      width: 200,
                       child: Text(
                         state.firstName.isEmpty
                             ? 'Name'

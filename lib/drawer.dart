@@ -1,5 +1,3 @@
-
-
 import 'package:cvault/Screens/notifications_screen.dart';
 import 'package:cvault/Screens/settings/settting.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
@@ -25,7 +23,7 @@ class _MyDrawerState extends State<MyDrawer> {
     return Consumer<TransactionsProvider>(
       builder: (kk, contexts, k) {
         return Consumer<ProfileChangeNotifier>(
-          builder: (ss,profileNotifier,k) {
+          builder: (ss, profileNotifier, k) {
             var userType = profileNotifier.profile.userType;
 
             return Drawer(
@@ -42,10 +40,14 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                     ),
                     ListTile(
-                      trailing:  Icon(
+                      trailing: Icon(
                         Icons.settings,
                         size: 25,
-                        color: userType==UserTypes.customer? Color(0xffE47331):userType==UserTypes.dealer?Color(0xff566749):Color(0xff0CFEBC),
+                        color: userType == UserTypes.customer
+                            ? Color(0xffE47331)
+                            : userType == UserTypes.dealer
+                                ? Color(0xff566749)
+                                : Color(0xff0CFEBC),
                       ),
                       title: const Text(
                         "Settings",
@@ -69,62 +71,50 @@ class _MyDrawerState extends State<MyDrawer> {
                     const SizedBox(
                       height: 10,
                     ),
-                    ListTile(
-                      trailing:  Icon(
-                        Icons.message,
-                        size: 25,
-                       color: userType==UserTypes.customer? Color(0xffE47331):userType==UserTypes.dealer?Color(0xff566749):Color(0xff0CFEBC),
-                      ),
-                      title: const Text(
-                        "Messages",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Roboto',
-                        ),
-                      ),
-                      onTap: () {
-                        /// TODO: navigate to messages
-                      },
-                    ),
-                    userType==UserTypes.customer?const SizedBox(
-                      height: 10,
-                    ):SizedBox(),
-                   userType==UserTypes.customer? ListTile(
-                      trailing:  Icon(
-                        Icons.notifications,
-                        size: 25,
-                        color: userType==UserTypes.customer? Color(0xffE47331):userType==UserTypes.dealer?Color(0xff566749):Color(0xff0CFEBC),
-                      ),
-                      title: const Text(
-                        "Notification",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Roboto',
-                        ),
-                      ),
-                      onTap: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const NotificationScreen(),
-                          ),
-                        );
-                      },
-                    ):Container(),
+                    userType == UserTypes.customer
+                        ? ListTile(
+                            trailing: Icon(
+                              Icons.notifications,
+                              size: 25,
+                              color: userType == UserTypes.customer
+                                  ? Color(0xffE47331)
+                                  : userType == UserTypes.dealer
+                                      ? Color(0xff566749)
+                                      : Color(0xff0CFEBC),
+                            ),
+                            title: const Text(
+                              "Notification",
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                fontStyle: FontStyle.normal,
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationScreen(),
+                                ),
+                              );
+                            },
+                          )
+                        : Container(),
                     const SizedBox(
                       height: 10,
                     ),
                     ListTile(
-                      trailing:  Icon(
+                      trailing: Icon(
                         Icons.exit_to_app,
                         size: 25,
-                        color: userType==UserTypes.customer? Color(0xffE47331):userType==UserTypes.dealer?Color(0xff566749):Color(0xff0CFEBC),
+                        color: userType == UserTypes.customer
+                            ? Color(0xffE47331)
+                            : userType == UserTypes.dealer
+                                ? Color(0xff566749)
+                                : Color(0xff0CFEBC),
                       ),
                       title: const Text(
                         "Log Out",

@@ -74,7 +74,7 @@ class _DealerManagementPageState extends State<DealerManagementPage> {
             Navigator.of(context).pop();
           },
           icon: const Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios,
           ),
         ),
         title: const Text(
