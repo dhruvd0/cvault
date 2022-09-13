@@ -176,6 +176,7 @@ class ProfilePage extends StatelessWidget {
                                       context,
                                       listen: false,
                                     ).createNewProfile();
+                                    print(userType);
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(

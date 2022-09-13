@@ -84,7 +84,7 @@ class Customer extends Profile {
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       uid: uid ?? this.uid,
-      referalCode: referalCode ?? this.referalCode,
+      referalCode: referalCode ?? this.referalCode!,
       phone: phone ?? this.phone,
       transactions: transactions ?? this.transactions,
     );

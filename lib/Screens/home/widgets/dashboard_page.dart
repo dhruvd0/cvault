@@ -184,8 +184,13 @@ class _DashboardPageState extends State<DashboardPage> {
                                                           ? const Color(
                                                               0xff566749,
                                                             )
-                                                          : Color.fromARGB(255,
-                                                              21, 158, 122),
+                                                          : const Color
+                                                              .fromARGB(
+                                                              255,
+                                                              21,
+                                                              158,
+                                                              122,
+                                                            ),
                                                 ),
                                                 child: Center(
                                                   child: Row(

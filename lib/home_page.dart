@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void getUserType() async {
     final user = ((await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey) ??
-        UserTypes.dealer);
+        UserTypes.customer);
     setState(() {
       userType = user;
     });
@@ -75,17 +75,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void callDealer() async {
-    setState(() {
-      
-    });
+    setState(() {});
     var token = Provider.of<ProfileChangeNotifier>(context, listen: false);
     var data = Provider.of<DealersProvider>(context, listen: false);
     data.fetchAndSetDealers(token.token);
     data.getNonAcceptDealer();
 
-    setState(() {
-      
-    });
+    setState(() {});
     // ignore: newline-before-return
   }
 
@@ -95,19 +91,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       builder: (_, profileNotifier, k) {
         return Consumer<DealersProvider>(
           builder: (s, dealer, k) {
-            //all dealer
-
-            //non accept dealer
-
-            print(dealer.allDealer.length);
-            print(dealer.tempnonAccept.length);
-
             return Scaffold(
               drawerEnableOpenDragGesture: false,
               key: scaffoldKey,
               endDrawer: const MyDrawer(),
               backgroundColor: const Color(0xff1F1D2B),
               body:
+
                   //dealer
                   userType == UserTypes.dealer
                       ? dealer.allDealer.isNotEmpty
@@ -122,13 +112,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           : Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-
                                 children: [
-                                 const Text(
-                                      "Your Application is rejected",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  const  SizedBox(height: 30,),
+                                  const Text(
+                                    "Your Application is rejected",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       primary: Color(0xff566749),

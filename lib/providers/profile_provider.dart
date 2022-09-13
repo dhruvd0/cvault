@@ -244,7 +244,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
 
   /// Registers a new customer or a new dealer, and fetches a profile if successfully created.
   Future<void> createNewProfile() async {
-    _setDefaultreferalCodeForCustomer();
+    //setDefaultreferalCodeForCustomer();
 
     Map<String, dynamic> data = profile.toJson();
     data['phone'] = authInstance.currentUser!.phoneNumber;
@@ -380,12 +380,12 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     await prefs.setString(profile.userType, jsonEncode(profile.toJson()));
   }
 
-  void _setDefaultreferalCodeForCustomer() {
-    if (profile.userType == UserTypes.customer) {
-      if (profile.referalCode.isEmpty) {
-        profile = (profile as Customer).copyWith(referalCode: 'default_code');
-        notifyListeners();
-      }
-    }
-  }
+  // void setDefaultreferalCodeForCustomer() {
+  //   if (profile.userType == UserTypes.customer) {
+  //     if (profile.referalCode.isEmpty) {
+  //       profile = (profile as Customer).copyWith(referalCode: 'z55s');
+  //       notifyListeners();
+  //     }
+  //   }
+  // }
 }
