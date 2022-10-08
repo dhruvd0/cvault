@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:cvault/Screens/home/widgets/dashboard_page.dart';
 import 'package:cvault/home_page.dart';
 import 'package:cvault/models/profile_models/customer.dart';
@@ -44,6 +47,8 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _onRefresh(context);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final provider = Provider.of<CustomerProvider>(context, listen: false);
 
@@ -64,15 +69,28 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
     });
   }
 
+  bool indicator = true;
+  void startTimer() {
+    if (mounted) {
+      Timer.periodic(const Duration(seconds: 4), (t) {
+        setState(() {
+          indicator = false; //set loading to false
+        });
+        t.cancel(); //stops the timer
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
+        automaticallyImplyLeading: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context, true);
+            Navigator.of(context).pop();
           },
           icon: const Icon(
             Icons.arrow_back_ios,
@@ -103,11 +121,15 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                     height: 20,
                   ),
                   Flexible(
-                    child: (customerProvider.isLoadedCustomers)
+                    child: customerProvider.customers.isNotEmpty
                         ? _buildListView(customerProvider.customers)
-                        : const Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                        : indicator == true
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Center(child: Text("No customers")),
                   ),
                   const SizedBox(
                     height: 10,

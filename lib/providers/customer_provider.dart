@@ -31,6 +31,7 @@ class CustomerProvider extends LoadStatusNotifier {
   List<Customer> _customers = [];
 
   ///
+  bool getcustomer = false;
   bool get isLoadedCustomers {
     return _customers.isNotEmpty;
   }
@@ -82,6 +83,8 @@ class CustomerProvider extends LoadStatusNotifier {
       pageData[page] = temp;
 
       _customers.addAll(temp);
+      notifyListeners();
+      getcustomer = true;
       print(temp.toString() + "hey");
       notifyListeners();
     } else {

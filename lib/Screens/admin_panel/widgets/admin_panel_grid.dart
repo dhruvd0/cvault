@@ -167,7 +167,7 @@ class AdminPanelGrid extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Image.asset(
-                        "assets/trans4.jpeg",
+                        "assets/Card.png",
                         fit: BoxFit.fitWidth,
                       ),
                     ),

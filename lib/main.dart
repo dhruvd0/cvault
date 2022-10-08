@@ -159,7 +159,7 @@ class _CVaultAppState extends State<CVaultApp> {
             Provider.of<ProfileChangeNotifier>(context, listen: false);
         await notifier
             .checkAndChangeUserType(FirebaseAuth.instance.currentUser!);
-        await notifier.fetchProfile();
+        await notifier.fetchProfile(context);
         widget = (notifier.profile.firstName.isNotEmpty ||
                 userType == UserTypes.admin)
             ? const HomePage()

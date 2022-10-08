@@ -19,19 +19,26 @@ import '../../../drawer.dart';
 
 /// Page to view crypto tickers, user details and Ads
 class DashboardPage extends StatefulWidget {
-  ///
   const DashboardPage({Key? key}) : super(key: key);
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
-/// @suraj96506 document this
-
 class _DashboardPageState extends State<DashboardPage> {
   @override
   @override
   var formatter = NumberFormat('##,##,###');
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    onrefresh();
+  }
+
+  onrefresh() async {
+    Provider.of<AdvertisementProvider>(context).getAd();
+  }
 
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();

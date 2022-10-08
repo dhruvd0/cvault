@@ -26,6 +26,7 @@ class _AdminPanelState extends State<AdminPanel> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 70,
         backgroundColor: Color(0xff252836),
         centerTitle: true,
@@ -94,7 +95,7 @@ class _AdminPanelState extends State<AdminPanel> {
                       ? const AdminPanelGrid()
                       : GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>

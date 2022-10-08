@@ -1,16 +1,20 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cvault/Screens/login/login_screen.dart';
+import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/models/profile_models/customer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/models/profile_models/profile.dart';
 import 'package:cvault/providers/common/load_status_notifier.dart';
+import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/util/http.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:cvault/util/ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -193,7 +197,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   /// Fetches and updates profile
   ///
   /// Checks profile data in shared preferences first
-  Future<void> fetchProfile() async {
+  Future<void> fetchProfile(context) async {
     loadStatus = LoadStatus.loading;
     notifyListeners();
     if (token.isEmpty) {
@@ -225,6 +229,18 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     } else {
       loadStatus = LoadStatus.error;
       notifyListeners();
+      Provider.of<HomeStateNotifier>(
+        context,
+        listen: false,
+      ).logout(context);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (builder) => const UserTypeSelectPage(),
+        ),
+      );
+
       throw Exception(response.statusCode.toString());
     }
   }

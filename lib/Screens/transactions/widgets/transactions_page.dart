@@ -27,6 +27,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _onRefresh(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _scrollController.addListener(() {
         if (!_scrollController.hasClients) {
@@ -47,7 +48,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         backgroundColor: Color(0xff252836),
         centerTitle: true,
@@ -97,7 +97,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   itemCount:
                                       transactionsProvider.transactions.length,
                                   controller: _scrollController,
-                                  itemBuilder: (BuildContext context, int index) {
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     // var transaction = Transaction.mock();
                                     return TransactionTile(
                                       transaction: transactionsProvider

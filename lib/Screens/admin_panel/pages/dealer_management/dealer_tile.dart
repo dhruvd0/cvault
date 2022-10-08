@@ -54,7 +54,8 @@ class _DealerTileState extends State<DealerTile> {
                 ),
                 Text(
                   "Email: ${widget.dealer.email}",
-                  style: const TextStyle(color: Colors.black,
+                  style: const TextStyle(
+                    color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -65,7 +66,7 @@ class _DealerTileState extends State<DealerTile> {
                 Text(
                   "Mobile: ${widget.dealer.phone}",
                   style: const TextStyle(
-                color: Colors.black,
+                    color: Colors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -96,21 +97,21 @@ class _DealerTileState extends State<DealerTile> {
               const SizedBox(
                 height: 10,
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Reporting(),
-                    ),
-                  );
-                },
-                child: const Icon(
-                  Icons.document_scanner,
-                  color: Color.fromARGB(255, 9, 10, 10),
-                  size: 30,
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => const Reporting(),
+              //       ),
+              //     );
+              //   },
+              //   child: const Icon(
+              //     Icons.document_scanner,
+              //     color: Color.fromARGB(255, 9, 10, 10),
+              //     size: 30,
+              //   ),
+              // ),
               const SizedBox(
                 height: 10,
               ),

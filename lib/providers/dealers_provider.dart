@@ -24,6 +24,7 @@ class DealersProvider extends LoadStatusNotifier {
   //non accept dealer
   List<nonAcceptdealer> listData = [];
   List<nonAcceptdealer> _Data = [];
+  bool isloading = false;
 
   ///
   List<nonAcceptdealer> tempnonAccept = [];
@@ -91,6 +92,7 @@ class DealersProvider extends LoadStatusNotifier {
       List<Dealer> dealers = [];
 
       final data = jsonDecode(response.body);
+      dealers.clear();
       for (var dt in data['docs']) {
         dealers.add(
           Dealer.fromJson('dealer', dt),
@@ -100,6 +102,7 @@ class DealersProvider extends LoadStatusNotifier {
       pageData[page] = dealers;
 
       _dealers.addAll(dealers);
+      notifyListeners();
       allDealer.addAll(dealers.where((element) =>
           element.phone == FirebaseAuth.instance.currentUser!.phoneNumber));
 
@@ -117,17 +120,24 @@ class DealersProvider extends LoadStatusNotifier {
     if (response.statusCode == 200) {
       stringRespone = response.body;
       var mapResponse = jsonDecode(response.body);
+      listData.clear();
+
       for (var e in mapResponse) {
         nonAcceptdealer model = nonAcceptdealer.fromJson(e);
-
-        
         listData.add(model);
-        print(listData.length);
-        tempnonAccept.addAll(listData.where((element) =>
-            element.phone == FirebaseAuth.instance.currentUser!.phoneNumber));
-            notifyListeners();
+        tempnonAccept.addAll(
+          listData.where(
+            (element) =>
+                element.phone == FirebaseAuth.instance.currentUser!.phoneNumber,
+          ),
+        );
+        // isloading = true;
+        // print(isloading);
+        notifyListeners();
       }
     }
+    isloading = true;
+    print(isloading);
     notifyListeners();
     return listData;
   }
@@ -144,7 +154,6 @@ class DealersProvider extends LoadStatusNotifier {
       body: {
         "dealerId": id,
       },
-      
     );
     notifyListeners();
     print(response.body);
@@ -163,7 +172,7 @@ class DealersProvider extends LoadStatusNotifier {
         "id": id,
       },
     );
-      notifyListeners();
+    notifyListeners();
 
     print(response.body);
   }

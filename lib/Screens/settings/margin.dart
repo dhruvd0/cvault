@@ -5,6 +5,7 @@ import 'package:cvault/util/ui.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 class EnterMarginField extends StatelessWidget {
   const EnterMarginField({
@@ -14,8 +15,8 @@ class EnterMarginField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProfileChangeNotifier>(
-      builder: (s,profileNotifier,k) {
-         var userType = profileNotifier.profile.userType;
+      builder: (s, profileNotifier, k) {
+        var userType = profileNotifier.profile.userType;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -36,7 +37,11 @@ class EnterMarginField extends StatelessWidget {
                   color: Colors.transparent,
                   border: Border.all(
                     width: 1.5,
-                    color: userType==UserTypes.customer? Color(0xffE47331):userType==UserTypes.dealer?Color(0xff566749):Color(0xff0CFEBC),
+                    color: userType == UserTypes.customer
+                        ? Color(0xffE47331)
+                        : userType == UserTypes.dealer
+                            ? Color(0xff566749)
+                            : Color(0xff0CFEBC),
                   ),
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -58,6 +63,8 @@ class MarginInputTextField extends StatelessWidget {
   final bool? editEnabled;
   @override
   Widget build(BuildContext context) {
+    var userTypes = Provider.of<ProfileChangeNotifier>(context);
+
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 100),
@@ -68,10 +75,13 @@ class MarginInputTextField extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
             ),
+            textInputAction: TextInputAction.done,
             keyboardType: TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-            ),
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: userTypes.profile.userType == UserTypes.admin
+                    ? marginsNotifier.adminMargin.toString()
+                    : marginsNotifier.dealerMargin.toString()),
             textAlign: TextAlign.center,
             onChanged: (string) {
               var parse = double.tryParse(string);

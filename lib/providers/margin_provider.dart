@@ -1,4 +1,3 @@
-
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/util/http.dart';
 
@@ -37,6 +36,7 @@ class MarginsNotifier extends LoadStatusNotifier {
       ? adminMargin
       : dealerMargin;
   Future<bool> setMargin(double margin) async {
+    print(margin);
     var defaultAuthenticatedHeader2 =
         defaultAuthenticatedHeader(profileChangeNotifier.token);
     var user =
@@ -88,8 +88,10 @@ class MarginsNotifier extends LoadStatusNotifier {
       final data = jsonDecode(response.body);
       if (userType == 'admin') {
         adminMargin = data['margin'].toDouble();
+        //print(adminMargin.toString() + "adminmargin");
       } else {
         dealerMargin = data['margin'].toDouble();
+        //print(dealerMargin.toString() + "dealermargin");
       }
 
       notifyListeners();

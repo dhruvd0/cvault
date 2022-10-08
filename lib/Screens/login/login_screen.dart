@@ -136,20 +136,20 @@ class _LogInScreenState extends State<LogInScreen> {
       return;
     }
 
-    await notifier.fetchProfile();
+    await notifier.fetchProfile(context);
     if (notifier.profile.firstName.isNotEmpty) {
-      if (notifier.profile is Dealer) {
-        if (!(notifier.profile as Dealer).active) {
-          showSnackBar('Your account is disabled', context);
-          await Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (builder) => const UserTypeSelectPage(),
-            ),
-          );
-          return;
-        }
-      }
+      // if (notifier.profile is Dealer) {
+      //   if (!(notifier.profile as Dealer).active) {
+      //     showSnackBar('Your account is disabled', context);
+      //     await Navigator.pushReplacement(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (builder) => const UserTypeSelectPage(),
+      //       ),
+      //     );
+      //     return;
+      //   }
+      // }
       const snackBar = SnackBar(content: Text("Welcome Back!"));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Navigator.pushReplacement(
@@ -321,9 +321,10 @@ class _LogInScreenState extends State<LogInScreen> {
                   foregroundColor:
                       MaterialStateProperty.all<Color>(Colors.white),
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      userType == "dealer"
-                          ? Color(0xff70755F)
-                          : Color(0xffE47331)),
+                    userType == "dealer"
+                        ? Color(0xff70755F)
+                        : Color(0xffE47331),
+                  ),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -424,11 +425,15 @@ class _LogInScreenState extends State<LogInScreen> {
                               autofocus: true,
                               keyboardType: TextInputType.number,
                               style: const TextStyle(
-                                  color: Colors.white, fontSize: 16),
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
                               decoration: const InputDecoration.collapsed(
                                 hintText: "   Enter Otp",
                                 hintStyle: TextStyle(
-                                    fontSize: 16, color: Colors.white),
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
                                 border: InputBorder.none,
                               ),
                               onChanged: (value) {
