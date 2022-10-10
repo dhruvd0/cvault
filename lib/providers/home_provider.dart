@@ -52,6 +52,7 @@ class HomeStateNotifier extends ChangeNotifier {
 
     if (state.cryptoCurrencies.isNotEmpty) {
       _calculateDifference();
+      notifyListeners();
     }
 
     wazirXChannel?.sink.close();
@@ -92,6 +93,10 @@ class HomeStateNotifier extends ChangeNotifier {
           _parseAndEmitWazirXTickerData(cryptoData);
         }
       }
+      if (state.cryptoCurrencies.isNotEmpty) {
+        _calculateDifference();
+        notifyListeners();
+      }
       fetchCurrencyDataFromKraken();
       marginsNotifier.getAllMargins();
     });
@@ -129,6 +134,7 @@ class HomeStateNotifier extends ChangeNotifier {
       List<CryptoCurrency> currencies =
           _parseCurrenciesFromWazirCryptoData(mapResponse);
       if (state is HomeData) {
+        print("wazirx");
         _emit((state as HomeData).copyWith(cryptoCurrencies: currencies));
       } else {
         _emit(
@@ -187,6 +193,7 @@ class HomeStateNotifier extends ChangeNotifier {
         var usdConvert = _doConversionToINR(krakenPrice);
         krakenPrice = usdConvert;
       }
+      //print("kraken");
       var currencies = state.cryptoCurrencies.toList();
       currencies = _updateCurrenciesWithKrakenData(
         currencies,
@@ -261,7 +268,8 @@ class HomeStateNotifier extends ChangeNotifier {
           cryptoCurrencies[index] = cryptoCurrencies[index].copyWith(
             wazirxBuyPrice: totalPrice,
           );
-
+          //print("wazirx");
+          fetchCurrencyDataFromWazirX();
           _emit(state.copyWith(cryptoCurrencies: cryptoCurrencies));
           notifyListeners();
         }
@@ -333,7 +341,8 @@ class HomeStateNotifier extends ChangeNotifier {
             ((crypto.wazirxBuyPrice - crypto.krakenPrice) / crypto.krakenPrice),
       ),
     );
+    // print(crypto.wazirxBuyPrice.toString() + "wazir");
+    // print(crypto.krakenPrice.toString() + "kraken");
+    // print(state.difference);
   }
 }
-// 100 * ((crypto.wazirxPrice – crypto.krakenPrice) / crypto.krakenPrice)
-// 100 * ((2533118-2415313.58)/2415313.58)

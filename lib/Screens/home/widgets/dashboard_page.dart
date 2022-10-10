@@ -27,17 +27,11 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   @override
-  @override
   var formatter = NumberFormat('##,##,###');
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    onrefresh();
-  }
-
-  onrefresh() async {
-    Provider.of<AdvertisementProvider>(context).getAd();
   }
 
   Widget build(BuildContext context) {
