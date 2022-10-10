@@ -25,6 +25,7 @@ class DealersProvider extends LoadStatusNotifier {
   List<nonAcceptdealer> listData = [];
   List<nonAcceptdealer> _Data = [];
   bool isloading = false;
+  bool isloading2 = false;
 
   ///
   List<nonAcceptdealer> tempnonAccept = [];
@@ -110,6 +111,8 @@ class DealersProvider extends LoadStatusNotifier {
     } else {
       throw Exception(response.statusCode);
     }
+
+    notifyListeners();
   }
 
   Future<List<nonAcceptdealer>> getNonAcceptDealer() async {
@@ -131,13 +134,11 @@ class DealersProvider extends LoadStatusNotifier {
                 element.phone == FirebaseAuth.instance.currentUser!.phoneNumber,
           ),
         );
-        // isloading = true;
-        // print(isloading);
+
         notifyListeners();
       }
     }
-    isloading = true;
-    print(isloading);
+
     notifyListeners();
     return listData;
   }

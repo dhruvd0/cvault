@@ -68,8 +68,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     getUserType();
     callDealer();
-
-    ///startTimer();
+    startTimer();
+    print("hey");
   }
 
   bool timesec = false;
@@ -97,175 +97,108 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Consumer<ProfileChangeNotifier>(
       builder: (_, profileNotifier, k) {
-        var dealer = Provider.of<DealersProvider>(context, listen: true);
+        //var dealer = Provider.of<DealersProvider>(context, listen: true);
 
-        return Scaffold(
-          drawerEnableOpenDragGesture: false,
-          key: scaffoldKey,
-          endDrawer: const MyDrawer(),
-          backgroundColor: const Color(0xff1F1D2B),
-          body:
-              //dealer
-              userType == UserTypes.dealer
-                  ? dealer.isloading == true
-                      ? dealer.allDealer.isNotEmpty
-                          ? dealer.tempnonAccept.isNotEmpty
-                              ? Center(
+        return Consumer<DealersProvider>(
+          builder: (s, dealer, k) {
+            return Scaffold(
+              drawerEnableOpenDragGesture: false,
+              key: scaffoldKey,
+              endDrawer: const MyDrawer(),
+              backgroundColor: const Color(0xff1F1D2B),
+              body:
+                  //dealer
+                  userType == UserTypes.dealer
+                      ? timesec == true
+                          ? dealer.allDealer.isNotEmpty
+                              ? dealer.tempnonAccept.isNotEmpty
+                                  ? Center(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Text(
+                                            "Your Application is Under Progress",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : screens[index]
+                              : Center(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Text(
-                                        "Your Application is Under Progress",
+                                    children: [
+                                      const Text(
+                                        "Your Application is rejected",
                                         style: TextStyle(color: Colors.white),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Color(0xff566749),
+                                        ),
+                                        child: Text("Log out"),
+                                        onPressed: () {
+                                          Provider.of<HomeStateNotifier>(
+                                            context,
+                                            listen: false,
+                                          ).logout(context);
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  const UserTypeSelectPage(),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ],
                                   ),
                                 )
-                              : screens[index]
-                          : Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    "Your Application is rejected",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  const SizedBox(
-                                    height: 30,
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Color(0xff566749),
-                                    ),
-                                    child: Text("Log out"),
-                                    onPressed: () {
-                                      Provider.of<HomeStateNotifier>(
-                                        context,
-                                        listen: false,
-                                      ).logout(context);
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (builder) =>
-                                              const UserTypeSelectPage(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                          : const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
                               ),
                             )
-                      : const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        )
-                  : screens[index],
+                      : screens[index],
 
-          //dealer
-          bottomNavigationBar: Theme(
-            data: ThemeData(splashColor: Colors.transparent),
-            child: NavigationBarTheme(
-              data: NavigationBarThemeData(
-                indicatorColor: userType == UserTypes.customer
-                    ? const Color(0xffE47331)
-                    : userType == UserTypes.dealer
-                        ? const Color(0xff70755F)
-                        : const Color(0xff0EE7AD),
-                labelTextStyle: MaterialStateProperty.all(
-                  const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
+              //dealer
+              bottomNavigationBar: Theme(
+                data: ThemeData(splashColor: Colors.transparent),
+                child: NavigationBarTheme(
+                  data: NavigationBarThemeData(
+                    indicatorColor: userType == UserTypes.customer
+                        ? const Color(0xffE47331)
+                        : userType == UserTypes.dealer
+                            ? const Color(0xff70755F)
+                            : const Color(0xff0EE7AD),
+                    labelTextStyle: MaterialStateProperty.all(
+                      const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              child: NavigationBar(
-                height: 80,
-                backgroundColor: Colors.transparent,
-                labelBehavior:
-                    NavigationDestinationLabelBehavior.onlyShowSelected,
-                selectedIndex: index,
-                onDestinationSelected: (index) {
-                  setState(() {
-                    this.index = index;
-                  });
-                },
-                destinations: userType == UserTypes.customer
-                    ? [
-                        const NavigationDestination(
-                          selectedIcon: Icon(
-                            Icons.home_filled,
-                            color: Colors.black,
-                          ),
-                          icon: Icon(
-                            Icons.home,
-                            color: Colors.white,
-                          ),
-                          label: "Home",
-                        ),
-                        const NavigationDestination(
-                          selectedIcon: Icon(
-                            Icons.paid_outlined,
-                            color: Colors.black,
-                          ),
-                          icon: Icon(
-                            Icons.paid,
-                            color: Colors.white,
-                          ),
-                          label: "Quote",
-                        ),
-                        const NavigationDestination(
-                          selectedIcon: Icon(
-                            Icons.person,
-                            color: Colors.black,
-                          ),
-                          icon: Icon(
-                            Icons.person,
-                            color: Colors.white,
-                          ),
-                          label: "Profile",
-                        ),
-                      ]
-                    : userType == UserTypes.admin
+                  child: NavigationBar(
+                    height: 80,
+                    backgroundColor: Colors.transparent,
+                    labelBehavior:
+                        NavigationDestinationLabelBehavior.onlyShowSelected,
+                    selectedIndex: index,
+                    onDestinationSelected: (index) {
+                      setState(() {
+                        this.index = index;
+                      });
+                    },
+                    destinations: userType == UserTypes.customer
                         ? [
-                            const NavigationDestination(
-                              selectedIcon: Icon(
-                                Icons.home_filled,
-                                color: Colors.black,
-                              ),
-                              icon: Icon(
-                                Icons.home,
-                                color: Colors.white,
-                              ),
-                              label: "Home",
-                            ),
-                            const NavigationDestination(
-                              selectedIcon: Icon(
-                                Icons.admin_panel_settings_outlined,
-                                color: Colors.black,
-                              ),
-                              icon: Icon(
-                                Icons.admin_panel_settings,
-                                color: Colors.white,
-                              ),
-                              label: "Admin Panel",
-                            ),
-                            const NavigationDestination(
-                              selectedIcon: Icon(
-                                Icons.person,
-                                color: Colors.black,
-                              ),
-                              icon: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              ),
-                              label: "Profile",
-                            ),
-                          ]
-                        : [
                             const NavigationDestination(
                               selectedIcon: Icon(
                                 Icons.home_filled,
@@ -290,17 +223,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             ),
                             const NavigationDestination(
                               selectedIcon: Icon(
-                                Icons.admin_panel_settings_outlined,
-                                color: Colors.black,
-                              ),
-                              icon: Icon(
-                                Icons.admin_panel_settings,
-                                color: Colors.white,
-                              ),
-                              label: "Admin Panel",
-                            ),
-                            const NavigationDestination(
-                              selectedIcon: Icon(
                                 Icons.person,
                                 color: Colors.black,
                               ),
@@ -310,10 +232,94 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               ),
                               label: "Profile",
                             ),
-                          ],
+                          ]
+                        : userType == UserTypes.admin
+                            ? [
+                                const NavigationDestination(
+                                  selectedIcon: Icon(
+                                    Icons.home_filled,
+                                    color: Colors.black,
+                                  ),
+                                  icon: Icon(
+                                    Icons.home,
+                                    color: Colors.white,
+                                  ),
+                                  label: "Home",
+                                ),
+                                const NavigationDestination(
+                                  selectedIcon: Icon(
+                                    Icons.admin_panel_settings_outlined,
+                                    color: Colors.black,
+                                  ),
+                                  icon: Icon(
+                                    Icons.admin_panel_settings,
+                                    color: Colors.white,
+                                  ),
+                                  label: "Admin Panel",
+                                ),
+                                const NavigationDestination(
+                                  selectedIcon: Icon(
+                                    Icons.person,
+                                    color: Colors.black,
+                                  ),
+                                  icon: Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                  ),
+                                  label: "Profile",
+                                ),
+                              ]
+                            : [
+                                const NavigationDestination(
+                                  selectedIcon: Icon(
+                                    Icons.home_filled,
+                                    color: Colors.black,
+                                  ),
+                                  icon: Icon(
+                                    Icons.home,
+                                    color: Colors.white,
+                                  ),
+                                  label: "Home",
+                                ),
+                                const NavigationDestination(
+                                  selectedIcon: Icon(
+                                    Icons.paid_outlined,
+                                    color: Colors.black,
+                                  ),
+                                  icon: Icon(
+                                    Icons.paid,
+                                    color: Colors.white,
+                                  ),
+                                  label: "Quote",
+                                ),
+                                const NavigationDestination(
+                                  selectedIcon: Icon(
+                                    Icons.admin_panel_settings_outlined,
+                                    color: Colors.black,
+                                  ),
+                                  icon: Icon(
+                                    Icons.admin_panel_settings,
+                                    color: Colors.white,
+                                  ),
+                                  label: "Admin Panel",
+                                ),
+                                const NavigationDestination(
+                                  selectedIcon: Icon(
+                                    Icons.person,
+                                    color: Colors.black,
+                                  ),
+                                  icon: Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                  ),
+                                  label: "Profile",
+                                ),
+                              ],
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

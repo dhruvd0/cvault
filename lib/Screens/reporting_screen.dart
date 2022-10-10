@@ -184,8 +184,9 @@ class _ReportingState extends State<Reporting> {
                                           .then((value) =>
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
-                                                content:
-                                                    const Text('In progress'),
+                                                content: const Text(
+                                                  'Dealer rejected',
+                                                ),
                                                 duration:
                                                     const Duration(seconds: 1),
                                                 action: SnackBarAction(

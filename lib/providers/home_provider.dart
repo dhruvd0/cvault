@@ -134,7 +134,6 @@ class HomeStateNotifier extends ChangeNotifier {
       List<CryptoCurrency> currencies =
           _parseCurrenciesFromWazirCryptoData(mapResponse);
       if (state is HomeData) {
-        print("wazirx");
         _emit((state as HomeData).copyWith(cryptoCurrencies: currencies));
       } else {
         _emit(
