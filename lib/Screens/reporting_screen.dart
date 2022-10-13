@@ -168,6 +168,7 @@ class _ReportingState extends State<Reporting> {
                                                     Text('dealer accepted'),
                                                 duration: Duration(seconds: 1),
                                               )));
+                                      fetchApproveDealer();
                                     },
                                   ),
                                   ElevatedButton(
@@ -183,17 +184,20 @@ class _ReportingState extends State<Reporting> {
                                           )
                                           .then((value) =>
                                               ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                content: const Text(
-                                                  'Dealer rejected',
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: const Text(
+                                                    'Dealer rejected',
+                                                  ),
+                                                  duration: const Duration(
+                                                      seconds: 1),
+                                                  action: SnackBarAction(
+                                                    label: 'ACTION',
+                                                    onPressed: () {},
+                                                  ),
                                                 ),
-                                                duration:
-                                                    const Duration(seconds: 1),
-                                                action: SnackBarAction(
-                                                  label: 'ACTION',
-                                                  onPressed: () {},
-                                                ),
-                                              )));
+                                              ));
+                                      fetchApproveDealer();
                                     },
                                   ),
                                 ],

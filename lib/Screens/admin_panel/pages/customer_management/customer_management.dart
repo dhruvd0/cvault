@@ -129,7 +129,7 @@ class _CustomerManagementPageState extends State<CustomerManagementPage> {
                                   color: Colors.white,
                                 ),
                               )
-                            : Center(child: Text("No customers")),
+                            : const Center(child: Text("No customers")),
                   ),
                   const SizedBox(
                     height: 10,

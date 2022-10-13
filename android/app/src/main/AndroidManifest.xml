@@ -18,6 +18,7 @@
 
    <application
         android:label="cvault"
+    
         android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
