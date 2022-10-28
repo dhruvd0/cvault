@@ -68,12 +68,19 @@ class _AdminPanelState extends State<AdminPanel> {
                           width: MediaQuery.of(context).size.width * 0.85,
                           decoration: BoxDecoration(
                             boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.4),
-                                blurRadius: 10,
-                                spreadRadius: 1,
-                                offset: const Offset(4, 4),
-                              ),
+                              userType == UserTypes.admin
+                                  ? BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
+                                      offset: const Offset(4, 4),
+                                    )
+                                  : BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      blurRadius: 1,
+                                      spreadRadius: 2,
+                                      offset: const Offset(4, 4),
+                                    ),
                             ],
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -81,8 +88,8 @@ class _AdminPanelState extends State<AdminPanel> {
                             borderRadius: BorderRadius.circular(15),
                             child: Image.asset(
                               userType == UserTypes.admin
-                                  ? "assets/trans.jpeg"
-                                  : "assets/Card.jpeg",
+                                  ? "assets/Trans.jpg"
+                                  : "assets/Card.jpg",
                               fit: BoxFit.fitWidth,
                             ),
                           ),
@@ -114,9 +121,9 @@ class _AdminPanelState extends State<AdminPanel> {
                                     color: Colors.black,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.grey.withOpacity(0.4),
-                                        blurRadius: 10,
-                                        spreadRadius: 1,
+                                        color: Colors.white.withOpacity(0.2),
+                                        blurRadius: 1,
+                                        spreadRadius: 2,
                                         offset: const Offset(4, 4),
                                       ),
                                     ],
@@ -125,7 +132,7 @@ class _AdminPanelState extends State<AdminPanel> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
                                     child: Image.asset(
-                                      "assets/Card-2.jpeg",
+                                      "assets/card2.png",
                                       fit: BoxFit.fitWidth,
                                     ),
                                   ),

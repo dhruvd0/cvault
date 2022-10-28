@@ -162,7 +162,17 @@ class ProfilePage extends StatelessWidget {
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.65,
                           child: Container(
-                            decoration: const BoxDecoration(),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  blurRadius: 1,
+                                  spreadRadius: 2,
+                                  offset: const Offset(3, 3),
+                                ),
+                              ],
+                            ),
                             child: FloatingActionButton.extended(
                               backgroundColor: userType == UserTypes.customer
                                   ? const Color(0xffE47331)

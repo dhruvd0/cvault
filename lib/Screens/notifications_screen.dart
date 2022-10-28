@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cvault/providers/NotificationApiProvider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +26,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     super.initState();
 
     getMytrans();
+    startTimer();
   }
 
   getMytrans() async {
@@ -35,6 +38,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
     transactions = await data.getAllNotification(tokens);
   }
 
+  bool indicator = true;
+  void startTimer() {
+    if (mounted) {
+      Timer.periodic(const Duration(seconds: 5), (t) {
+        setState(() {
+          indicator = false; //set loading to false
+        });
+        t.cancel(); //stops the timer
+      });
+    }
+  }
   // void _onRefresh(context) async {
   //   getMytrans();
   // }
@@ -79,11 +93,18 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       return _notificationTile(context, index, tokens);
                     },
                   )
-                : const Center(
-                    child: CircularProgressIndicator(
-                      color: Color(0xffE47331),
-                    ),
-                  );
+                : indicator == true
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0xffE47331),
+                        ),
+                      )
+                    : const Center(
+                        child: Text(
+                          "No notifications",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
           },
         ),
       ),
@@ -175,9 +196,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             ),
                             Text(
                               DateFormat('yyyy-MM-dd \nH:m:s').format(
-                                  DateTime.parse(transactions[index]
-                                          ["transactionId"]["createdAt"])
-                                      .toLocal()),
+                                DateTime.parse(transactions[index]
+                                        ["transactionId"]["createdAt"])
+                                    .toLocal(),
+                              ),
                               style:
                                   TextStyle(color: Colors.white, fontSize: 15),
                             ),
@@ -196,18 +218,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   const Text(
                                     "Price",
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 15),
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
                                   ),
                                   Text(
                                     transactions[index]["transactionId"]
                                         ["transactionType"],
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 15),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
                                   ),
                                   const Text(
                                     "Currency",
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 15),
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ],
                               ),

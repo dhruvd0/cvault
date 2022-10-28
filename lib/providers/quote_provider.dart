@@ -4,6 +4,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/providers/notification_bloc/notification_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +17,7 @@ import 'package:cvault/providers/common/load_status_notifier.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:intl_phone_field/phone_number.dart';
+import 'package:provider/provider.dart';
 
 enum QuoteMode {
   Price,
@@ -32,6 +34,8 @@ class QuoteProvider extends LoadStatusNotifier {
   final HomeStateNotifier homeStateNotifier;
 
   final ProfileChangeNotifier profileChangeNotifier;
+  var userType;
+
   var quoteMode = QuoteMode.Price;
   void changeQuoteMode(QuoteMode mode) {
     quoteMode = mode;
@@ -87,13 +91,14 @@ class QuoteProvider extends LoadStatusNotifier {
   ///  [false] for 400, Bad Request(Customer not found)
   ///  and null for failure
   // ignore: long-method
-  Future<bool?> sendQuote() async {
+  Future<bool?> sendQuote(context) async {
     loadStatus = LoadStatus.loading;
-print(quoteMode);
+    //print(quoteMode);
     notifyListeners();
 
     var quoteDataFromTransactions = _quoteDataFromTransactions(
       profileChangeNotifier.authInstance.currentUser!.uid,
+      context,
     );
     var jsonEncode2 = jsonEncode(
       quoteDataFromTransactions,
@@ -111,13 +116,19 @@ print(quoteMode);
 
     if (response.statusCode == 201) {
       var decodedBody = jsonDecode(response.body);
+      //print(homeStateNotifier.marginsNotifier.dealerMargin);
+      print(homeStateNotifier.marginsNotifier.margin.toString() + "margin");
+      // print(homeStateNotifier.marginsNotifier.totalMargin);
+      // print(homeStateNotifier.marginsNotifier.adminMargin);
       _id = decodedBody["data"]["_id"];
-      print(_id);
+      var margin = decodedBody["data"]["dealerMargin"];
+      print(margin);
+      print(jsonEncode2);
       String title = 'Quote Received';
       String body =
           '${transaction.transactionType} | ${transaction.cryptoType} |  ${transaction.transactionType == "buy" ? transaction.price + (transaction.price / 100) * finalMargin : transaction.price - (transaction.price / 100) * finalMargin} ${transaction.currency} | ${transaction.quantity} ${transaction.cryptoType}';
       if (Firebase.apps.isNotEmpty) {
-        print(decodedBody);
+        //print(decodedBody);
         NotificationCubit.sendNotificationToUser(
           'Quote Sent',
           body,
@@ -158,9 +169,8 @@ print(quoteMode);
           "transactionId": _id,
         },
       );
-      print(response.body);
+      //print(response.body);
 
-      print("hey");
     } else {
       print("_id null");
     }
@@ -170,7 +180,12 @@ print(quoteMode);
 //new field
 
 //new filed
-  Map<String, dynamic> _quoteDataFromTransactions(String sendersID) {
+
+  // ignore: long-method
+  Map<String, dynamic> _quoteDataFromTransactions(
+    String sendersID,
+    context,
+  ) {
     var quantity =
         transaction.costPrice + (transaction.costPrice / 100) * finalMargin;
     var finalQuantity = transaction.price / quantity;
@@ -179,25 +194,32 @@ print(quoteMode);
         transaction.costPrice - (transaction.costPrice / 100) * finalMargin;
 
     var sellFinalQunatity = transaction.price / sellQuantity;
-
+    var userType = Provider.of<ProfileChangeNotifier>(context, listen: false)
+        .profile
+        .userType;
 
     return {
       "transactionType": transaction.transactionType,
       "cryptoType": transaction.cryptoType,
-      "price":quoteMode==QuoteMode.Price? transaction.transactionType == "buy"
-          ? transaction.price + (transaction.price / 100) * finalMargin
-    : transaction.price - (transaction.price / 100) * finalMargin:transaction.price,
+      "price": quoteMode == QuoteMode.Price
+          ? transaction.transactionType == "buy"
+              ? transaction.price + (transaction.price / 100) * finalMargin
+              : transaction.price - (transaction.price / 100) * finalMargin
+          : transaction.price,
       "costPrice": transaction.costPrice,
       "currency": transaction.currency,
-
-      "quantity":quoteMode==QuoteMode.Quantity? transaction.status == "sell"
-    ? sellFinalQunatity.toStringAsFixed(8)
-         : finalQuantity.toStringAsFixed(8):transaction.quantity,
+      "quantity": quoteMode == QuoteMode.Quantity
+          ? transaction.status == "sell"
+              ? sellFinalQunatity.toStringAsFixed(8)
+              : finalQuantity.toStringAsFixed(8)
+          : transaction.quantity,
       "timestamps": DateTime.now().toIso8601String(),
       "receiversPhone": transaction.receiver.phone,
       "sendersID": sendersID,
       'dealerMargin': homeStateNotifier.marginsNotifier.dealerMargin,
-      "margin":finalMargin,
+      "margin": userType == UserTypes.dealer
+          ? finalMargin
+          : homeStateNotifier.marginsNotifier.dealerMargin,
     };
   }
 

@@ -133,7 +133,9 @@ class TransactionTile extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
               Text(
-                "Margin: ${transaction.margin}",
+                transaction.status == 'sent'
+                    ? "Margin: ${transaction.margin}"
+                    : "Margin: ${""}",
                 style: TextStyle(color: Colors.white, fontSize: 15),
               ),
             ],

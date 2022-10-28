@@ -7,12 +7,15 @@ import 'package:cvault/Screens/quote/quote.dart';
 import 'package:cvault/Screens/usertype_select/usertype_select_page.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:cvault/drawer.dart';
+import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/dealers_provider.dart';
 import 'package:cvault/providers/home_provider.dart';
 import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
+import 'package:cvault/util/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Base Page For cvault, opens after logging in
@@ -28,6 +31,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   int index = 0;
   var screens = [
     const DashboardPage(),
@@ -37,7 +41,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ];
   String userType = UserTypes.admin;
 
-  void getUserType() async {
+  Future getUserType() async {
     final user = ((await SharedPreferences.getInstance())
             .getString(SharedPreferencesKeys.userTypeKey) ??
         UserTypes.customer);
@@ -66,30 +70,65 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     getUserType();
     callDealer();
     startTimer();
-    print("hey");
+  }
+
+  dealerCheack() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = Provider.of<ProfileChangeNotifier>(context, listen: false);
+    var data = Provider.of<DealersProvider>(context, listen: false);
+    var notifier = Provider.of<ProfileChangeNotifier>(context, listen: false);
+    var dealer = Provider.of<DealersProvider>(context, listen: false);
+
+    if (notifier.profile is Dealer) {
+      await data.fetchAndSetDealers(token.token);
+      if (dealer.allDealer[0].active == false) {
+        showSnackBar('Your account is disabled', context);
+        await Provider.of<HomeStateNotifier>(
+          context,
+          listen: false,
+        ).logout(context);
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (builder) => const UserTypeSelectPage(),
+          ),
+        );
+        print(notifier.profile.active);
+        return;
+      }
+    }
   }
 
   bool timesec = false;
-  void startTimer() {
-    Timer.periodic(const Duration(seconds: 3), (t) {
-      setState(() {
-        timesec = true;
+  startTimer() {
+    if (mounted) {
+      Timer.periodic(const Duration(seconds: 4), (t) {
+        setState(() {
+          getUserType();
+          callDealer();
+          timesec = true;
+        });
+        t.cancel(); //stops the timer
       });
-      t.cancel(); //stops the timer
-    });
+    }
   }
 
-  void callDealer() async {
-    setState(() {});
-    var token = Provider.of<ProfileChangeNotifier>(context, listen: false);
-    var data = Provider.of<DealersProvider>(context, listen: true);
-    await data.fetchAndSetDealers(token.token);
-    await data.getNonAcceptDealer();
+  callDealer() async {
+    if (mounted && userType == UserTypes.dealer) {
+      setState(() {});
+      var token = Provider.of<ProfileChangeNotifier>(context, listen: false);
+      var data = Provider.of<DealersProvider>(context, listen: false);
+      await data.fetchAndSetDealers(token.token);
+      await data.getNonAcceptDealer();
+      await dealerCheack();
 
-    setState(() {});
+      setState(() {});
+    }
+
     // ignore: newline-before-return
   }
 
@@ -101,10 +140,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
         return Consumer<DealersProvider>(
           builder: (s, dealer, k) {
+            var token =
+                Provider.of<ProfileChangeNotifier>(context, listen: false);
+
             return Scaffold(
               drawerEnableOpenDragGesture: false,
               key: scaffoldKey,
-              endDrawer: const MyDrawer(),
+              endDrawer: userType == UserTypes.dealer
+                  ? dealer.allDealer.isNotEmpty
+                      ? dealer.tempnonAccept.isNotEmpty
+                          ? null
+                          : MyDrawer()
+                      : null
+                  : MyDrawer(),
               backgroundColor: const Color(0xff1F1D2B),
               body:
                   //dealer
@@ -112,19 +160,48 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ? timesec == true
                           ? dealer.allDealer.isNotEmpty
                               ? dealer.tempnonAccept.isNotEmpty
-                                  ? Center(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: const [
-                                          Text(
-                                            "Your Application is Under Progress",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                  ? RefreshIndicator(
+                                      onRefresh: () async {
+                                        setState(() {});
+                                        getUserType();
+                                        callDealer();
+                                        startTimer();
+
+                                        setState(() {});
+                                      },
+                                      child: SingleChildScrollView(
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: Center(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: const [
+                                                Text(
+                                                  "Your Application is Under Progress \n  ",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "( Pull to refresh.... )",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     )
                                   : screens[index]

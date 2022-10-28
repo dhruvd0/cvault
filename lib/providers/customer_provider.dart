@@ -44,6 +44,7 @@ class CustomerProvider extends LoadStatusNotifier {
   /// fetch all customers
 
   /// Fetches specific customers
+  // ignore: long-method
   Future<void> fetchAndSetCustomers(String token) async {
     String userType = (await SharedPreferences.getInstance())
         .get(SharedPreferencesKeys.userTypeKey)
@@ -85,12 +86,10 @@ class CustomerProvider extends LoadStatusNotifier {
       _customers.addAll(temp);
       notifyListeners();
       getcustomer = true;
-      print(temp.toString() + "hey");
+      //print(temp.toString() + "hey");
       notifyListeners();
     } else {
       throw Exception(response.statusCode);
     }
   }
-
-  Future<void> fetchNotification() async {}
 }

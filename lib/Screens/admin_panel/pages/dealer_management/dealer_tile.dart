@@ -115,21 +115,25 @@ class _DealerTileState extends State<DealerTile> {
               const SizedBox(
                 height: 10,
               ),
-              Switch(
-                activeColor: Colors.white,
-                activeTrackColor: Colors.green,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.black,
-                value: toggle,
-                onChanged: (value) {
-                  setState(() {
-                    toggle = value;
+              Row(
+                children: [
+                  Switch(
+                    activeColor: Colors.white,
+                    activeTrackColor: Colors.green,
+                    inactiveThumbColor: Colors.white,
+                    inactiveTrackColor: Colors.black,
+                    value: widget.dealer.active,
+                    onChanged: (value) {
+                      setState(() {
+                        widget.dealer.active = value;
+                        _changeActiveStatus(context);
+                        success;
+                      });
 
-                    success;
-                  });
-
-                  // _changeActiveStatus(context);
-                },
+                      // _changeActiveStatus(context);
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -141,7 +145,7 @@ class _DealerTileState extends State<DealerTile> {
   void _changeActiveStatus(BuildContext context) async {
     bool success = await Provider.of<DealersProvider>(context, listen: false)
         .changeDealerActiveState(widget.dealer.dealerId);
-    String status = toggle ? 'Enabled' : 'Disabled';
+    String status = widget.dealer.active == true ? 'Enabled' : 'Disabled';
     if (success) {
       final snackBar = SnackBar(content: Text("Dealer $status"));
 

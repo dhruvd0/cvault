@@ -1,8 +1,5 @@
 import 'dart:developer';
-import 'dart:ui';
 import 'package:flutter/services.dart';
-
-import 'package:cvault/models/profile_models/dealer.dart';
 import 'package:cvault/providers/profile_provider.dart';
 
 import 'package:cvault/Screens/profile/widgets/profile_page.dart';
@@ -131,22 +128,28 @@ class _LogInScreenState extends State<LogInScreen> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var notifier = Provider.of<ProfileChangeNotifier>(context, listen: false);
+    await notifier.fetchProfile(context);
     if (phone == "+911111111111") {
       await postLoginRoutineForAdmin(prefs, notifier);
       return;
     }
 
-    await notifier.fetchProfile(context);
     if (notifier.profile.firstName.isNotEmpty) {
+      // print((notifier.profile as Dealer).active);
       // if (notifier.profile is Dealer) {
       //   if (!(notifier.profile as Dealer).active) {
       //     showSnackBar('Your account is disabled', context);
+      //     await Provider.of<HomeStateNotifier>(
+      //       context,
+      //       listen: false,
+      //     ).logout(context);
       //     await Navigator.pushReplacement(
       //       context,
       //       MaterialPageRoute(
       //         builder: (builder) => const UserTypeSelectPage(),
       //       ),
       //     );
+
       //     return;
       //   }
       // }
@@ -180,10 +183,11 @@ class _LogInScreenState extends State<LogInScreen> {
       UserTypes.admin,
       FirebaseAuth.instance.currentUser!.uid,
     );
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (builder) => const HomePage()),
-    );
+
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (builder) => const HomePage()),
+        (route) => false);
   }
 
   // ignore: long-method
@@ -199,54 +203,43 @@ class _LogInScreenState extends State<LogInScreen> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.65,
               height: 50,
-              child: Container(
-                decoration: const BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromARGB(255, 133, 128, 119),
-                      blurRadius: 15,
-                      spreadRadius: 1, //New
+              child: SizedBox(
+                height: 45,
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      userType == "Dealer"
+                          ? const Color(0xff70755F)
+                          : const Color(0xffE47331),
                     ),
-                  ],
-                ),
-                child: SizedBox(
-                  height: 45,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        userType == "Dealer"
-                            ? const Color(0xff70755F)
-                            : const Color(0xffE47331),
-                      ),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    onPressed: () async {
-                      setState(() {
-                        _isLoading = true;
-                        number();
-                      });
-                      verifyPhone();
-                    },
-                    child: _isLoading == false
-                        ? const Text(
-                            'Get otp',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          )
-                        : const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          ),
                   ),
+                  onPressed: () async {
+                    setState(() {
+                      _isLoading = true;
+                      number();
+                    });
+                    verifyPhone();
+                  },
+                  child: _isLoading == false
+                      ? const Text(
+                          'Get otp',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        )
+                      : const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -332,6 +325,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                 ),
                 onPressed: () async {
+                  await postLoginSubRoutine;
                   setState(() {
                     _isOtpLogin == true;
                     Newotp();
@@ -536,10 +530,10 @@ class _LogInScreenState extends State<LogInScreen> {
                             height: 30,
                           ),
                           Container(
-                            padding: EdgeInsets.all(25),
+                            padding: const EdgeInsets.all(25),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color(0xff252836),
+                              color: const Color(0xff252836),
                             ),
                             child: Column(
                               children: [
@@ -576,7 +570,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                         _isLoading = true;
                                         number();
                                       });
-                                      verifyPhone();
+                                      _isLoading == true ? verifyPhone() : null;
                                       print(profileNotifier.Role);
                                     },
                                     child: _isLoading == false

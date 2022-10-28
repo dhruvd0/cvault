@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flutter/services.dart';
+
 /// Has phone number text field, send quote button
 class SendQuoteBox extends StatelessWidget {
   ///
@@ -117,63 +119,74 @@ class SendQuoteBox extends StatelessWidget {
                             )
                           : Consumer<TransactionsProvider>(
                               builder: (s, contexts, u) {
-                                return SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.45,
-                                  child: Consumer<ProfileChangeNotifier>(
-                                    builder: (context, profileNotifier, _) {
-                                      var userType =
-                                          profileNotifier.profile.userType;
+                                return GestureDetector(
+                                  onTap: () async {
+                                    print(quoteProvider.phoneNumber);
+                                    final success =
+                                        await quoteProvider.sendQuote(context);
 
-                                      return ElevatedButton(
-                                        onPressed: () async {
-                                          print(quoteProvider.phoneNumber);
-                                          final success =
-                                              await quoteProvider.sendQuote();
+                                    var snackBarText = '';
 
-                                          var snackBarText = '';
+                                    if (success == null) {
+                                      snackBarText = "Something Went Wrong";
+                                    } else if (success) {
+                                      snackBarText = 'Quote Sent';
+                                    } else {
+                                      snackBarText = 'This User does not exist';
+                                    }
 
-                                          if (success == null) {
-                                            snackBarText =
-                                                "Something Went Wrong";
-                                          } else if (success) {
-                                            snackBarText = 'Quote Sent';
-                                          } else {
-                                            snackBarText =
-                                                'This User does not exist';
-                                          }
-
-                                          var snackBar = SnackBar(
-                                            content: Text(
-                                              snackBarText,
-                                            ),
-                                          );
-                                          // ScaffoldMessenger.of(context)
-                                          //     .showSnackBar(snackBar);
-                                          quoteProvider.SendNotifiaction().then(
-                                            (value) =>
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(snackBar),
-                                          );
-                                          print(quoteProvider
-                                              .transaction.quantity.toString()+"hey");
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          primary:
-                                              userType == UserTypes.customer
-                                                  ? Color(0xffE47331)
-                                                  : Color(0xff566749),
-                                          elevation: 10,
-                                          shape: const StadiumBorder(),
+                                    var snackBar = SnackBar(
+                                      content: Text(
+                                        snackBarText,
+                                      ),
+                                    );
+                                    // ScaffoldMessenger.of(context)
+                                    //     .showSnackBar(snackBar);
+                                    quoteProvider.SendNotifiaction().then(
+                                      (value) => ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar),
+                                    );
+                                    print(quoteProvider.transaction.quantity
+                                            .toString() +
+                                        "hey");
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: userType == UserTypes.customer
+                                          ? Color(0xffE47331)
+                                          : Color(0xff566749),
+                                      borderRadius: BorderRadius.circular(18),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.4),
+                                          blurRadius: 1,
+                                          spreadRadius: 2,
+                                          offset: const Offset(3, 4),
                                         ),
-                                        child: const Text(
-                                          "Send Quote",
-                                          style: TextStyle(
-                                            fontSize: 18,
+                                      ],
+                                    ),
+                                    child: Consumer<ProfileChangeNotifier>(
+                                      builder: (context, profileNotifier, _) {
+                                        var userType =
+                                            profileNotifier.profile.userType;
+
+                                        return const Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                            20,
+                                            5,
+                                            20,
+                                            5,
                                           ),
-                                        ),
-                                      );
-                                    },
+                                          child: Text(
+                                            "Send Quote",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 );
                               },
@@ -207,7 +220,10 @@ class SendQuoteBox extends StatelessWidget {
                             //autovalidateMode: AutovalidateMode.always,
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.phone,
-                            inputFormatters: const [],
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10),
+                            ],
+
                             onChanged: (string) {
                               quoteProvider.changeTransactionField(
                                 TransactionProps.receiver,

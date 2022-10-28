@@ -8,9 +8,9 @@ import 'package:cvault/models/transaction/transaction.dart';
 ///
 class Dealer extends Profile {
   ///
-  const Dealer({
+  Dealer({
     required this.dealerId,
-    required this.active,
+    // required this.active,
     required List<Transaction> transactions,
     required String userType,
     required String firstName,
@@ -20,6 +20,7 @@ class Dealer extends Profile {
     required String uid,
     required String referalCode,
     required String phone,
+    required bool active,
   }) : super(
           middleName: middleName,
           referalCode: referalCode,
@@ -29,6 +30,7 @@ class Dealer extends Profile {
           uid: uid,
           phone: phone,
           lastName: lastName,
+          active: active,
           transactions: transactions,
         );
 
@@ -36,7 +38,7 @@ class Dealer extends Profile {
   final String dealerId;
 
   ///
-  final bool active;
+  // final bool active;
 
   ///
   factory Dealer.fromJson(String userType, Map<String, dynamic> json) {
@@ -49,7 +51,7 @@ class Dealer extends Profile {
       userType: userType,
       phone: json["phone"] ?? '',
       email: json["email"] ?? '',
-      active: json["active"] ?? false,
+      active: json["active"] ?? true,
       referalCode: json['referalCode'] ?? '',
       transactions: json['transactions'] == null
           ? []

@@ -33,7 +33,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 child: ListView(
                   children: [
                     const DrawerHeader(
-                      decoration: BoxDecoration(color: Colors.black),
+                      decoration: BoxDecoration(color: Color(0xff1E2224)),
                       child: SizedBox(
                         height: 200,
                         width: 200,

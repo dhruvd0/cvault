@@ -36,8 +36,8 @@ class AdminPanelGrid extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.4),
-                      blurRadius: 10,
-                      spreadRadius: 1,
+                      blurRadius: 1,
+                      spreadRadius: 2,
                       offset: const Offset(4, 4),
                     ),
                   ],
@@ -46,7 +46,7 @@ class AdminPanelGrid extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image.asset(
-                    "assets/trans1.jpeg",
+                    "assets/trans1.png",
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -75,8 +75,8 @@ class AdminPanelGrid extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.4),
-                      blurRadius: 10,
-                      spreadRadius: 1,
+                      blurRadius: 1,
+                      spreadRadius: 2,
                       offset: const Offset(4, 4),
                     ),
                   ],
@@ -85,7 +85,7 @@ class AdminPanelGrid extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image.asset(
-                    "assets/trans2.jpeg",
+                    "assets/trans2.png",
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -114,8 +114,8 @@ class AdminPanelGrid extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.4),
-                      blurRadius: 10,
-                      spreadRadius: 1,
+                      blurRadius: 1,
+                      spreadRadius: 2,
                       offset: const Offset(4, 4),
                     ),
                   ],
@@ -124,7 +124,7 @@ class AdminPanelGrid extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Image.asset(
-                    "assets/trans3.jpeg",
+                    "assets/trans3.jpg",
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -157,8 +157,8 @@ class AdminPanelGrid extends StatelessWidget {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.4),
-                          blurRadius: 10,
-                          spreadRadius: 1,
+                          blurRadius: 1,
+                          spreadRadius: 2,
                           offset: const Offset(4, 4),
                         ),
                       ],

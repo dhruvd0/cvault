@@ -27,6 +27,7 @@ import 'providers/margin_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -40,15 +41,10 @@ Future<void> main() async {
             create: (context) => NotificationCubit(),
           ),
         ),
-      child: DevicePreview(
-        enabled: false,
-        builder: (context) {
-          return const MaterialApp(
-            useInheritedMediaQuery: true,
-            debugShowCheckedModeBanner: false,
-            home: CVaultApp(),
-          );
-        },
+      child: const MaterialApp(
+        useInheritedMediaQuery: true,
+        debugShowCheckedModeBanner: false,
+        home: CVaultApp(),
       ),
     ),
   );

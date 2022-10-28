@@ -28,6 +28,7 @@ abstract class Profile extends Equatable {
 
   ///
   final String referalCode;
+  late bool active;
 
   /// Phone should always have the country code as a prefix-'+91'
   final String phone;
@@ -35,7 +36,7 @@ abstract class Profile extends Equatable {
   final List<Transaction> transactions;
 
   ///
-  const Profile({
+  Profile({
     required this.firstName,
     required this.middleName,
     required this.lastName,
@@ -44,6 +45,7 @@ abstract class Profile extends Equatable {
     required this.userType,
     required this.referalCode,
     required this.phone,
+    required this.active,
     required this.transactions,
   });
   @override
@@ -103,6 +105,7 @@ class ProfileInitial extends Profile {
       : super(
           firstName: '',
           email: '',
+          active: true,
           middleName: '',
           lastName: '',
           referalCode: '',

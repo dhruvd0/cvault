@@ -23,8 +23,6 @@ class UserTypeButton extends StatelessWidget {
   ) {
     return Consumer<ProfileChangeNotifier>(
       builder: (s, profile, K) {
-        
-
         return InkWell(
           onTap: () async {
             (await SharedPreferences.getInstance())
@@ -45,9 +43,17 @@ class UserTypeButton extends StatelessWidget {
             children: [
               const SizedBox(height: 10),
               Container(
-                //height: 130,
-                // padding: const EdgeInsets.all(25),
-
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      blurRadius: 2,
+                      spreadRadius: 2,
+                      offset: const Offset(4, 4),
+                    ),
+                  ],
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: image,

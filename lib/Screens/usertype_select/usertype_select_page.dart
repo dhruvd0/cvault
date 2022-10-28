@@ -16,18 +16,14 @@ class UserTypeSelectPage extends StatefulWidget {
 }
 
 class _UserTypeSelectPageState extends State<UserTypeSelectPage> {
-
-
- late Image image1;
+  late Image image1;
   late Image image2;
-
 
   @override
   void initState() {
     super.initState();
     image1 = Image.asset("assets/dealer.png");
     image2 = Image.asset("assets/customer.png");
-
   }
 
   @override
@@ -49,14 +45,12 @@ class _UserTypeSelectPageState extends State<UserTypeSelectPage> {
         backgroundColor: const Color(0xff1F1D2B),
         body: Consumer<ProfileChangeNotifier>(
           builder: (s, profile, K) {
-            
-
             return Align(
               alignment: Alignment.bottomCenter,
               child: Container(
                 height: MediaQuery.of(context).size.height,
-                margin: const EdgeInsets.only(left: 10, right: 10,top: 100),
-                decoration: const BoxDecoration(
+                margin: const EdgeInsets.only(left: 10, right: 10, top: 100),
+                decoration: BoxDecoration(
                   color: Color(0xff252836),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
@@ -106,21 +100,18 @@ class _UserTypeSelectPageState extends State<UserTypeSelectPage> {
                       margin: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         children: [
-                          UserTypeButton(
-                            userType: UserTypes.dealer,
-                            image: image1,
+                          Container(
+                            child: UserTypeButton(
+                              userType: UserTypes.dealer,
+                              image: image1,
+                            ),
                           ),
                           const SizedBox(
                             width: 20,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              
-                            },
-                            child:  UserTypeButton(
-                              userType: UserTypes.customer,
-                              image:image2,
-                            ),
+                          UserTypeButton(
+                            userType: UserTypes.customer,
+                            image: image2,
                           ),
                         ],
                       ),

@@ -8,7 +8,7 @@ class Customer extends Profile {
   final String customerId;
 
   ///
-  const Customer({
+  Customer({
     required this.customerId,
     required String firstName,
     required String middleName,
@@ -28,6 +28,7 @@ class Customer extends Profile {
           phone: phone,
           lastName: lastName,
           transactions: transactions,
+          active: true,
         );
 
   ///

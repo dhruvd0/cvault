@@ -197,6 +197,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
   /// Fetches and updates profile
   ///
   /// Checks profile data in shared preferences first
+  // ignore: long-method
   Future<void> fetchProfile(context) async {
     loadStatus = LoadStatus.loading;
     notifyListeners();
@@ -223,7 +224,7 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     assert(token.isNotEmpty);
     final response = await _fetchProfileGetCall(uri);
     if (response.statusCode == 200) {
-      _parseAndEmitProfile(response);
+      parseAndEmitProfile(response);
     } else if (response.statusCode == 400) {
       _emitUnregisteredProfile();
     } else {
@@ -356,11 +357,16 @@ class ProfileChangeNotifier extends LoadStatusNotifier {
     notifyListeners();
   }
 
-  void _parseAndEmitProfile(http.Response response) {
+  void parseAndEmitProfile(http.Response response) {
     var body = jsonDecode(response.body);
 
     var data = body['${profile.userType}Data'];
+    List<Dealer> dealers = [];
+    dealers.add(Dealer.fromJson('dealer', data));
+    print(dealers[0].active);
+    print(data["active"].toString() + "stats");
     var user = Profile.fromMap(data);
+
     if (user.phone == '+911111111111') {
       user = (user as Dealer).copyWith(userType: 'admin');
     }

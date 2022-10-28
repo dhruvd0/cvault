@@ -22,11 +22,43 @@
           }
         },
         {
+          "client_id": "377759081959-e0v6qcbg5l2n6c08des8ni0a7l5mofi3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.cvault",
+            "certificate_hash": "c8d0644a588f777275e218245d09d459bb906088"
+          }
+        },
+        {
+          "client_id": "377759081959-iis803kp06vnqgfqcuv75ki1m4ehvu61.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.cvault",
+            "certificate_hash": "73d9979b01d5fbb94a271864b6626c82e18c1f63"
+          }
+        },
+        {
           "client_id": "377759081959-j7d1lt6ed72bkvck908hon1sobpknb5d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.application.cvault",
             "certificate_hash": "0b029a90a083c60bf97696097d6d7a7cd79dfbd2"
+          }
+        },
+        {
+          "client_id": "377759081959-lr5ppn196o6l8vtlmuvb8u6c9dmj6qrh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.cvault",
+            "certificate_hash": "e0a851b096f28247922a4e173ead861bc21f627a"
+          }
+        },
+        {
+          "client_id": "377759081959-mcrgdtten64pcboijducnvajdf011341.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.cvault",
+            "certificate_hash": "2cc1ce9c47c5dd8bc01ca1254af41b286eb7bd27"
           }
         },
         {
@@ -53,6 +85,13 @@
             {
               "client_id": "377759081959-p9mgf70dfaf6ltn62vvp2f5rogdjccne.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "377759081959-3bvkuhj5g5pt8eka93sd2r1vn0legah8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cvault.app2"
+              }
             }
           ]
         }
