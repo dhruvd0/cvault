@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cvault/models/NonAcceptDealer.dart';
 import 'package:cvault/models/profile_models/dealer.dart';
@@ -24,8 +25,8 @@ class DealersProvider extends LoadStatusNotifier {
   //non accept dealer
   List<nonAcceptdealer> listData = [];
   List<nonAcceptdealer> _Data = [];
-  bool isloading = false;
-  bool isloading2 = false;
+  //bool activeDealer = true;
+  bool toggle = true;
 
   ///
   List<nonAcceptdealer> tempnonAccept = [];
@@ -49,6 +50,8 @@ class DealersProvider extends LoadStatusNotifier {
       ),
     );
     if (response.statusCode == 200) {
+      //activeDealer = false;
+      notifyListeners();
       return true;
     } else {
       throw Exception('dealer/changeActive:${response.statusCode}');
@@ -67,21 +70,6 @@ class DealersProvider extends LoadStatusNotifier {
       notifyListeners();
     }
 
-    // if (response.statusCode == 200) {
-    // getNonAcceptDealer();
-    // List<Dealer> dealers = [];
-    // final data = jsonDecode(response.body);
-    // for (var dt in data['docs']) {
-    //   dealers.add(
-    //  Dealer.fromJson('dealer', dt),
-    // );
-    // }
-
-    // if (userType != 'admin') {
-    // return;
-    // }
-    //  correctPageNumber();
-
     final response = await http.get(
       Uri.parse(
         "https://cvault-backend.herokuapp.com/dealer/getAllDealer?page=$page",
@@ -94,6 +82,7 @@ class DealersProvider extends LoadStatusNotifier {
 
       final data = jsonDecode(response.body);
       dealers.clear();
+      allDealer.clear();
       for (var dt in data['docs']) {
         dealers.add(
           Dealer.fromJson('dealer', dt),
@@ -103,9 +92,16 @@ class DealersProvider extends LoadStatusNotifier {
       pageData[page] = dealers;
 
       _dealers.addAll(dealers);
+
       notifyListeners();
+
       allDealer.addAll(dealers.where((element) =>
           element.phone == FirebaseAuth.instance.currentUser!.phoneNumber));
+      print(allDealer.length.toString() + "alldealers");
+      if (allDealer.isNotEmpty) {
+        print(allDealer[0].active);
+      }
+      notifyListeners();
 
       notifyListeners();
     } else {
@@ -124,7 +120,7 @@ class DealersProvider extends LoadStatusNotifier {
       stringRespone = response.body;
       var mapResponse = jsonDecode(response.body);
       listData.clear();
-
+      tempnonAccept.clear();
       for (var e in mapResponse) {
         nonAcceptdealer model = nonAcceptdealer.fromJson(e);
         listData.add(model);
@@ -134,7 +130,8 @@ class DealersProvider extends LoadStatusNotifier {
                 element.phone == FirebaseAuth.instance.currentUser!.phoneNumber,
           ),
         );
-
+        print(listData.length.toString() + "nonlist");
+        print(tempnonAccept.length.toString() + "temp");
         notifyListeners();
       }
     }
@@ -174,7 +171,6 @@ class DealersProvider extends LoadStatusNotifier {
       },
     );
     notifyListeners();
-
     print(response.body);
   }
 }
