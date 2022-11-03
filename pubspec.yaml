@@ -28,6 +28,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   auto_size_text: ^3.0.0
+  change_app_package_name: ^1.1.0
   cloud_firestore: ^3.2.1
   convex_bottom_bar: ^3.1.0+1
   cupertino_icons: ^1.0.2
@@ -48,6 +49,7 @@ dependencies:
   flutter_local_notifications: ^9.6.1
   flutter_otp_text_field: ^1.0.1
   flutter_switch: ^0.3.2
+  flutterfire_cli: ^0.2.6+1
   font_awesome_flutter: ^10.1.0
   google_fonts: ^3.0.1
   google_sign_in: ^5.3.0

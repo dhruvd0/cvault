@@ -66,14 +66,14 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBA1TjReS3sdQCqYLzuS2_OPUGVwxMm47Y',
-    appId: '1:377759081959:ios:e8fd96d82a6cd2d7ab0942',
+    appId: '1:377759081959:ios:b7d9d456a8f4cd2eab0942',
     messagingSenderId: '377759081959',
     projectId: 'cvault-2f761',
     storageBucket: 'cvault-2f761.appspot.com',
     androidClientId:
         '377759081959-14652pmvi14t9lg8s0khoak7825jni49.apps.googleusercontent.com',
     iosClientId:
-        '377759081959-u67d11vhm1jqtdcmokhhjmdujoqiaiko.apps.googleusercontent.com',
-    iosBundleId: 'com.example.cvault',
+        '377759081959-439o15mmdo9l1ufodim1nvfgp3astomv.apps.googleusercontent.com',
+    iosBundleId: 'com.kodekrewcvault.com',
   );
 }
