@@ -55,6 +55,8 @@ dependencies:
   google_sign_in: ^5.3.0
   gradients: ^0.1.1+1
   http: ^0.13.4
+  flutter:
+    sdk: flutter
   image_picker: ^0.8.5+3
   international_phone_input: ^1.0.4
   intl: ^0.17.0
