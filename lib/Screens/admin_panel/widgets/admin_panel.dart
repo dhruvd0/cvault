@@ -3,6 +3,7 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/Screens/transactions/widgets/transactions_page.dart';
 import 'package:cvault/constants/user_types.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 
 import '../../../home_page.dart';
@@ -67,30 +68,34 @@ class _AdminPanelState extends State<AdminPanel> {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.85,
                           decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
                             boxShadow: [
-                              userType == UserTypes.admin
-                                  ? BoxShadow(
-                                      color: Colors.grey.withOpacity(0.4),
-                                      blurRadius: 1,
-                                      spreadRadius: 1,
-                                      offset: const Offset(4, 4),
-                                    )
-                                  : BoxShadow(
-                                      color: Colors.grey.withOpacity(0.4),
-                                      blurRadius: 1,
-                                      spreadRadius: 2,
-                                      offset: const Offset(4, 4),
-                                    ),
+                              BoxShadow(
+                                color: Colors.white.withOpacity(0.2),
+                                blurRadius: 1,
+                                spreadRadius: 2,
+                                offset: const Offset(4, 4),
+                              ),
                             ],
-                            borderRadius: BorderRadius.circular(15),
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.asset(
-                              userType == UserTypes.admin
-                                  ? "assets/Trans.jpg"
-                                  : "assets/Card.jpg",
-                              fit: BoxFit.fitWidth,
+                          child: Neumorphic(
+                            style: NeumorphicStyle(
+                                shadowLightColor:
+                                    Color.fromARGB(255, 147, 141, 141),
+                                shape: NeumorphicShape.concave,
+                                boxShape: NeumorphicBoxShape.roundRect(
+                                    BorderRadius.circular(10)),
+                                depth: 8,
+                                lightSource: LightSource.topLeft,
+                                color: Color(0xff252836)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.asset(
+                                userType == UserTypes.admin
+                                    ? "assets/Trans.jpg"
+                                    : "assets/Card.jpg",
+                                fit: BoxFit.fitWidth,
+                              ),
                             ),
                           ),
                         ),
@@ -116,24 +121,26 @@ class _AdminPanelState extends State<AdminPanel> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 const SizedBox(height: 10),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.white.withOpacity(0.2),
-                                        blurRadius: 1,
-                                        spreadRadius: 2,
-                                        offset: const Offset(4, 4),
+                                Neumorphic(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.white.withOpacity(0.2),
+                                          blurRadius: 1,
+                                          spreadRadius: 2,
+                                          offset: const Offset(4, 4),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Image.asset(
+                                        "assets/card2.png",
+                                        fit: BoxFit.fitWidth,
                                       ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Image.asset(
-                                      "assets/card2.png",
-                                      fit: BoxFit.fitWidth,
                                     ),
                                   ),
                                 ),

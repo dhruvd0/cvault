@@ -14,6 +14,7 @@ import 'package:cvault/providers/profile_provider.dart';
 import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:cvault/util/ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -264,6 +265,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   ),
                   child: NavigationBar(
+                    elevation: 0,
                     height: 80,
                     backgroundColor: Colors.transparent,
                     labelBehavior:

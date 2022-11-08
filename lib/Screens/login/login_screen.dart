@@ -10,6 +10,7 @@ import 'package:cvault/util/sharedPreferences/keys.dart';
 import 'package:cvault/util/ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -200,48 +201,47 @@ class _LogInScreenState extends State<LogInScreen> {
           padding: const EdgeInsets.only(left: 20),
           child: Align(
             alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.65,
-              height: 50,
-              child: SizedBox(
-                height: 45,
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      userType == "Dealer"
-                          ? const Color(0xff70755F)
-                          : const Color(0xffE47331),
-                    ),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+            child: NeumorphicButton(
+              // style: ButtonStyle(
+              //   // foregroundColor:
+              //   //     MaterialStateProperty.all<Color>(Colors.white),
+              //   // backgroundColor: MaterialStateProperty.all<Color>(
+              //   //   userType == "Dealer"
+              //   //       ? const Color(0xff70755F)
+              //   //       : const Color(0xffE47331),
+              //   // ),
+              //   // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              //   //   RoundedRectangleBorder(
+              //   //     borderRadius: BorderRadius.circular(15),
+              //   //   ),
+              //   // ),
+              //),
+              style: NeumorphicStyle(
+                shadowLightColor: Colors.white.withOpacity(0.6),
+                border: const NeumorphicBorder(
+                    isEnabled: true, color: Colors.black, width: 2),
+                color: Colors.black,
+                boxShape: const NeumorphicBoxShape.circle(),
+              ),
+              onPressed: () async {
+                setState(() {
+                  _isLoading = true;
+                  number();
+                });
+                verifyPhone();
+              },
+              child: _isLoading == false
+                  ? const Text(
+                      'Get otp',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
                       ),
                     ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      _isLoading = true;
-                      number();
-                    });
-                    verifyPhone();
-                  },
-                  child: _isLoading == false
-                      ? const Text(
-                          'Get otp',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        )
-                      : const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        ),
-                ),
-              ),
             ),
           ),
         );
